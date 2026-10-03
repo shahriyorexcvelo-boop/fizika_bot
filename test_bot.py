@@ -5390,31 +5390,34 @@ def _sync_extract_keys_gemini(image_bytes: bytes, mime_type: str = "image/jpeg")
         raise ValueError("GEMINI_API_KEY o'rnatilmagan")
 
     prompt = (
-        "Ushbu rasmda test javoblari/kalitlari varaqasi yoki jadvali berilgan.\n"
-        "Iltimos, rasmdagi har bir savol javobini diqqat bilan o'qib, faqat to'g'ri JSON formatida qaytar.\n\n"
-        "Test strukturasi (55 ta element):\n"
-        "- 1 dan 32 gacha: 4 variantli yopiq savollar (A, B, C, D)\n"
-        "- 33, 34, 35: 6 variantli yopiq savollar (A, B, C, D, E, F)\n"
-        "- 36a dan 45b gacha: ochiq matematik javoblar (masalan: 25, -4, 25/6, √29, 8√58, ∛8, π/4, 120 + 36π va h.k.)\n\n"
-        "MUHIM VA QAT'IY TALAB:\n"
-        "Matematik ifodalarda HECH QACHON LaTeX (\\frac, \\sqrt, \\pi, \\cdot) ishlatma! Faqat oddiy Unicode belgilaridan foydalan:\n"
-        "- Kasrlar uchun: a/b (masalan, 25/6, 3π/2)\n"
-        "- Ildizlar uchun: √x (masalan, √29, 8√58, ∛8)\n"
-        "- Pi soni uchun: π (masalan, π/4, 120 + 36π)\n"
-        "- Bo'shliqlar va ishoralarni (+, -, *, /) aniq saqla.\n\n"
-        "Qaytadigan javob aynan toza JSON obyekti bo'lsin:\n"
-        "{\n"
-        '  "1": "A",\n'
-        '  "2": "B",\n'
-        '  "33": "C",\n'
-        '  "36a": "25/6",\n'
-        '  "36b": "√29",\n'
-        '  "37a": "8√58",\n'
-        '  "37b": "π/4",\n'
-        '  ...\n'
-        '  "45b": "5"\n'
-        "}\n\n"
-        "DIQQAT: Faqat toza JSON matnini qaytar, hech qanday qo'shimcha so'z, sharh yoki izoh yozma!"
+        """Ushbu rasmda FIZIKA yoki MATEMATIKA fani bo'yicha test javoblari/kalitlari varaqasi yoki jadvali berilgan.
+Iltimos, rasmdagi har bir savol javobini diqqat bilan o'qib, faqat to'g'ri JSON formatida qaytar.
+
+Test strukturasi (55 ta element):
+- 1 dan 32 gacha: 4 variantli yopiq savollar (A, B, C, D)
+- 33, 34, 35: 6 variantli yopiq savollar (A, B, C, D, E, F)
+- 36a dan 45b gacha: ochiq javoblar. FIZIKA bo'lsa, o'lchov birliklari va izohlari bilan aynan yozing (masalan: 400 J, 900 J, 4 m/s², 12 s, 9 m/s, 5 cm², 44 mm, ≈ 1450 nJ, 2400 J ga kamaydi, -800 J, 10 kV/m, ≈ 177 nC/m², 360 V, 4,8 nC, 10 cm, 22,5 cm, 2-nur (1,89 eV), hech qaysi nur). Matematika bo'lsa: 25, 25/6, √29, π/4 va h.k.
+
+MUHIM TALABLAR:
+1. Hech qachon LaTeX (\frac, \sqrt, \cdot) ishlatma! Faqat oddiy Unicode belgilari: kasrlar (a/b), ildizlar (√), darajalar (m/s², cm²).
+2. Fizika birliklarini (J, m/s, m/s², s, cm, mm, nJ, kV/m, nC, V, eV, va h.k.) va izohlarni ('ga kamaydi', 'hech qaysi nur', '2-nur') aynan rasmdagidek to'liq saqla!
+3. Taqribiy belgilarni (≈) va manfiy ishoralarni (- yoki −) aniq yoz.
+4. O'nlik kasrlarda vergul (,) yoki nuqta (.) ni rasmdagidek saqla.
+
+Qaytadigan javob aynan toza JSON obyekti bo'lsin:
+{
+  "1": "A",
+  "2": "B",
+  "33": "C",
+  "36a": "400 J",
+  "36b": "900 J",
+  "37a": "4 m/s²",
+  "37b": "12 s",
+  ...
+  "45b": "hech qaysi nur"
+}
+
+DIQQAT: Faqat toza JSON matnini qaytar, hech qanday qo'shimcha so'z, sharh yoki izoh yozma!"""
     )
 
     models_to_try = [

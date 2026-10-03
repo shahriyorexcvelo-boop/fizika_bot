@@ -1860,69 +1860,184 @@ def count_binary_plus_minus(s: str) -> int:
 
 
 
+
+# ── FIZIKA JAVOBLARINI SOLISHTIRISH (SI birliklar va prefikslar bilan) ──────────
+_SUPERSCRIPT_MAP = str.maketrans("⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺", "0123456789-+")
+_SI_PREFIXES = {
+    "p": 1e-12, "n": 1e-9, "μ": 1e-6, "µ": 1e-6, "u": 1e-6, "mk": 1e-6, "mc": 1e-6,
+    "m": 1e-3, "c": 1e-2, "s": 1e-2, "d": 1e-1, "k": 1e3, "M": 1e6, "G": 1e9, "T": 1e12,
+}
+# Asosiy birliklar (uzunroqlari birinchi tekshiriladi)
+_BASE_UNITS = {
+    "eV": ("eV", 1.0), "Hz": ("Hz", 1.0), "Pa": ("Pa", 1.0), "Wb": ("Wb", 1.0),
+    "mol": ("mol", 1.0), "ohm": ("Ω", 1.0), "Om": ("Ω", 1.0), "Ω": ("Ω", 1.0),
+    "min": ("s", 60.0), "J": ("J", 1.0), "N": ("N", 1.0), "W": ("W", 1.0),
+    "V": ("V", 1.0), "A": ("A", 1.0), "C": ("C", 1.0), "F": ("F", 1.0),
+    "H": ("H", 1.0), "T": ("T", 1.0), "K": ("K", 1.0), "L": ("L", 1.0),
+    "l": ("L", 1.0), "g": ("g", 1.0), "m": ("m", 1.0), "s": ("s", 1.0),
+}
+_BASE_ORDER = sorted(_BASE_UNITS.keys(), key=len, reverse=True)
+_PHYS_WORDS_RE = re.compile(r"\b(?:ga|marta|ga\s+teng|teng)\b", re.IGNORECASE)
+
+
 def clean_physics_str(s: str) -> str:
+    """Fizika javobini normallashtirish (registr saqlanadi: M=mega, m=milli)."""
     if not s:
         return ""
-    s = str(s).strip().lower()
-    s = s.replace("≈", "").replace("~", "").replace("`", "'")
+    s = str(s).strip()
+    s = s.replace("−", "-").replace("–", "-").replace("—", "-")
+    s = s.replace("≈", "").replace("~", "").replace("`", "'").replace("’", "'").replace("'", "'")
+    s = s.replace("×", "*").replace("·", "*").replace("⋅", "*")
     s = s.replace("²", "^2").replace("³", "^3")
-    s = re.sub(r"(\d+),(\d+)", r"\g<1>.\g<2>", s)
+    s = s.translate(_SUPERSCRIPT_MAP)
+    s = re.sub(r"(\d),(\d)", r"\1.\2", s)
     s = re.sub(r"\s+", " ", s).strip()
     return s
 
+
+def _parse_unit_factor(tok: str):
+    """'kV' -> ({'V':1}, 1e3); 'cm^2' -> ({'m':2}, 1e-4). Tanilmasa None."""
+    m = re.fullmatch(r"([A-Za-zμµΩ]+)(?:\^?(-?\d+))?", tok)
+    if not m:
+        return None
+    name, exp = m.group(1), int(m.group(2) or 1)
+    if name in ("sm", "cm"):  # santimetr
+        return {"m": exp}, (1e-2) ** exp
+    if name in ("kg",):
+        return {"g": exp}, (1e3) ** exp
+    for attempt in (name, name.lower()):
+        bases = _BASE_ORDER if attempt == name else [b for b in _BASE_ORDER if b == b.lower()] + ["j", "n", "w", "v", "a", "hz", "pa", "ev"]
+        for base in bases:
+            if not attempt.endswith(base):
+                continue
+            prefix = attempt[: -len(base)]
+            key = base if base in _BASE_UNITS else {"j": "J", "n": "N", "w": "W", "v": "V", "a": "A", "hz": "Hz", "pa": "Pa", "ev": "eV"}[base]
+            dim, mult = _BASE_UNITS[key]
+            if prefix == "":
+                scale = mult
+            elif prefix in _SI_PREFIXES:
+                scale = _SI_PREFIXES[prefix] * mult
+            else:
+                continue
+            return {dim: exp}, scale ** exp
+    return None
+
+
+def parse_physics_unit(unit: str):
+    """'kV/m' -> ({'V':1,'m':-1}, 1000.0). Bo'sh -> ({}, 1.0). Tanilmasa None."""
+    unit = (unit or "").strip().strip(".")
+    if not unit:
+        return {}, 1.0
+    unit = unit.replace(" ", "")
+    dims, scale = {}, 1.0
+    parts = re.split(r"(/|\*)", unit)
+    sign = 1
+    for p in parts:
+        if p == "/":
+            sign = -1
+            continue
+        if p == "*":
+            continue
+        if not p:
+            continue
+        r = _parse_unit_factor(p)
+        if r is None:
+            return None
+        d, sc = r
+        for k, v in d.items():
+            dims[k] = dims.get(k, 0) + sign * v
+        scale *= sc ** sign
+    dims = {k: v for k, v in dims.items() if v != 0}
+    return dims, scale
+
+
 def extract_physics_number_and_unit(s: str):
+    """'1.45*10^-6 J ga kamaydi' -> (-1.45e-6, 'J', clean). Son bo'lmasa (None, '', clean)."""
     clean = clean_physics_str(s)
-    # Asosiy sonni topish (masalan: 400, -800, 4.8, 1450, 22.5)
-    m = re.search(r"([-+]?\d+(?:\.\d+)?)", clean)
-    if m:
-        num_str = m.group(1)
-        try:
-            num_val = float(num_str)
-        except Exception:
-            return None, "", clean
-        unit_part = (clean[:m.start()] + clean[m.end():]).strip()
-        unit_part = re.sub(r"(?:ga\s+kamaydi|kamaydi|ga\s+ortdi|ortdi|nur)", "", unit_part).strip()
-        unit_part = unit_part.replace(" ", "")
-        return num_val, unit_part, clean
-    return None, "", clean
+    work = clean
+    negative_word = bool(re.search(r"kamay", work, re.IGNORECASE))
+    work = re.sub(r"\b(?:ga\s+)?(?:kamaydi|kamayadi|ortdi|ortadi|oshdi|oshadi)\b", " ", work, flags=re.IGNORECASE)
+    work = _PHYS_WORDS_RE.sub(" ", work)
+    m = re.search(r"([-+]?\d+(?:\.\d+)?)(?:\s*(?:\*|x)\s*10\s*\^?\s*\(?\s*([-+]?\d+)\s*\)?|\s*e([-+]?\d+))?", work)
+    if not m:
+        return None, "", clean
+    try:
+        num_val = float(m.group(1))
+        exp = m.group(2) or m.group(3)
+        if exp:
+            num_val *= 10 ** int(exp)
+    except Exception:
+        return None, "", clean
+    if negative_word and num_val > 0:
+        num_val = -num_val
+    unit_part = (work[: m.start()] + " " + work[m.end():]).strip()
+    unit_part = re.sub(r"\s+", "", unit_part)
+    return num_val, unit_part, clean
+
+
+def _num_close(a: float, b: float, approx: bool) -> bool:
+    tol = 0.035 if approx else 1e-3
+    return abs(a - b) <= max(1e-9, tol * max(abs(a), abs(b)))
+
 
 def check_physics_match(u_raw: Any, c_raw: Any) -> bool:
-    """Fizika o'lchov birliklari, o'nlik kasrlar (vergul/nuqta), taqribiy belgilar va so'zlarni moslashtirish."""
+    """Fizika javoblari: SI prefikslar (nJ = 1e-9 J), birliklar, vergul/nuqta,
+    taqribiy (≈) qiymatlar, 'kamaydi' = manfiy, 'N-nur' va matnli javoblar."""
     if u_raw is None or c_raw is None:
         return False
-    u = clean_physics_str(str(u_raw))
-    c = clean_physics_str(str(c_raw))
+    c_full = str(c_raw)
+    u_full = str(u_raw)
+    u = clean_physics_str(u_full)
+    c = clean_physics_str(c_full)
     if not u or not c:
         return False
-    
-    if u == c or u.replace(" ", "") == c.replace(" ", ""):
+    approx = ("≈" in c_full) or ("~" in c_full) or ("≈" in u_full) or ("~" in u_full)
+
+    if u.lower().replace(" ", "") == c.lower().replace(" ", ""):
         return True
-    
-    u_num, u_unit, _ = extract_physics_number_and_unit(u)
+
+    # Matnli maxsus javoblar (masalan: "hech qaysi nur" vs "hech qaysi" vs "hech biri")
+    if any(h in c.lower() for h in ["hech", "yo'q", "mavjud emas"]):
+        if any(h in u.lower() for h in ["hech", "yo'q", "mavjud emas"]):
+            return True
+
+    # Qavs ichidagi muqobil javob: "2-nur (1,89 eV)" -> "2-nur" yoki "1,89 eV"
+    paren = re.match(r"^(.*?)\s*\((.+)\)\s*$", c)
+    if paren:
+        return check_physics_match(u_raw, paren.group(1)) or check_physics_match(u_raw, paren.group(2))
+
+    # Faqat maxsus "N-nur", "N-holat" kabi tartib raqamlar
+    ord_m = re.fullmatch(r"(\d+)\s*-?\s*(nur|holat|qism|daraja)\b.*", c, re.IGNORECASE)
+    if ord_m:
+        u_ord = re.fullmatch(r"(\d+)\s*-?\s*([A-Za-z'ʻ]*)", u)
+        if u_ord and u_ord.group(1) == ord_m.group(1):
+            return True
+
     c_num, c_unit, _ = extract_physics_number_and_unit(c)
+    u_num, u_unit, _ = extract_physics_number_and_unit(u)
 
-    if u_num is not None and c_num is not None:
-        # Sonli tenglik (1.5% gacha taqribiy farqni ham inobatga oladi: masalan 1450 vs 1449)
-        num_match = abs(u_num - c_num) < 1e-4 or (abs(u_num - c_num) / (abs(c_num) + 1e-9) < 0.02)
-        if num_match:
-            # Agar birlik biri yoki ikkalasida kiritilmagan bo'lsa (faqat son bo'lsa) -> Qabul qilish!
-            if not u_unit or not c_unit:
-                return True
-            # Birliklarni normallashtirish: masalan m/s^2 vs m/s2, j vs joul
-            u_u = u_unit.replace("^2", "2").replace("^3", "3").replace("joul", "j")
-            c_u = c_unit.replace("^2", "2").replace("^3", "3").replace("joul", "j")
-            if u_u == c_u or u_u in c_u or c_u in u_u:
-                return True
+    if c_num is None:
+        # Matnli javob (masalan: "hech qaysi nur")
+        cw = set(re.findall(r"[a-zA-Z'ʻ]+", c.lower())) - {"nur"}
+        uw = set(re.findall(r"[a-zA-Z'ʻ]+", u.lower())) - {"nur"}
+        return bool(cw) and cw == uw
+    if u_num is None:
+        return False
 
-    # Matnli maxsus javoblar (masalan: "hech qaysi nur" vs "hech qaysi", "2-nur" vs "2")
-    if "hech" in c and "hech" in u:
-        return True
-    if "2-nur" in c and ("2-nur" in u or "2 nur" in u or u == "2"):
-        return True
-    if "1-nur" in c and ("1-nur" in u or "1 nur" in u or u == "1"):
-        return True
+    # Birlik yozilmagan bo'lsa: faqat son bo'yicha (kalitdagi birlikda deb hisoblanadi)
+    if not u_unit or not c_unit:
+        return _num_close(u_num, c_num, approx)
 
-    return False
+    pu, pc = parse_physics_unit(u_unit), parse_physics_unit(c_unit)
+    if pu is None or pc is None:
+        # Noma'lum birlik — matn bo'yicha qat'iy solishtirish
+        same_unit = u_unit.replace("^", "").lower() == c_unit.replace("^", "").lower()
+        return same_unit and _num_close(u_num, c_num, approx)
+    (du, su), (dc, sc) = pu, pc
+    if du != dc:
+        return False
+    return _num_close(u_num * su, c_num * sc, approx)
+
 
 def check_answer_match(user_ans: Any, correct_ans: Any) -> Tuple[bool, float, str]:
     """

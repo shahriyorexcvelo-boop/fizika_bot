@@ -758,8 +758,7 @@ const AdminApp = {
     }
     s = s.replace(/\{([^}]+)\}/g, '$1');
     s = s.replace(/\\/g, '');
-    s = s.replace(/\s*\+\s*/g, ' + ');
-    s = s.replace(/\s*\-\s*/g, ' - ');
+    s = s.replace(/^[−–—]/, '-');
     s = s.replace(/\s+/g, ' ');
     return s.trim();
   }
