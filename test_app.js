@@ -38,28 +38,31 @@ const TestApp = {
     if (tg) {
       try { tg.ready(); tg.expand(); } catch(e) {}
     }
+    const params = new URLSearchParams(window.location.search);
+    const queryTgId = params.get('tg_id');
     const tgU = tg && tg.initDataUnsafe && tg.initDataUnsafe.user;
-    const hasTgContext = !!(tg && ((tg.platform && tg.platform !== 'unknown') || (tg.initData && tg.initData.length > 0) || (tgU && tgU.id)));
 
-    // ⛔️ QAT'IY XAVFSIZLIK: AGAR TELEGRAMSIZ WEB ORQALI KIRILSA — TO'LIQ BLOKLASH!
-    if (!hasTgContext || !tgU || !tgU.id) {
+    const tgPlatform = tg ? (tg.platform || '').toLowerCase() : '';
+    const isTg = !!(tg && (
+      (tgPlatform && tgPlatform !== 'unknown') ||
+      (tg.initData && tg.initData.length > 0) ||
+      (tgU && tgU.id) ||
+      queryTgId
+    ));
+
+    // ⛔️ ODDIY VEB-BRAUZERDA (TELEGRAMSIZ) OCHILGANDA TO'LIQ BLOKLASH!
+    if (!isTg) {
       const webBlock = document.getElementById('web-block-screen');
-      if (webBlock) {
-        webBlock.style.display = 'flex';
-      }
+      if (webBlock) webBlock.style.display = 'flex';
       const introSplash = document.getElementById('intro-splash') || document.getElementById('splashScreen');
-      if (introSplash) {
-        introSplash.style.display = 'none';
-      }
+      if (introSplash) introSplash.style.display = 'none';
       const testContent = document.querySelector('.test-body') || document.querySelector('.main-container');
-      if (testContent) {
-        testContent.style.display = 'none';
-      }
-      return; // To'xtatish! Web orqali kirganlarga testni umuman ochmaslik!
+      if (testContent) testContent.style.display = 'none';
+      return;
     }
 
-    this.userTgId = tgU.id;
-    this.userFullname = `${tgU.first_name || ''} ${tgU.last_name || ''}`.trim() || tgU.username || 'Foydalanuvchi';
+    this.userTgId = (tgU && tgU.id) || (queryTgId ? parseInt(queryTgId, 10) : 0);
+    this.userFullname = (tgU && `${tgU.first_name || ''} ${tgU.last_name || ''}`.trim()) || (tgU && tgU.username) || 'Foydalanuvchi';
 
     // Mavzu (birinchi kirishda oq/light, agar foydalanuvchi qoraga o'tkazsa saqlanadi)
     const savedTheme = localStorage.getItem('app_theme') || 'light';

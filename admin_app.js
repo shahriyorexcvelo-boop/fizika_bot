@@ -11,11 +11,20 @@ const AdminApp = {
     if (tg) {
       try { tg.ready(); tg.expand(); } catch(e) {}
     }
+    const params = new URLSearchParams(window.location.search);
+    const queryTgId = params.get('tg_id');
     const tgU = tg && tg.initDataUnsafe && tg.initDataUnsafe.user;
-    const hasTgContext = !!(tg && ((tg.platform && tg.platform !== 'unknown') || (tg.initData && tg.initData.length > 0) || (tgU && tgU.id)));
 
-    // ⛔️ QAT'IY XAVFSIZLIK: AGAR TELEGRAMSIZ WEB ORQALI KIRILSA — TO'LIQ BLOKLASH!
-    if (!hasTgContext || !tgU || !tgU.id) {
+    const tgPlatform = tg ? (tg.platform || '').toLowerCase() : '';
+    const isTg = !!(tg && (
+      (tgPlatform && tgPlatform !== 'unknown') ||
+      (tg.initData && tg.initData.length > 0) ||
+      (tgU && tgU.id) ||
+      queryTgId
+    ));
+
+    // ⛔️ ODDIY VEB-BRAUZERDA (TELEGRAMSIZ) OCHILGANDA TO'LIQ BLOKLASH!
+    if (!isTg) {
       const wb = document.getElementById('web-block-screen');
       if (wb) wb.style.display = 'flex';
       const sp = document.getElementById('admin-splash');
@@ -24,7 +33,8 @@ const AdminApp = {
       if (container) container.style.display = 'none';
       return;
     }
-    this.creatorTgId = tgU.id;
+
+    this.creatorTgId = (tgU && tgU.id) || (queryTgId ? parseInt(queryTgId, 10) : 0);
     if (window.BM_LOGO_B64) {
       document.querySelectorAll('.header-bm-logo').forEach(img => {
         img.src = window.BM_LOGO_B64;
