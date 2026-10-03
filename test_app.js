@@ -69,7 +69,6 @@ const TestApp = {
     this.setTheme(savedTheme === 'dark');
 
     // 2. URL parametrlardan test ma'lumotlarini olish
-    const params = new URLSearchParams(window.location.search);
     if (params.has('test_code')) this.testCode = params.get('test_code');
     if (params.has('test_id')) this.testId = parseInt(params.get('test_id')) || 1;
     if (params.has('title')) this.testTitle = params.get('title');
