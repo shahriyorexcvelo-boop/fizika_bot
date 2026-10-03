@@ -9,7 +9,7 @@ const TestApp = {
   subject: 'Fizika',
   userTgId: 0,
   userFullname: 'Foydalanuvchi',
-  isDarkMode: false,
+  isDarkMode: true,
   minSubmitInfo: null,
   minSubmitTimerInterval: null,
   isAdmin: false,
@@ -18,6 +18,10 @@ const TestApp = {
   answers: {},
 
   init() {
+    // 0. Mavzuni darhol xotiradan yuklash (default: dark)
+    const savedTheme = localStorage.getItem('app_theme') || 'dark';
+    this.setTheme(savedTheme !== 'light');
+
     if (window.BM_LOGO_B64) {
       document.querySelectorAll('.intro-logo-img, .header-bm-logo').forEach(img => {
         img.src = window.BM_LOGO_B64;
@@ -63,10 +67,6 @@ const TestApp = {
 
     this.userTgId = (tgU && tgU.id) || (queryTgId ? parseInt(queryTgId, 10) : 0);
     this.userFullname = (tgU && `${tgU.first_name || ''} ${tgU.last_name || ''}`.trim()) || (tgU && tgU.username) || 'Foydalanuvchi';
-
-    // Mavzu (Fizika kosmik chuqur mavzu — default: dark)
-    const savedTheme = localStorage.getItem('app_theme') || 'dark';
-    this.setTheme(savedTheme !== 'light');
 
     // 2. URL parametrlardan test ma'lumotlarini olish
     if (params.has('test_code')) this.testCode = params.get('test_code');
@@ -178,9 +178,32 @@ const TestApp = {
 
   setTheme(isDark) {
     this.isDarkMode = isDark;
-    document.body.classList.toggle('dark-mode', isDark);
-    document.documentElement.classList.toggle('dark-mode', isDark);
+    if (document.body) {
+      document.body.classList.toggle('dark-mode', isDark);
+      document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    }
+    if (document.documentElement) {
+      document.documentElement.classList.toggle('dark-mode', isDark);
+      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    }
     localStorage.setItem('app_theme', isDark ? 'dark' : 'light');
+
+    // Tugma ikonkasini yangilash
+    const themeBtn = document.querySelector('.theme-toggle-btn');
+    if (themeBtn) {
+      themeBtn.innerHTML = isDark ? '🌙' : '☀️';
+      themeBtn.title = isDark ? "Kunduzgi rejim (Oq)" : "Tungi rejim (Qora)";
+    }
+
+    // Telegram WebApp interfeys ranglarini moslash
+    if (window.Telegram && window.Telegram.WebApp) {
+      try {
+        const bg = isDark ? '#0B0F19' : '#F1F5F9';
+        if (window.Telegram.WebApp.setHeaderColor) window.Telegram.WebApp.setHeaderColor(bg);
+        if (window.Telegram.WebApp.setBackgroundColor) window.Telegram.WebApp.setBackgroundColor(bg);
+        if (window.Telegram.WebApp.setBottomBarColor) window.Telegram.WebApp.setBottomBarColor(bg);
+      } catch (e) {}
+    }
   },
 
   // ----------------------------------------------------

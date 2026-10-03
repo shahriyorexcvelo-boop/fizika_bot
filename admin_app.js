@@ -5,8 +5,45 @@ const AdminApp = {
   answers: {}, // {"1": {"ans": ""}, ...} — ball Rasch tomonidan avtomatik hisoblanadi
   isEditMode: false,
   editTestId: null,
+  isDarkMode: true,
+
+  toggleTheme() {
+    this.setTheme(!this.isDarkMode);
+  },
+
+  setTheme(isDark) {
+    this.isDarkMode = isDark;
+    if (document.body) {
+      document.body.classList.toggle('dark-mode', isDark);
+      document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    }
+    if (document.documentElement) {
+      document.documentElement.classList.toggle('dark-mode', isDark);
+      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    }
+    localStorage.setItem('app_theme', isDark ? 'dark' : 'light');
+
+    const btn = document.getElementById('admin-theme-btn');
+    if (btn) {
+      btn.innerHTML = isDark ? '🌙' : '☀️';
+      btn.title = isDark ? "Kunduzgi rejim (Oq)" : "Tungi rejim (Qora)";
+    }
+
+    if (window.Telegram && window.Telegram.WebApp) {
+      try {
+        const bg = isDark ? '#0B0F19' : '#F1F5F9';
+        if (window.Telegram.WebApp.setHeaderColor) window.Telegram.WebApp.setHeaderColor(bg);
+        if (window.Telegram.WebApp.setBackgroundColor) window.Telegram.WebApp.setBackgroundColor(bg);
+        if (window.Telegram.WebApp.setBottomBarColor) window.Telegram.WebApp.setBottomBarColor(bg);
+      } catch (e) {}
+    }
+  },
 
   init() {
+    // 0. Mavzuni darhol xotiradan yuklash (default: dark)
+    const savedTheme = localStorage.getItem('app_theme') || 'dark';
+    this.setTheme(savedTheme !== 'light');
+
     const tg = window.Telegram && window.Telegram.WebApp;
     if (tg) {
       try { tg.ready(); tg.expand(); } catch(e) {}

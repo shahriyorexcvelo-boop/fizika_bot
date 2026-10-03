@@ -27,8 +27,7 @@ var state = {
 
 // ── INIT ────────────────────────────────────────
 function initApp() {
-  // Birinchi kirishda oq (light), foydalanuvchi qora (dark) qilsa o'sha saqlanadi
-  var savedTheme = localStorage.getItem(LS_THEME) || 'light';
+  var savedTheme = localStorage.getItem(LS_THEME) || localStorage.getItem('app_theme') || 'dark';
   document.documentElement.setAttribute('data-theme', savedTheme);
   updateThemeIcon(savedTheme);
   syncTelegramTheme(savedTheme);

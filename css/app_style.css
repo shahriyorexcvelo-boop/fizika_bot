@@ -79,13 +79,17 @@
   --liquid-glass-blur: blur(30px) saturate(190%) contrast(105%);
 
   --bg: #f2f5fd;
+  --bg-main: #f2f5fd;
   --bg-card: var(--liquid-glass-bg);
   --bg-card-hover: var(--liquid-glass-hover);
+  --bg-card-sub: #ffffff;
   --bg-glass: rgba(255, 255, 255, 0.72);
   --bg-glass-2: rgba(255, 255, 255, 0.48);
   --border: rgba(255, 255, 255, 0.85);
   --border-active: rgba(37, 99, 235, 0.4);
   --text: #0f172a;
+  --text-primary: #0f172a;
+  --text-main: #0f172a;
   --text-muted: #475569;
   --text-soft: #334155;
   --shadow: var(--liquid-glass-shadow);
