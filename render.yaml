@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: fizika-rash
+    name: shohruh-fizika
     runtime: python
     buildCommand: pip install -r requirements.txt
     startCommand: python3 test_bot.py
@@ -19,7 +19,7 @@ services:
         sync: false          # Neon.tech connection string — Dashboard orqali kiriting
 
       - key: WEBAPP_URL
-        value: https://fizika-rash.onrender.com
+        value: https://shohruh-fizika.onrender.com
 
       - key: PYTHON_VERSION
         value: 3.11.9
