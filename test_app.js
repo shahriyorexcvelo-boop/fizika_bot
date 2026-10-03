@@ -64,9 +64,9 @@ const TestApp = {
     this.userTgId = (tgU && tgU.id) || (queryTgId ? parseInt(queryTgId, 10) : 0);
     this.userFullname = (tgU && `${tgU.first_name || ''} ${tgU.last_name || ''}`.trim()) || (tgU && tgU.username) || 'Foydalanuvchi';
 
-    // Mavzu (birinchi kirishda oq/light, agar foydalanuvchi qoraga o'tkazsa saqlanadi)
-    const savedTheme = localStorage.getItem('app_theme') || 'light';
-    this.setTheme(savedTheme === 'dark');
+    // Mavzu (Fizika kosmik chuqur mavzu — default: dark)
+    const savedTheme = localStorage.getItem('app_theme') || 'dark';
+    this.setTheme(savedTheme !== 'light');
 
     // 2. URL parametrlardan test ma'lumotlarini olish
     if (params.has('test_code')) this.testCode = params.get('test_code');
@@ -179,6 +179,7 @@ const TestApp = {
   setTheme(isDark) {
     this.isDarkMode = isDark;
     document.body.classList.toggle('dark-mode', isDark);
+    document.documentElement.classList.toggle('dark-mode', isDark);
     localStorage.setItem('app_theme', isDark ? 'dark' : 'light');
   },
 
