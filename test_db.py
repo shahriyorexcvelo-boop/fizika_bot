@@ -23,6 +23,10 @@ ADMIN_ID = int(os.getenv("ADMIN_ID", "8039427064"))
 
 DATABASE_URL = os.getenv("DATABASE_URL", "").strip()
 
+# Agar Render da hali ham eski Matematika Neon DB (ep-sparkling-bread) qolgan bo'lsa, avtomatik yangi Fizika bazasiga yo'naltirish
+if "ep-sparkling-bread" in DATABASE_URL or not DATABASE_URL:
+    DATABASE_URL = "postgresql://neondb_owner:npg_sCxRJyj3Ob8c@ep-plain-mountain-b2554mwk-pooler.c-6.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+
 # Neon.tech uchun: agar URL da '-pooler' bo'lmasa, uni avtomatik '-pooler' (PgBouncer) rejimiga o'tkazish
 # Bu 'Max connections' (ulanuvchilar soni chegarasi) xatoligini to'liq bartaraf qiladi.
 if DATABASE_URL and "neon.tech" in DATABASE_URL and "-pooler" not in DATABASE_URL:

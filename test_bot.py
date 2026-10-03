@@ -523,7 +523,7 @@ async def send_test_card_to_user_chat(user_tg_id: int, test: Dict[str, Any]):
         "title": test["title"],
         "subject": test.get("subject", "Fizika"),
         "tg_id": user_tg_id,
-        "v": "20261003_vcosmic"
+        "v": "20261003_vcosmic2"
     }
     encoded_url = f"{WEBAPP_URL}?{urllib.parse.urlencode(params)}"
 
@@ -884,7 +884,7 @@ async def solve_test_cb(call: CallbackQuery):
         "test_code": t["test_code"],
         "title": t["title"],
         "subject": t.get("subject", "Fizika"),
-        "v": "20261003_vcosmic"
+        "v": "20261003_vcosmic2"
     }
     encoded_url = f"{WEBAPP_URL}?{urllib.parse.urlencode(params)}"
     reply_kb = InlineKeyboardMarkup(inline_keyboard=[
