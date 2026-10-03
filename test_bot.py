@@ -7090,7 +7090,7 @@ async def create_web_app():
 
     return app
 
-# keep_alive_pinger o'chirildi — Render.com bepul 750 soatlik limitni tejash uchun.
+# keep_alive_pinger main() ichida qayta yoqildi (KEEP_ALIVE=0 bilan o'chirish mumkin).
 # Tashqi Cron-job (UptimeRobot, cron-job.org) orqali /healthz yoki /ping endpointiga
 # ertalab 07:00 dan 23:00 gacha so'rov yuboring. Bu bot o'z-o'zini ping qilmaydi.
 
@@ -7558,6 +7558,26 @@ async def main():
 
     # 2b. Avtomatik jadval tekshiruvchisini ishga tushirish
     asyncio.create_task(schedule_checker())
+
+    # 2c. Render bepul rejimida 15 daqiqa harakatsizlikdan keyin server uxlab qoladi va
+    # polling to'xtaydi. Har 10 daqiqada o'z public URL'ini ping qilib uyg'oq ushlaymiz.
+    # (Workspace'da faqat 1 ta xizmat ishlasa ~744 soat/oy — 750 soatlik limitga sig'adi.)
+    async def keep_alive_pinger():
+        import aiohttp
+        await asyncio.sleep(60)
+        while True:
+            url = (os.getenv("RENDER_EXTERNAL_URL") or WEBAPP_URL or os.getenv("WEBAPP_URL") or "").rstrip("/")
+            if url.startswith("http"):
+                try:
+                    async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=30)) as s:
+                        async with s.get(f"{url}/healthz") as r:
+                            log.debug(f"keep-alive ping: {r.status}")
+                except Exception as ex:
+                    log.warning(f"keep-alive ping xatolik: {ex}")
+            await asyncio.sleep(600)
+
+    if os.getenv("KEEP_ALIVE", "1") != "0":
+        asyncio.create_task(keep_alive_pinger())
 
     # 3. Telegram Botni ishga tushirish
     log.info("🤖 Telegram Bot Polling rejimida ishga tushmoqda...")
