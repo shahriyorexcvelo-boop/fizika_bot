@@ -89,7 +89,7 @@ if (document.readyState === 'loading') {
   initApp();
 }
 
-// ── SPLASH (Kosmik Matematik Kirish Animatsiyasi) ──────────
+// ── SPLASH (Kosmik Fizika Kirish Animatsiyasi) ──────────
 function startSplashCanvas() {
   var canvas = document.getElementById('splash-canvas');
   if (!canvas) return null;
@@ -197,7 +197,7 @@ function runSplash() {
   var splash = document.getElementById('splashScreen') || document.getElementById('splash-screen');
   if (!splash) { launchApp(); return; }
 
-  // Kosmik matematik zarrachalar animatsiyasini ishga tushirish
+  // Kosmik fizika zarrachalari animatsiyasini ishga tushirish
   _stopSplashCanvas = startSplashCanvas();
 
   // Ma'lumotlarni fonda oldindan yuklash

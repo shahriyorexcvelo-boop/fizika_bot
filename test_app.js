@@ -95,6 +95,9 @@ const TestApp = {
     // 3.1. Agar telefon o'chib yongan yoki sahifa yangilangan bo'lsa, javoblarni xotiradan tiklash
     this.restoreAnswersFromStorage();
 
+    // 3.2. Yuqori Neon Firuza Test Taymerini ishga tushirish
+    this.initTopTimer(null);
+
     // 4. Mavzuga mos kirish animatsiyasini ishga tushirish
     this.runIntroAnimation();
 
@@ -107,6 +110,9 @@ const TestApp = {
             TestApp.isAdmin = Boolean(d.is_admin);
             var cur = d.tests.find(function(t) { return Number(t.id) === Number(TestApp.testId); });
             if (cur) {
+              TestApp.activeTestInfo = cur;
+              TestApp.initTopTimer(cur);
+
               if (cur.min_submit_info) {
                 TestApp.minSubmitInfo = cur.min_submit_info;
                 TestApp.startMinSubmitTimer();
@@ -239,7 +245,7 @@ const TestApp = {
               <div class="savol-input-box" id="box-${key}" onclick="MathKeyboard.openFor('${key}')">
                 <input type="text" class="savol-input" id="input-${key}" readonly inputmode="none" placeholder="Masalan: 400 J, 4 m/s²" onclick="MathKeyboard.openFor('${key}')">
               </div>
-              <button type="button" class="btn-kb-icon" onclick="MathKeyboard.openFor('${key}')" title="Klaviaturani ochish">⌨️</button>
+              <button type="button" class="btn-kb-icon" onclick="MathKeyboard.openFor('${key}')" title="Klaviaturani ochish" style="display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"/><line x1="6" y1="8" x2="6" y2="8"/><line x1="10" y1="8" x2="10" y2="8"/><line x1="14" y1="8" x2="14" y2="8"/><line x1="18" y1="8" x2="18" y2="8"/><line x1="6" y1="12" x2="6" y2="12"/><line x1="10" y1="12" x2="10" y2="12"/><line x1="14" y1="12" x2="14" y2="12"/><line x1="18" y1="12" x2="18" y2="12"/><line x1="7" y1="16" x2="17" y2="16"/></svg></button>
             </div>
           `;
         }
@@ -275,6 +281,114 @@ const TestApp = {
     } catch (e) {
       console.warn('Storage save error:', e);
     }
+  },
+
+  // ----------------------------------------------------
+  // TEST TAYMERI (VAQT) — NEON FIRUZA VA PROGRESS
+  // Yuqorida neon firuza (--accent-cyan) rangli progress chiziq bilan yurgiziladi,
+  // 1 daqiqadan kam qolganda avtomatik sariq/qizilga o'zgaradi.
+  // ----------------------------------------------------
+  initTopTimer(cur) {
+    if (this._topTimerInterval) {
+      clearInterval(this._topTimerInterval);
+      this._topTimerInterval = null;
+    }
+
+    const tid = this.testId || '1';
+    const uid = this.userTgId || '0';
+    const storageKey = `bm_fizika_timer_start_${tid}_${uid}`;
+
+    let timeLimitMin = 0;
+    if (cur && cur.time_limit_min) {
+      timeLimitMin = parseInt(cur.time_limit_min, 10);
+    }
+
+    let totalSeconds = 0;
+    if (timeLimitMin > 0) {
+      totalSeconds = timeLimitMin * 60;
+    } else if (cur && cur.min_submit_info && cur.min_submit_info.remaining_seconds > 0) {
+      totalSeconds = Math.max(45 * 60, cur.min_submit_info.remaining_seconds);
+    } else {
+      // Standart 120 daqiqalik (2 soatlik) Fizika blok test davri
+      totalSeconds = 120 * 60;
+    }
+
+    let startTime = parseInt(localStorage.getItem(storageKey), 10);
+    if (!startTime || isNaN(startTime) || startTime > Date.now()) {
+      startTime = Date.now();
+      localStorage.setItem(storageKey, String(startTime));
+    }
+
+    const fillEl = document.getElementById('test-timer-fill');
+    const digitsEl = document.getElementById('timer-countdown-display');
+    const badgeEl = document.getElementById('timer-badge');
+    const noteEl = document.getElementById('test-timer-note');
+
+    const updateTimerUI = () => {
+      const elapsedSec = Math.floor((Date.now() - startTime) / 1000);
+      let remainingSec = Math.max(0, totalSeconds - elapsedSec);
+
+      // Agar min_submit cheklovi mavjud bo'lsa
+      if (this.minSubmitInfo && this.minSubmitInfo.remaining_seconds !== undefined && !this.minSubmitInfo.can_submit) {
+        remainingSec = Math.max(0, this.minSubmitInfo.remaining_seconds);
+      }
+
+      const mins = Math.floor(remainingSec / 60);
+      const secs = remainingSec % 60;
+      const hours = Math.floor(mins / 60);
+      const remMins = mins % 60;
+
+      let timeStr = '';
+      if (hours > 0) {
+        timeStr = `${String(hours).padStart(2, '0')}:${String(remMins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      } else {
+        timeStr = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      }
+
+      if (digitsEl) digitsEl.textContent = timeStr;
+
+      const pct = Math.max(0, Math.min(100, (remainingSec / totalSeconds) * 100));
+      if (fillEl) fillEl.style.width = pct + '%';
+
+      // 1 daqiqadan (60s) kam qolganda avtomatik sariq/qizilga o'zgaradi
+      if (remainingSec <= 60 && remainingSec > 20) {
+        if (fillEl) {
+          fillEl.className = 'test-timer-fill timer-warning';
+        }
+        if (badgeEl) {
+          badgeEl.className = 'timer-badge-neon timer-warning';
+        }
+        if (noteEl) noteEl.textContent = 'Qoldi:';
+      } else if (remainingSec <= 20 && remainingSec > 0) {
+        if (fillEl) {
+          fillEl.className = 'test-timer-fill timer-danger';
+        }
+        if (badgeEl) {
+          badgeEl.className = 'timer-badge-neon timer-danger';
+        }
+        if (noteEl) noteEl.textContent = 'Shoshiling:';
+      } else if (remainingSec === 0) {
+        if (fillEl) {
+          fillEl.className = 'test-timer-fill timer-danger';
+          fillEl.style.width = '0%';
+        }
+        if (badgeEl) {
+          badgeEl.className = 'timer-badge-neon timer-danger';
+        }
+        if (noteEl) noteEl.textContent = 'Tugadi:';
+      } else {
+        if (fillEl) {
+          fillEl.className = 'test-timer-fill';
+        }
+        if (badgeEl) {
+          badgeEl.className = 'timer-badge-neon';
+        }
+        if (noteEl) noteEl.textContent = 'Vaqt:';
+      }
+    };
+
+    updateTimerUI();
+    this._topTimerInterval = setInterval(updateTimerUI, 1000);
   },
 
   restoreAnswersFromStorage() {

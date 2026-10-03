@@ -78,13 +78,23 @@
        ========================================= -->
   <div id="web-block-screen" class="web-block-screen" style="display:none;">
     <div class="web-block-card">
-      <div class="web-block-icon">🚫</div>
+      <div class="web-block-icon" style="display:flex;align-items:center;justify-content:center;color:#EF4444;">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+        </svg>
+      </div>
       <h2 class="web-block-title">Web orqali kirish taqiqlangan!</h2>
       <p class="web-block-desc">
         Ushbu Mini ilovadan faqat rasmiy <b>Telegram botimiz (@fizika_rash_testbot)</b> orqali foydalanish mumkin.
       </p>
-      <div class="web-block-warning">
-        ⚠️ Oddiy veb-brauzer orqali kirishga ruxsat berilmagan.
+      <div class="web-block-warning" style="display:flex;align-items:center;justify-content:center;gap:6px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <span>Oddiy veb-brauzer orqali kirishga ruxsat berilmagan.</span>
       </div>
       <a href="https://t.me/fizika_rash_testbot" class="btn-action-primary" style="margin-top: 18px; text-decoration: none; width:100%; justify-content:center; display:flex; align-items:center; gap:8px;">
         <span>Telegram Botga o'tish</span>
@@ -209,8 +219,10 @@
           <div class="nav-icon-wrap">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
               stroke-linecap="round" stroke-linejoin="round">
-              <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" />
-              <path d="M9 21V12h6v9" />
+              <rect width="7" height="7" x="3" y="3" rx="1.5"/>
+              <rect width="7" height="7" x="14" y="3" rx="1.5"/>
+              <rect width="7" height="7" x="14" y="14" rx="1.5"/>
+              <rect width="7" height="7" x="3" y="14" rx="1.5"/>
             </svg>
           </div>
           <span class="nav-label" data-i18n="tab_home">Asosiy</span>
@@ -219,10 +231,11 @@
           <div class="nav-icon-wrap">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
               stroke-linecap="round" stroke-linejoin="round">
-              <rect x="5" y="2" width="14" height="20" rx="2" />
-              <line x1="9" y1="7" x2="15" y2="7" />
-              <line x1="9" y1="11" x2="15" y2="11" />
-              <line x1="9" y1="15" x2="12" y2="15" />
+              <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+              <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+              <path d="M10 9H8"/>
+              <path d="M16 13H8"/>
+              <path d="M16 17H8"/>
             </svg>
           </div>
           <span class="nav-label" data-i18n="tab_tests">Testlar</span>
@@ -231,8 +244,10 @@
           <div class="nav-icon-wrap">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
               stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="8" r="4" />
-              <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
             </svg>
           </div>
           <span class="nav-label" data-i18n="tab_profile">Profil</span>
@@ -241,9 +256,7 @@
           <div class="nav-icon-wrap" style="position:relative">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
               stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="3" />
-              <path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14" />
-              <path d="M12 2v2M12 20v2M2 12h2M20 12h2" />
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
             </svg>
             <span class="nav-badge" id="admin-badge" style="display:none">0</span>
           </div>
@@ -287,8 +300,12 @@
   <!-- UNREGISTERED MODAL (RO'YXATDAN O'TISH QAT'IY CHEKLOVI) -->
   <div id="unregistered-modal" class="modal-overlay" style="display:none;z-index:999999;">
     <div class="modal-box" style="text-align:center;padding:32px 24px 26px;border-radius:26px;max-width:380px;width:92%;background:var(--bg-card);border:1px solid var(--border);box-shadow:0 24px 60px rgba(0,0,0,0.45);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);">
-      <div style="width:76px;height:76px;border-radius:24px;background:rgba(239,68,68,0.12);color:#EF4444;font-size:38px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 8px 24px rgba(239,68,68,0.2);">
-        ⚠️
+      <div style="width:76px;height:76px;border-radius:24px;background:rgba(239,68,68,0.12);color:#EF4444;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 8px 24px rgba(239,68,68,0.2);">
+        <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+          <line x1="12" y1="9" x2="12" y2="13"></line>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
       </div>
       <h3 style="font-size:20px;font-weight:900;color:var(--text);margin-bottom:8px;" data-i18n="unreg_title">
         Iltimos, roʻyxatdan oʻting!
@@ -297,7 +314,11 @@
         Tizimdan toʻliq foydalanish, testlarni yechish va natijalarni saqlash uchun avval botda roʻyxatdan oʻting.
       </p>
       <button onclick="goToBotRegister()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg, #3B82F6, #6366F1);color:white;border:none;font-weight:800;font-size:15px;cursor:pointer;box-shadow:0 4px 18px rgba(59,130,246,0.4);display:flex;align-items:center;justify-content:center;gap:8px;">
-        <span data-i18n="unreg_btn">Roʻyxatdan oʻtish 🚀</span>
+        <span data-i18n="unreg_btn">Roʻyxatdan oʻtish</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
       </button>
     </div>
   </div>
@@ -311,8 +332,13 @@
         <!-- Slide 0: Asosiy (Home) -->
         <div class="onboarding-slide" id="onboarding-slide-0">
           <div
-            style="width:72px;height:72px;border-radius:24px;background:rgba(59,130,246,0.12);color:#3B82F6;font-size:34px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;box-shadow:0 8px 22px rgba(59,130,246,0.2);">
-            🏠
+            style="width:72px;height:72px;border-radius:24px;background:rgba(59,130,246,0.12);color:#3B82F6;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;box-shadow:0 8px 22px rgba(59,130,246,0.2);">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="7" height="7" x="3" y="3" rx="1.5"/>
+              <rect width="7" height="7" x="14" y="3" rx="1.5"/>
+              <rect width="7" height="7" x="14" y="14" rx="1.5"/>
+              <rect width="7" height="7" x="3" y="14" rx="1.5"/>
+            </svg>
           </div>
           <div
             style="display:inline-block;padding:3px 12px;border-radius:20px;background:rgba(59,130,246,0.12);color:#3B82F6;font-size:11.5px;font-weight:800;letter-spacing:0.5px;margin-bottom:8px;">
@@ -324,15 +350,22 @@
           </p>
           <div
             style="background:var(--bg-body);border:1px solid var(--border);border-radius:14px;padding:10px 14px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:12.5px;color:var(--text);font-weight:600;">
-            <span style="font-size:16px;">⚡️</span> Tezkor kirish, test kodlari va e’lonlar
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <span>Tezkor kirish, test kodlari va e’lonlar</span>
           </div>
         </div>
 
         <!-- Slide 1: Testlar (Tests) -->
         <div class="onboarding-slide" id="onboarding-slide-1" style="display:none;">
           <div
-            style="width:72px;height:72px;border-radius:24px;background:rgba(16,185,129,0.12);color:#10B981;font-size:34px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;box-shadow:0 8px 22px rgba(16,185,129,0.2);">
-            📝
+            style="width:72px;height:72px;border-radius:24px;background:rgba(16,185,129,0.12);color:#10B981;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;box-shadow:0 8px 22px rgba(16,185,129,0.2);">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+              <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+              <path d="M10 9H8"/>
+              <path d="M16 13H8"/>
+              <path d="M16 17H8"/>
+            </svg>
           </div>
           <div
             style="display:inline-block;padding:3px 12px;border-radius:20px;background:rgba(16,185,129,0.12);color:#10B981;font-size:11.5px;font-weight:800;letter-spacing:0.5px;margin-bottom:8px;">
@@ -345,15 +378,23 @@
           </p>
           <div
             style="background:var(--bg-body);border:1px solid var(--border);border-radius:14px;padding:10px 14px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:12.5px;color:var(--text);font-weight:600;">
-            <span style="font-size:16px;">🔍</span> Har bir savolning to‘g‘ri/noto‘g‘ri tahlili
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <span>Har bir savolning to‘g‘ri/noto‘g‘ri tahlili</span>
           </div>
         </div>
 
         <!-- Slide 2: Profil (Profile) -->
         <div class="onboarding-slide" id="onboarding-slide-2" style="display:none;">
           <div
-            style="width:72px;height:72px;border-radius:24px;background:rgba(245,158,11,0.12);color:#F59E0B;font-size:34px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;box-shadow:0 8px 22px rgba(245,158,11,0.2);">
-            👤
+            style="width:72px;height:72px;border-radius:24px;background:rgba(245,158,11,0.12);color:#F59E0B;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;box-shadow:0 8px 22px rgba(245,158,11,0.2);">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m8 21 8 0"/>
+              <path d="M12 17v4"/>
+              <path d="M7 4h10"/>
+              <path d="M17 4v8a5 5 0 0 1-10 0V4"/>
+              <path d="M3 9a4 4 0 0 0 4 4"/>
+              <path d="M21 9a4 4 0 0 1-4 4"/>
+            </svg>
           </div>
           <div
             style="display:inline-block;padding:3px 12px;border-radius:20px;background:rgba(245,158,11,0.12);color:#F59E0B;font-size:11.5px;font-weight:800;letter-spacing:0.5px;margin-bottom:8px;">
@@ -366,28 +407,29 @@
           </p>
           <div
             style="background:var(--bg-body);border:1px solid var(--border);border-radius:14px;padding:10px 14px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:12.5px;color:var(--text);font-weight:600;">
-            <span style="font-size:16px;">🎖</span> Shaxsiy ballar va reyting
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 21 8 0"/><path d="M12 17v4"/><path d="M7 4h10"/><path d="M17 4v8a5 5 0 0 1-10 0V4"/></svg>
+            <span>Shaxsiy ballar va reyting</span>
           </div>
         </div>
 
         <!-- Slide 3: Oq va Qorong'u rejim (Theme) -->
         <div class="onboarding-slide" id="onboarding-slide-3" style="display:none;">
           <div
-            style="width:72px;height:72px;border-radius:24px;background:rgba(139,92,246,0.12);color:#8B5CF6;font-size:34px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;box-shadow:0 8px 22px rgba(139,92,246,0.2);">
-            ☀️ 🌙
+            style="width:72px;height:72px;border-radius:24px;background:rgba(139,92,246,0.12);color:#8B5CF6;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;box-shadow:0 8px 22px rgba(139,92,246,0.2);gap:6px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
           </div>
           <div
             style="display:inline-block;padding:3px 12px;border-radius:20px;background:rgba(139,92,246,0.12);color:#8B5CF6;font-size:11.5px;font-weight:800;letter-spacing:0.5px;margin-bottom:8px;">
             QULAY DIZAYN</div>
           <h3 style="font-size:19px;font-weight:900;color:var(--text);margin-bottom:8px;">Oq va Qorong‘u rejim</h3>
           <p style="font-size:13.5px;color:var(--text-muted);line-height:1.55;margin:0 auto 12px;max-width:310px;">
-            Ilova kirishda har doim qulay <b>Oq (kunduzgi)</b> rejimda ochiladi. Tepadagi <b>☀️ / 🌙</b> tugma orqali
+            Ilova kirishda har doim qulay <b>Oq (kunduzgi)</b> rejimda ochiladi. Tepadagi rejim tugmasi orqali
             ilovani xohlagan vaqtingizda <b>Qorong‘u (tungi)</b> yoki <b>Oq</b> rejimga o‘tkaza olasiz!
           </p>
           <div
             style="background:var(--bg-body);border:1px solid var(--border);border-radius:14px;padding:10px 14px;display:flex;align-items:center;justify-content:center;gap:12px;font-size:12.5px;color:var(--text);font-weight:700;">
-            <span>☀️ Kunduzgi (Oq)</span> <span style="color:var(--text-muted);">⇄</span> <span>🌙 Tungi
-              (Qorong‘u)</span>
+            <span>Kunduzgi (Oq)</span> <span style="color:var(--text-muted);">⇄</span> <span>Tungi (Qorong‘u)</span>
           </div>
         </div>
       </div>
@@ -409,8 +451,10 @@
         <button onclick="finishOnboarding()" data-i18n="btn_skip"
           style="flex:1;padding:12px;border-radius:12px;background:var(--bg-body);color:var(--text-muted);border:1px solid var(--border);font-weight:700;font-size:14px;cursor:pointer;">Oʻtkazish</button>
         <button id="btn-onboarding-next" onclick="nextOnboardingSlide()"
-          style="flex:1.4;padding:12px;border-radius:12px;background:linear-gradient(135deg, #3B82F6, #6366F1);color:white;border:none;font-weight:800;font-size:14.5px;cursor:pointer;box-shadow:0 4px 14px rgba(59,130,246,0.35);">Keyingisi
-          ➔</button>
+          style="flex:1.4;padding:12px;border-radius:12px;background:linear-gradient(135deg, #3B82F6, #6366F1);color:white;border:none;font-weight:800;font-size:14.5px;cursor:pointer;box-shadow:0 4px 14px rgba(59,130,246,0.35);display:inline-flex;align-items:center;justify-content:center;gap:6px;">
+          <span>Keyingisi</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </button>
       </div>
     </div>
   </div>
@@ -433,16 +477,20 @@
       <!-- PRESET TAGS (QUICK PILLS) — Testlar, Natijalarim, Bot haqida -->
       <div class="search-preset-chips" id="search-preset-chips">
         <button class="search-chip active" id="chip-all" onclick="selectSearchFilter('all')">
-          <span class="chip-icon">✨</span> <span data-i18n="search_chip_all">Barchasi</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <span data-i18n="search_chip_all">Barchasi</span>
         </button>
         <button class="search-chip" id="chip-tests" onclick="selectSearchFilter('tests')">
-          <span class="chip-icon">📝</span> <span data-i18n="search_chip_tests">Testlar</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+          <span data-i18n="search_chip_tests">Testlar</span>
         </button>
         <button class="search-chip" id="chip-results" onclick="selectSearchFilter('results')">
-          <span class="chip-icon">📊</span> <span data-i18n="search_chip_results">Natijalarim</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          <span data-i18n="search_chip_results">Natijalarim</span>
         </button>
         <button class="search-chip" id="chip-about" onclick="selectSearchFilter('about')">
-          <span class="chip-icon">ℹ️</span> <span data-i18n="search_chip_about">Bot haqida</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <span data-i18n="search_chip_about">Bot haqida</span>
         </button>
       </div>
 

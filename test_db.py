@@ -12,6 +12,12 @@ import math
 from datetime import datetime, timezone, timedelta
 from typing import Optional, List, Dict, Any, Tuple
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 UZB_TZ = timezone(timedelta(hours=5))
 ADMIN_ID = int(os.getenv("ADMIN_ID", "8039427064"))
 

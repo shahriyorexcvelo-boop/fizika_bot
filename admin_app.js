@@ -269,7 +269,7 @@ const AdminApp = {
               <div class="savol-input-box" id="box-${q}a" onclick="MathKeyboard.openFor('${q}a')" style="height: 38px; flex: 1; padding: 0 8px; cursor: pointer;">
                 <input type="text" class="savol-input" id="input-${q}a" readonly inputmode="none" placeholder="Masalan: 400 J, 4 m/s²" value="${itemA.ans}" onclick="MathKeyboard.openFor('${q}a')" style="font-size: 13px; cursor: pointer;">
               </div>
-              <button type="button" class="btn-kb-icon" style="width: 36px; height: 38px; font-size: 16px; border-radius: 10px;" onclick="MathKeyboard.openFor('${q}a')" title="Matematik klaviatura">⌨️</button>
+              <button type="button" class="btn-kb-icon" style="width: 36px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center;" onclick="MathKeyboard.openFor('${q}a')" title="Klaviatura"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"/><line x1="6" y1="8" x2="6" y2="8"/><line x1="10" y1="8" x2="10" y2="8"/><line x1="14" y1="8" x2="14" y2="8"/><line x1="18" y1="8" x2="18" y2="8"/><line x1="6" y1="12" x2="6" y2="12"/><line x1="10" y1="12" x2="10" y2="12"/><line x1="14" y1="12" x2="14" y2="12"/><line x1="18" y1="12" x2="18" y2="12"/><line x1="7" y1="16" x2="17" y2="16"/></svg></button>
             </div>
 
             <!-- b -->
@@ -278,7 +278,7 @@ const AdminApp = {
               <div class="savol-input-box" id="box-${q}b" onclick="MathKeyboard.openFor('${q}b')" style="height: 38px; flex: 1; padding: 0 8px; cursor: pointer;">
                 <input type="text" class="savol-input" id="input-${q}b" readonly inputmode="none" placeholder="Masalan: 400 J, 4 m/s²" value="${itemB.ans}" onclick="MathKeyboard.openFor('${q}b')" style="font-size: 13px; cursor: pointer;">
               </div>
-              <button type="button" class="btn-kb-icon" style="width: 36px; height: 38px; font-size: 16px; border-radius: 10px;" onclick="MathKeyboard.openFor('${q}b')" title="Matematik klaviatura">⌨️</button>
+              <button type="button" class="btn-kb-icon" style="width: 36px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center;" onclick="MathKeyboard.openFor('${q}b')" title="Klaviatura"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"/><line x1="6" y1="8" x2="6" y2="8"/><line x1="10" y1="8" x2="10" y2="8"/><line x1="14" y1="8" x2="14" y2="8"/><line x1="18" y1="8" x2="18" y2="8"/><line x1="6" y1="12" x2="6" y2="12"/><line x1="10" y1="12" x2="10" y2="12"/><line x1="14" y1="12" x2="14" y2="12"/><line x1="18" y1="12" x2="18" y2="12"/><line x1="7" y1="16" x2="17" y2="16"/></svg></button>
             </div>
           </div>
         `;

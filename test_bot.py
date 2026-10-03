@@ -357,61 +357,61 @@ class ContactUserState(StatesGroup):
 def main_menu_kb(user_tg_id: int) -> ReplyKeyboardMarkup:
     is_adm = test_db.is_admin(user_tg_id, ADMIN_ID)
     
-    app_url = f"{WEBAPP_URL}/app.html?tg_id={user_tg_id}&v=20261002_fresh"
-    admin_webapp_url = f"{WEBAPP_URL}/admin.html?tg_id={user_tg_id}&v=20261002_fresh"
+    app_url = f"{WEBAPP_URL}/app.html?tg_id={user_tg_id}&v=20261003_fresh"
+    admin_webapp_url = f"{WEBAPP_URL}/admin.html?tg_id={user_tg_id}&v=20261003_fresh"
 
     # Agar HTTPS bo'lsa to'g'ridan-to'g'ri Telegram WebApp ochadi
     if app_url.startswith("https://"):
-        results_btn = KeyboardButton(text="📊 Mening natijalarim", web_app=WebAppInfo(url=app_url))
+        results_btn = KeyboardButton(text="◈ Mening natijalarim", web_app=WebAppInfo(url=app_url))
     else:
-        results_btn = KeyboardButton(text="📊 Mening natijalarim")
+        results_btn = KeyboardButton(text="◈ Mening natijalarim")
 
     if admin_webapp_url.startswith("https://"):
-        create_test_btn = KeyboardButton(text="➕ Yangi test yaratish", web_app=WebAppInfo(url=admin_webapp_url))
+        create_test_btn = KeyboardButton(text="✦ Yangi test yaratish", web_app=WebAppInfo(url=admin_webapp_url))
     else:
-        create_test_btn = KeyboardButton(text="➕ Yangi test yaratish")
+        create_test_btn = KeyboardButton(text="✦ Yangi test yaratish")
 
     if is_adm:
-        # Adminlar uchun faqat admin funksiyalari:
+        # Adminlar uchun menyu:
         # 1-qator: Test kodini kiritish + Yangi test yaratish (Mini App)
         # 2-qator: Test natijalari va reyting + Testlarni boshqarish
         # 3-qator: Admin Panel
         buttons = [
-            [KeyboardButton(text="⚛️ Test kodini kiritish"), create_test_btn],
-            [KeyboardButton(text="📊 Test natijalari va reyting"), KeyboardButton(text="🔬 Testlarni boshqarish")],
-            [KeyboardButton(text="⚙️ Admin Panel")]
+            [KeyboardButton(text="✦ Test kodini kiritish"), create_test_btn],
+            [KeyboardButton(text="◈ Test natijalari va reyting"), KeyboardButton(text="◈ Testlarni boshqarish")],
+            [KeyboardButton(text="⚙ Admin Panel")]
         ]
     else:
         # Oddiy foydalanuvchilar uchun menyu tartibi:
         # 1-qator: Test kodini kiritish + Mening natijalarim (Asosiy App)
         # 2-qator: Profilim + Yordam (adminga murojaat)
         buttons = [
-            [KeyboardButton(text="⚛️ Test kodini kiritish"), results_btn],
-            [KeyboardButton(text="👤 Profilim"), KeyboardButton(text="💡 Yordam")]
+            [KeyboardButton(text="✦ Test kodini kiritish"), results_btn],
+            [KeyboardButton(text="◈ Profilim"), KeyboardButton(text="› Yordam")]
         ]
 
     return ReplyKeyboardMarkup(keyboard=buttons, resize_keyboard=True)
 
 def profile_webapp_kb(user_tg_id: int) -> InlineKeyboardMarkup:
     """Shaxsiy profil mini ilovasini ochish tugmasi."""
-    app_url = f"{WEBAPP_URL}/app.html?tg_id={user_tg_id}&v=20261002_fresh"
+    app_url = f"{WEBAPP_URL}/app.html?tg_id={user_tg_id}&v=20261003_fresh"
     buttons = [
-        [make_webapp_button("📱 Shaxsiy profilni ochish", app_url, fallback_cb="open_app_info")]
+        [make_webapp_button("◈ Shaxsiy profilni ochish", app_url, fallback_cb="open_app_info")]
     ]
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 def results_webapp_kb(user_tg_id: int = 0) -> InlineKeyboardMarkup:
     """Natijalarni ko'rish mini ilovasi tugmasi."""
-    qs = f"?tg_id={user_tg_id}&v=20261002_fresh" if user_tg_id else "?v=20261002_fresh"
+    qs = f"?tg_id={user_tg_id}&v=20261003_fresh" if user_tg_id else "?v=20261003_fresh"
     app_url = f"{WEBAPP_URL}/app.html{qs}"
     buttons = [
-        [make_webapp_button("📊 Asosiy ilovani ochish", app_url, fallback_cb="open_app_info")]
+        [make_webapp_button("◈ Asosiy ilovani ochish", app_url, fallback_cb="open_app_info")]
     ]
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 def contact_share_kb() -> ReplyKeyboardMarkup:
     return ReplyKeyboardMarkup(
-        keyboard=[[KeyboardButton(text="📱 Telefon raqamni yuborish", request_contact=True)]],
+        keyboard=[[KeyboardButton(text="▫️ Telefon raqamni yuborish", request_contact=True)]],
         resize_keyboard=True,
         one_time_keyboard=True
     )
@@ -422,19 +422,18 @@ def admin_menu_kb() -> InlineKeyboardMarkup:
     Foydalanuvchilar boshqaruvi to'liq Asosiy Web Ilovaga (Main App) ko'chirilgan.
     """
     maint_on = test_db.is_maintenance_mode()
-    maint_icon = "🔴" if maint_on else "🟢"
-    maint_status = "YOQILGAN" if maint_on else "O'CHIQ"
-    maint_btn_text = f"🛠 Texnik rejim: {maint_status} {maint_icon}"
+    maint_status = "YOQILGAN (Faol)" if maint_on else "O'CHIQ"
+    maint_btn_text = f"⚙ Texnik rejim: {maint_status}"
 
     buttons = [
-        [InlineKeyboardButton(text="💻 MacBook Dashboard (Katta Baza)", url=f"{WEBAPP_URL}/dashboard")],
-        [InlineKeyboardButton(text="💬 Foydalanuvchiga yozish / Chat", callback_data="admin_contact_user_prompt")],
-        [InlineKeyboardButton(text="📢 O'quvchilarga xabar yuborish", callback_data="admin_broadcast_menu")],
-        [InlineKeyboardButton(text="⚠️ Faoliyatsizlarga ogohlantirish", callback_data="admin_warn_inactive_menu")],
-        [InlineKeyboardButton(text="🧹 Botni bloklaganlarni tozalash", callback_data="admin_clean_blocked_prompt")],
+        [InlineKeyboardButton(text="◈ MacBook Dashboard (Katta Baza)", url=f"{WEBAPP_URL}/dashboard")],
+        [InlineKeyboardButton(text="› Foydalanuvchiga yozish / Chat", callback_data="admin_contact_user_prompt")],
+        [InlineKeyboardButton(text="✦ O'quvchilarga xabar yuborish", callback_data="admin_broadcast_menu")],
+        [InlineKeyboardButton(text="▫️ Faoliyatsizlarga ogohlantirish", callback_data="admin_warn_inactive_menu")],
+        [InlineKeyboardButton(text="✕ Botni bloklaganlarni tozalash", callback_data="admin_clean_blocked_prompt")],
         [InlineKeyboardButton(text=maint_btn_text, callback_data="admin_toggle_maint_prompt")],
-        [InlineKeyboardButton(text="👑 Adminlar boshqaruvi", callback_data="admin_manage_admins")],
-        [make_webapp_button("👥 Foydalanuvchilar boshqaruvi (Web App)", f"{WEBAPP_URL}/app.html?tab=admin&tg_id={ADMIN_ID}", "admin_webapp_redirect_info")]
+        [InlineKeyboardButton(text="⚙ Adminlar boshqaruvi", callback_data="admin_manage_admins")],
+        [make_webapp_button("◈ Foydalanuvchilar boshqaruvi (Web App)", f"{WEBAPP_URL}/app.html?tab=admin&tg_id={ADMIN_ID}", "admin_webapp_redirect_info")]
     ]
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
@@ -461,15 +460,15 @@ async def send_test_card_to_user_chat(user_tg_id: int, test: Dict[str, Any]):
             score_val = existing_sub.get("score", 0)
             corr_val = existing_sub.get("correct_count", 0)
             text = (
-                f"⛔️ <b>Siz ushbu testni topshirgansiz!</b>\n\n"
-                f"📖 <b>Test:</b> {test['title']}\n"
-                f"🎖 <b>Milliy Sertifikat darajangiz:</b> <b>{grade}</b> ({score_val} ball)\n"
-                f"✅ <b>To'g'ri javoblar:</b> {corr_val} ta\n"
-                f"🕒 <b>Topshirilgan vaqt:</b> {dt}\n\n"
-                f"💡 <i>Test tahlilini ko'rish uchun quyidagi tugmani bosing:</i>"
+                f"✕ <b>Siz ushbu testni topshirgansiz!</b>\n\n"
+                f"• <b>Test:</b> {test['title']}\n"
+                f"✦ <b>Milliy Sertifikat darajangiz:</b> <b>{grade}</b> ({score_val} ball)\n"
+                f"✓ <b>To'g'ri javoblar:</b> {corr_val} ta\n"
+                f"• <b>Topshirilgan vaqt:</b> {dt}\n\n"
+                f"ℹ <i>Test tahlilini ko'rish uchun quyidagi tugmani bosing:</i>"
             )
             kb = InlineKeyboardMarkup(inline_keyboard=[
-                [InlineKeyboardButton(text="📊 Test tahlili", callback_data=f"user_req_tahlil_{test['id']}")]
+                [InlineKeyboardButton(text="◈ Test tahlili", callback_data=f"user_req_tahlil_{test['id']}")]
             ])
             try:
                 await bot.send_message(chat_id=user_tg_id, text=text, reply_markup=kb)
@@ -477,11 +476,11 @@ async def send_test_card_to_user_chat(user_tg_id: int, test: Dict[str, Any]):
                 log.warning(f"send_message error: {e}")
         else:
             text = (
-                f"⏳ <b>Siz ushbu testni topshirgansiz!</b>\n\n"
-                f"📖 <b>Test:</b> {test['title']}\n"
-                f"📌 <b>Holat:</b> ⏳ <b>Javoblaringiz tekshirilmoqda...</b>\n"
-                f"🕒 <b>Topshirilgan vaqt:</b> {dt}\n\n"
-                f"ℹ️ <i>Test hozirda davom etmoqda. Admin testni to'xtatib, Rasch tahlilini e'lon qilgandan so'ng, "
+                f"▫️ <b>Siz ushbu testni topshirgansiz!</b>\n\n"
+                f"• <b>Test:</b> {test['title']}\n"
+                f"• <b>Holat:</b> <b>Javoblaringiz tekshirilmoqda...</b>\n"
+                f"• <b>Topshirilgan vaqt:</b> {dt}\n\n"
+                f"ℹ <i>Test hozirda davom etmoqda. Admin testni to'xtatib, Rasch tahlilini e'lon qilgandan so'ng, "
                 f"to'g'ri javoblar soni, yakuniy ball va Milliy sertifikat darajangiz bot orqali shaxsiy xabar qilib yuboriladi!</i>"
             )
             try:
@@ -498,9 +497,9 @@ async def send_test_card_to_user_chat(user_tg_id: int, test: Dict[str, Any]):
             await bot.send_message(
                 chat_id=user_tg_id,
                 text=(
-                    f"⏳ <b>«{test['title']}» testi hali boshlanmagan!</b>\n\n"
-                    f"📅 Belgilangan sana: <b>{sdate}</b>\n"
-                    f"⏰ Boshlanish vaqti: <b>{sstart} (UZB)</b>\n\n"
+                    f"▫️ <b>«{test['title']}» testi hali boshlanmagan!</b>\n\n"
+                    f"• Belgilangan sana: <b>{sdate}</b>\n"
+                    f"• Boshlanish vaqti: <b>{sstart} (UZB)</b>\n\n"
                     f"<i>Test belgilangan vaqtda avtomatik boshlanadi va test kodi hamda savollar ochiladi. Ungacha kuting!</i>"
                 )
             )
@@ -512,7 +511,7 @@ async def send_test_card_to_user_chat(user_tg_id: int, test: Dict[str, Any]):
         try:
             await bot.send_message(
                 chat_id=user_tg_id,
-                text=f"⛔️ <b>«{test['title']}» testi to'xtatilgan!</b>\nAdmin tomonidan javoblar qabul qilish yopilgan."
+                text=f"✕ <b>«{test['title']}» testi to'xtatilgan!</b>\nAdmin tomonidan javoblar qabul qilish yopilgan."
             )
         except Exception as e:
             log.warning(f"send_message error: {e}")
@@ -523,22 +522,23 @@ async def send_test_card_to_user_chat(user_tg_id: int, test: Dict[str, Any]):
         "test_code": test["test_code"],
         "title": test["title"],
         "subject": test.get("subject", "Fizika"),
-        "tg_id": user_tg_id
+        "tg_id": user_tg_id,
+        "v": "20261003_vcosmic"
     }
     encoded_url = f"{WEBAPP_URL}?{urllib.parse.urlencode(params)}"
 
     inline_kb = InlineKeyboardMarkup(inline_keyboard=[
-        [make_webapp_button("📝 Javoblarni topshirish (Mini App)", encoded_url, fallback_cb=f"solve_test_{test['id']}")]
+        [make_webapp_button("✦ Javoblarni topshirish (Mini App)", encoded_url, fallback_cb=f"solve_test_{test['id']}")]
     ])
 
-    time_info = f"⏱ <b>Vaqt chegarasi:</b> {test['time_limit_min']} daqiqa\n" if test.get("time_limit_min", 0) > 0 else ""
+    time_info = f"• <b>Vaqt chegarasi:</b> {test['time_limit_min']} daqiqa\n" if test.get("time_limit_min", 0) > 0 else ""
 
     caption = (
-        f"📖 <b>{test['title']}</b>\n"
-        f"📌 <b>Fan:</b> {test.get('subject', 'Fizika')}\n"
-        f"❓ <b>Savollar:</b> 55 ta (1-32 ABCD, 33-35 ABCDEF, 36a-45b Yozma)\n"
+        f"✦ <b>{test['title']}</b>\n"
+        f"• <b>Fan:</b> {test.get('subject', 'Fizika')}\n"
+        f"• <b>Savollar:</b> 55 ta (1-32 ABCD, 33-35 ABCDEF, 36a-45b Yozma)\n"
         f"{time_info}\n"
-        f"⚠️ <i>Eslatma: Testni faqat 1 marta topshirish mumkin! Javoblaringizni belgilab bo'lgach, «Testni yakunlash» tugmasini bosing.</i>"
+        f"ℹ <i>Eslatma: Testni faqat 1 marta topshirish mumkin! Javoblaringizni belgilab bo'lgach, «Testni yakunlash» tugmasini bosing.</i>"
     )
 
     sent = False
@@ -786,17 +786,17 @@ async def reg_phone(message: Message, state: FSMContext):
         reply_markup=main_menu_kb(user_tg_id)
     )
 
-# 1. 🔢 Test kodini kiritish (Prompt)
-@router.message(F.text.in_({"⚛️ Test kodini kiritish", "⚛️ Test kodini kiritish", "🔢 Test kodini kiritish"}))
+# 1. ✦ Test kodini kiritish (Prompt)
+@router.message(F.text.in_({"✦ Test kodini kiritish", "⚛️ Test kodini kiritish", "🔢 Test kodini kiritish"}))
 @router.message(Command("solve"))
 async def enter_test_code_prompt(message: Message, state: FSMContext):
     if not await check_access(message):
         return
     await state.set_state(SolveTestState.test_code)
     await message.answer(
-        "🔢 <b>Test kodini kiriting:</b>\n\n"
-        "<i>(Masalan: <code>MAT-01</code> yoki <code>101</code>)</i>\n\n"
-        "Bekor qilish uchun pastdagi menyudan foydalaning."
+        "✦ <b>Test kodini kiriting:</b>\n\n"
+        "<i>(Masalan: <code>1</code> yoki <code>FIZ-01</code>)</i>\n\n"
+        "Bekor qilish uchun menyudan foydalanishingiz mumkin."
     )
 
 # Test kodi kiritildi (FSM)
@@ -809,27 +809,32 @@ async def process_solve_test_code(message: Message, state: FSMContext):
     if not text:
         return
     menu_cmds = [
-        "⚛️ Test kodini kiritish", "🔢 Test kodini kiritish", "📊 Mening natijalarim", "👤 Profilim",
-        "ℹ️ Yordam", "ℹ️ Bot haqida", "⚙️ Admin Panel",
-        "➕ Yangi test yaratish", "📊 Test natijalari va reyting", "🔬 Testlarni boshqarish", "📋 Testlarni boshqarish"
+        "✦ Test kodini kiritish", "⚛️ Test kodini kiritish", "🔢 Test kodini kiritish",
+        "◈ Mening natijalarim", "📊 Mening natijalarim",
+        "◈ Profilim", "👤 Profilim",
+        "› Yordam", "💡 Yordam", "ℹ️ Yordam", "ℹ️ Bot haqida",
+        "⚙ Admin Panel", "⚙️ Admin Panel",
+        "✦ Yangi test yaratish", "➕ Yangi test yaratish",
+        "◈ Test natijalari va reyting", "📊 Test natijalari va reyting",
+        "◈ Testlarni boshqarish", "🔬 Testlarni boshqarish", "📋 Testlarni boshqarish"
     ]
     if text in menu_cmds:
         await state.clear()
-        if text == "📊 Mening natijalarim":
+        if text in ["◈ Mening natijalarim", "📊 Mening natijalarim"]:
             await show_my_results(message)
-        elif text == "👤 Profilim":
+        elif text in ["◈ Profilim", "👤 Profilim"]:
             await show_profile(message)
-        elif text in ["💡 Yordam", "ℹ️ Yordam", "ℹ️ Bot haqida"]:
+        elif text in ["› Yordam", "💡 Yordam", "ℹ️ Yordam", "ℹ️ Bot haqida"]:
             await show_help(message)
-        elif text == "⚙️ Admin Panel":
+        elif text in ["⚙ Admin Panel", "⚙️ Admin Panel"]:
             await admin_panel_handler(message)
-        elif text == "➕ Yangi test yaratish":
+        elif text in ["✦ Yangi test yaratish", "➕ Yangi test yaratish"]:
             await admin_create_test_text_handler(message)
-        elif text == "📊 Test natijalari va reyting":
+        elif text in ["◈ Test natijalari va reyting", "📊 Test natijalari va reyting"]:
             await admin_leaderboard_text_handler(message)
-        elif text in ["🔬 Testlarni boshqarish", "📋 Testlarni boshqarish"]:
+        elif text in ["◈ Testlarni boshqarish", "🔬 Testlarni boshqarish", "📋 Testlarni boshqarish"]:
             await admin_manage_tests_text_handler(message)
-        elif text in ["⚛️ Test kodini kiritish", "🔢 Test kodini kiritish"]:
+        elif text in ["✦ Test kodini kiritish", "⚛️ Test kodini kiritish", "🔢 Test kodini kiritish"]:
             await enter_test_code_prompt(message, state)
         return
 
@@ -878,7 +883,8 @@ async def solve_test_cb(call: CallbackQuery):
         "test_id": t["id"],
         "test_code": t["test_code"],
         "title": t["title"],
-        "subject": t.get("subject", "Fizika")
+        "subject": t.get("subject", "Fizika"),
+        "v": "20261003_vcosmic"
     }
     encoded_url = f"{WEBAPP_URL}?{urllib.parse.urlencode(params)}"
     reply_kb = InlineKeyboardMarkup(inline_keyboard=[
@@ -908,8 +914,8 @@ async def admin_webapp_info_cb(call: CallbackQuery):
         await call.message.answer(text, reply_markup=reply_kb)
     await call.answer()
 
-# 2. 📊 Mening natijalarim
-@router.message(F.text == "📊 Mening natijalarim")
+# 2. ◈ Mening natijalarim
+@router.message(F.text.in_({"◈ Mening natijalarim", "📊 Mening natijalarim"}))
 @router.message(Command("results"))
 async def show_my_results(message: Message):
     subs = test_db.get_user_submissions(message.from_user.id)
@@ -920,19 +926,19 @@ async def show_my_results(message: Message):
         for s in pub_subs[:5]:
             t_title = s.get("test_title", "Test")
             t_code = s.get("test_code", "")
-            btn_title = f"📊 #{t_code} tahlili" if t_code else f"📊 {t_title[:20]} tahlili"
+            btn_title = f"◈ #{t_code} tahlili" if t_code else f"◈ {t_title[:20]} tahlili"
             kb_rows.append([InlineKeyboardButton(text=btn_title, callback_data=f"user_req_tahlil_{s['test_id']}")])
 
-    kb_rows.append([make_webapp_button("📱 Barcha natijalar va tahlillar (Mini App)", f"{WEBAPP_URL}/app.html?tab=tests")])
+    kb_rows.append([make_webapp_button("◈ Barcha natijalar va tahlillar (Mini App)", f"{WEBAPP_URL}/app.html?tab=tests")])
 
     await message.answer(
-        "📊 <b>Mening natijalarim va tahlillar</b>\n\n"
-        "Quyidagi tugmalar orqali topshirgan testlaringiz tahlilini ko'rishingiz yoki Mini ilovani ochishingiz mumkin 👇",
+        "◈ <b>Mening natijalarim va tahlillar</b>\n\n"
+        "Quyidagi tugmalar orqali topshirgan testlaringiz tahlilini ko'rishingiz yoki Mini ilovani ochishingiz mumkin:",
         reply_markup=InlineKeyboardMarkup(inline_keyboard=kb_rows)
     )
 
-# 3. 👤 Profil (Bot chatida ko'rish va tahrirlash)
-@router.message(F.text == "👤 Profilim")
+# 3. ◈ Profil (Bot chatida ko'rish va tahrirlash)
+@router.message(F.text.in_({"◈ Profilim", "👤 Profilim"}))
 @router.message(Command("profile"))
 async def show_profile(message: Message):
     user = test_db.get_user(message.from_user.id)
@@ -1775,113 +1781,112 @@ async def adm_clean_blocked_start_cb(call: CallbackQuery):
     ])
     await call.message.edit_text(res_text, reply_markup=kb)
 
-# 4. ℹ️ Yordam va murojaat
-@router.message(F.text.in_({"💡 Yordam", "ℹ️ Yordam"}))
-@router.message(F.text == "ℹ️ Bot haqida")
+# 4. › Yordam va murojaat
+@router.message(F.text.in_({"› Yordam", "💡 Yordam", "ℹ️ Yordam", "ℹ️ Bot haqida"}))
 @router.message(Command("help"))
 async def show_help(message: Message):
     contact_kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="✍️ Adminga murojaat (@eshmbetov)", url="https://t.me/eshmbetov")],
-        [make_webapp_button("📱 Shohruh Fizika (Mini App)", f"{WEBAPP_URL}/app.html")]
+        [InlineKeyboardButton(text="› Adminga murojaat (@eshmbetov)", url="https://t.me/eshmbetov")],
+        [make_webapp_button("◈ Shohruh Fizika (Mini App)", f"{WEBAPP_URL}/app.html")]
     ])
     await message.answer(
-        "ℹ️ <b>YORDAM VA QO'LLAB-QUVVATLASH</b>\n\n"
-        "🎓 <b>SHOHRUH FIZIKA — RASH TEST</b>\n\n"
+        "ℹ <b>YORDAM VA QO'LLAB-QUVVATLASH</b>\n\n"
+        "◈ <b>SHOHRUH FIZIKA — RASCH TEST TIZIMI</b>\n\n"
         "Ushbu tizim orqali siz:\n"
         "• Milliy sertifikat formatidagi 55 talik testlarni yechishingiz;\n"
-        "• Virtual matematik klaviaturadan foydalanib yozma javoblarni kiritishingiz;\n"
+        "• Virtual klaviaturadan foydalanib yozma javoblarni kiritishingiz;\n"
         "• Rasch modeli bo'yicha darajangiz (A+, A, B+, B, ...) va to'liq tahlilni ko'rishingiz mumkin.\n\n"
         "💬 <b>Savol, taklif yoki yordam uchun to'g'ridan-to'g'ri bog'lanishingiz mumkin:</b>\n"
-        "👤 <b>Aloqa:</b> @eshmbetov\n\n"
-        "<i>Pastdagi tugma orqali murojaat yuborishingiz mumkin 👇</i>",
+        "• <b>Aloqa:</b> @eshmbetov\n\n"
+        "<i>Pastdagi havola orqali murojaat yuborishingiz mumkin:</i>",
         reply_markup=contact_kb
     )
 
 show_about = show_help
 
-# ➕ Yangi test yaratish (Admin Mini App ochish)
-@router.message(F.text == "➕ Yangi test yaratish")
+# ✦ Yangi test yaratish (Admin Mini App ochish)
+@router.message(F.text.in_({"✦ Yangi test yaratish", "➕ Yangi test yaratish"}))
 async def admin_create_test_text_handler(message: Message):
     if not test_db.is_admin(message.from_user.id, ADMIN_ID):
         return
     admin_webapp_url = f"{WEBAPP_URL}/admin.html?tg_id={message.from_user.id}"
     kb = InlineKeyboardMarkup(inline_keyboard=[
-        [make_webapp_button("➕ Yangi test yaratish (Mini App)", admin_webapp_url)]
+        [make_webapp_button("✦ Yangi test yaratish (Mini App)", admin_webapp_url)]
     ])
     await message.answer(
-        "➕ <b>YANGI TEST YARATISH BO'LIMI</b>\n\n"
-        "Quyidagi tugma orqali Admin Mini Appni ochib, test kodi, fani, vaqti va 55 ta savol kalitlarini kiritishingiz mumkin 👇",
+        "✦ <b>YANGI TEST YARATISH BO'LIMI</b>\n\n"
+        "Quyidagi tugma orqali Admin Mini Appni ochib, test kodi, fani, vaqti va 55 ta savol kalitlarini kiritishingiz mumkin:",
         reply_markup=kb
     )
 
-# 📋 Testlarni boshqarish (O'chirish, to'xtatish, vaqt)
-@router.message(F.text.in_({"🔬 Testlarni boshqarish", "🔬 Testlarni boshqarish", "📋 Testlarni boshqarish"}))
+# ◈ Testlarni boshqarish (O'chirish, to'xtatish, vaqt)
+@router.message(F.text.in_({"◈ Testlarni boshqarish", "🔬 Testlarni boshqarish", "📋 Testlarni boshqarish"}))
 async def admin_manage_tests_text_handler(message: Message):
     if not test_db.is_admin(message.from_user.id, ADMIN_ID):
         return
     tests = test_db.get_all_tests()
     if not tests:
-        await message.answer("ℹ️ Hozircha bazada birorta ham test yo'q.")
+        await message.answer("ℹ Hozircha bazada birorta ham test yo'q.")
         return
 
     text = (
-        "📋 <b>Barcha testlar ro'yxati va boshqaruvi:</b>\n\n"
-        "<i>Boshqarish (to'xtatish / vaqt / o'chirish) uchun kerakli testni tanlang 👇</i>\n\n"
+        "◈ <b>Barcha testlar ro'yxati va boshqaruvi:</b>\n\n"
+        "<i>Boshqarish (to'xtatish / vaqt / o'chirish) uchun kerakli testni tanlang:</i>\n\n"
     )
     buttons = []
     for idx, t in enumerate(tests, 1):
-        status_icon = "🟢" if t["is_active"] == 1 else "🔴"
+        status_icon = "✓" if t["is_active"] == 1 else "✕"
         time_str = f"{t['time_limit_min']} daqiqa" if t.get("time_limit_min", 0) > 0 else "Cheksiz"
         text += f"<b>{idx}. #{t['test_code']}</b> — {t['title']} ({status_icon}, ⏱ {time_str})\n"
-        buttons.append([InlineKeyboardButton(text=f"{status_icon} #{t['test_code']} — {t['title'][:25]}", callback_data=f"adm_mng_test_{t['id']}")])
+        buttons.append([InlineKeyboardButton(text=f"[{status_icon}] #{t['test_code']} — {t['title'][:25]}", callback_data=f"adm_mng_test_{t['id']}")])
 
-    buttons.append([InlineKeyboardButton(text="🔙 Admin Menyuga qaytish", callback_data="admin_back_to_menu")])
+    buttons.append([InlineKeyboardButton(text="‹ Admin menyusiga qaytish", callback_data="admin_back_to_menu")])
     await message.answer(text, reply_markup=InlineKeyboardMarkup(inline_keyboard=buttons))
 
-# 📊 Test natijalari va reyting
-@router.message(F.text == "📊 Test natijalari va reyting")
+# ◈ Test natijalari va reyting
+@router.message(F.text.in_({"◈ Test natijalari va reyting", "📊 Test natijalari va reyting"}))
 async def admin_leaderboard_text_handler(message: Message):
     if not test_db.is_admin(message.from_user.id, ADMIN_ID):
         return
     tests = test_db.get_tests_with_stats()
     if not tests:
-        await message.answer("⚠️ Hozirda tizimda mavjud testlar yo'q.")
+        await message.answer("ℹ Hozirda tizimda mavjud testlar yo'q.")
         return
     buttons = []
     msg_list = ""
     for idx, t in enumerate(tests, 1):
         sub_cnt = t.get("submissions_count", 0)
-        btn_text = f"📊 #{t['test_code']} — 👥 {sub_cnt} kishi"
+        btn_text = f"◈ #{t['test_code']} — {sub_cnt} kishi"
         buttons.append([InlineKeyboardButton(text=btn_text, callback_data=f"adm_tstat_{t['id']}")])
         creator_name = t.get("created_by_name") or ("Bosh Admin" if t.get("created_by") == ADMIN_ID else "")
-        creator_info = f" (👤 {creator_name})" if creator_name else ""
+        creator_info = f" ({creator_name})" if creator_name else ""
         msg_list += f"<b>{idx}. #{t['test_code']}</b> — {t['title']}{creator_info}: <b>{sub_cnt} kishi</b>\n"
 
-    buttons.append([InlineKeyboardButton(text="⬅️ Admin Panelga qaytish", callback_data="admin_panel_back")])
+    buttons.append([InlineKeyboardButton(text="‹ Admin Panelga qaytish", callback_data="admin_panel_back")])
     msg_text = (
-        "📊 <b>Mavjud Testlar va Ishtirokchilar Soni:</b>\n\n"
+        "◈ <b>Mavjud Testlar va Ishtirokchilar Soni:</b>\n\n"
         f"{msg_list}\n"
-        "<i>Batafsil natijalarni (Matn yoki PDF shaklida) olish uchun kerakli test kodini tanlang 👇</i>"
+        "<i>Batafsil natijalarni (Matn yoki PDF shaklida) olish uchun kerakli test kodini tanlang:</i>"
     )
     await message.answer(msg_text, reply_markup=InlineKeyboardMarkup(inline_keyboard=buttons))
 
-# 5. 📱 Mini App buyrug'i
+# 5. ◈ Mini App buyrug'i
 @router.message(Command("app"))
 async def open_app_command(message: Message):
     await message.answer(
-        "📱 <b>RASH TEST Mini App tizimiga kirish:</b>\n\n"
-        "Quyidagi tugmani bosing 👇",
+        "◈ <b>RASCH TEST Mini App tizimiga kirish:</b>\n\n"
+        "Quyidagi tugmani bosing:",
         reply_markup=results_webapp_kb(message.from_user.id)
     )
 
 # ── ADMIN PANEL HANDLERLARI ───────────────────────────
 
-@router.message(F.text == "⚙️ Admin Panel")
+@router.message(F.text.in_({"⚙ Admin Panel", "⚙️ Admin Panel"}))
 @router.message(Command("admin"))
 @router.message(Command("dashboard"))
 async def admin_panel_handler(message: Message):
     if not test_db.is_admin(message.from_user.id, ADMIN_ID):
-        await message.answer("⛔️ Bu bo'lim faqat bot administratori uchun!")
+        await message.answer("✕ Bu bo'lim faqat bot administratori uchun!")
         return
 
     await message.answer(
@@ -4042,34 +4047,34 @@ def build_detailed_tahlil_text(sub: dict, test: dict) -> str:
     incorr_str = ", ".join(incorrect_keys) if incorrect_keys else "Yo'q"
 
     text = (
-        f"📊 <b>SAVOLLAR TAHLILI — «{test_title}»</b> (<code>#{code}</code>)\n\n"
-        f"👤 <b>O'quvchi:</b> {name}\n"
-        f"🎖 <b>Milliy Sertifikat darajasi:</b> <b>{grade}</b> ({score} ball)\n"
-        f"✅ <b>To'g'ri ishlangan:</b> {corr} / {total} ta band\n"
+        f"◈ <b>SAVOLLAR TAHLILI — «{test_title}»</b> (<code>#{code}</code>)\n\n"
+        f"• <b>O'quvchi:</b> {name}\n"
+        f"✦ <b>Milliy Sertifikat darajasi:</b> <b>{grade}</b> ({score} ball)\n"
+        f"✓ <b>To'g'ri ishlangan:</b> {corr} / {total} ta band\n"
     )
     if partial_keys:
-        text += f"⚠️ <b>Qisman to'g'ri (30% ball):</b> {len(partial_keys)} ta band\n"
+        text += f"› <b>Qisman to'g'ri (30% ball):</b> {len(partial_keys)} ta band\n"
     text += (
-        f"❌ <b>Noto'g'ri / qoldirilgan:</b> {incorr} ta\n"
+        f"✕ <b>Noto'g'ri / qoldirilgan:</b> {incorr} ta\n"
         f"━━━━━━━━━━━━━━━━━━━━\n"
-        f"✅ <b>TO'G'RI ISHLANGAN SAVOLLAR ({len(correct_keys)} ta):</b>\n"
+        f"✓ <b>TO'G'RI ISHLANGAN SAVOLLAR ({len(correct_keys)} ta):</b>\n"
         f"<code>{corr_str}</code>\n"
     )
     if partial_keys:
         text += (
-            f"\n⚠️ <b>QISMAN TO'G'RI (30% ball berilgan, oxirgacha hisoblanmagan) ({len(partial_keys)} ta):</b>\n"
+            f"\n› <b>QISMAN TO'G'RI (30% ball berilgan, oxirgacha hisoblanmagan) ({len(partial_keys)} ta):</b>\n"
             f"<code>{partial_str}</code>\n"
         )
     text += (
-        f"\n❌ <b>NOTO'G'RI ISHLANGAN SAVOLLAR ({len(incorrect_keys)} ta):</b>\n"
+        f"\n✕ <b>NOTO'G'RI ISHLANGAN SAVOLLAR ({len(incorrect_keys)} ta):</b>\n"
         f"<code>{incorr_str}</code>"
     )
     if unanswered_keys:
         unans_str = ", ".join(unanswered_keys)
-        text += f"\n\n⚪ <b>BELGILANMAGAN SAVOLLAR ({len(unanswered_keys)} ta):</b>\n<code>{unans_str}</code>"
+        text += f"\n\n▫️ <b>BELGILANMAGAN SAVOLLAR ({len(unanswered_keys)} ta):</b>\n<code>{unans_str}</code>"
     text += "\n━━━━━━━━━━━━━━━━━━━━"
     if yt_url:
-        text += f"\n\n🎬 <b>Video tahlil:</b> <a href=\"{yt_url}\">YouTube orqali ko'rish</a>"
+        text += f"\n\n› <b>Video tahlil:</b> <a href=\"{yt_url}\">YouTube orqali ko'rish</a>"
     return text
 
 def build_student_result_message(sub: dict, test: dict, eval_type: str = "rasch") -> tuple:
@@ -4086,45 +4091,45 @@ def build_student_result_message(sub: dict, test: dict, eval_type: str = "rasch"
 
     if eval_type == "rasch":
         msg_text = (
-            f"📢 <b>DIQQAT! TEST NATIJALARI E'LON QILINDI!</b>\n\n"
+            f"✦ <b>DIQQAT: TEST NATIJALARI E'LON QILINDI!</b>\n\n"
             f"Hurmatli <b>{name}</b>, sizning <b>«{test_title}»</b> (<code>#{code}</code>) testi bo'yicha rasmiy natijangiz:\n\n"
-            f"🧮 <b>Baholash tizimi:</b> Rasch Modeli (JMLE)\n"
-            f"🎖 <b>Milliy Sertifikat darajangiz:</b> <b>{grade}</b> ({score} ball)\n"
-            f"✅ <b>To'g'ri ishlangan:</b> {corr} ta band\n"
-            f"❌ <b>Noto'g'ri / belgilanmagan:</b> {incorr} ta\n"
-            f"📊 <b>Jami savollar:</b> {total} ta\n"
-            f"🕒 <b>E'lon vaqti:</b> {format_uzb_time()}\n\n"
-            f"💡 <i>Qaysi savollaringiz to'g'ri yoki noto'g'ri ekanligini ko'rish uchun quyidagi <b>«📊 Test tahlili»</b> tugmasini bosing:</i>\n\n"
-            f"🏆 <i>Ishtirokingiz uchun tashakkur!</i>"
+            f"• <b>Baholash tizimi:</b> Rasch Modeli (JMLE)\n"
+            f"✦ <b>Milliy Sertifikat darajangiz:</b> <b>{grade}</b> ({score} ball)\n"
+            f"✓ <b>To'g'ri ishlangan:</b> {corr} ta band\n"
+            f"✕ <b>Noto'g'ri / belgilanmagan:</b> {incorr} ta\n"
+            f"• <b>Jami savollar:</b> {total} ta\n"
+            f"• <b>E'lon vaqti:</b> {format_uzb_time()}\n\n"
+            f"ℹ <i>Qaysi savollaringiz to'g'ri yoki noto'g'ri ekanligini ko'rish uchun quyidagi <b>«◈ Test tahlili»</b> tugmasini bosing:</i>\n\n"
+            f"✦ <i>Ishtirokingiz uchun tashakkur!</i>"
         )
     else:
         msg_text = (
-            f"📢 <b>DIQQAT! TEST NATIJALARI E'LON QILINDI!</b>\n\n"
+            f"✦ <b>DIQQAT: TEST NATIJALARI E'LON QILINDI!</b>\n\n"
             f"Hurmatli <b>{name}</b>, sizning <b>«{test_title}»</b> (<code>#{code}</code>) testi bo'yicha rasmiy natijangiz:\n\n"
-            f"📋 <b>Baholash turi:</b> Standart (To'g'ri javoblar soni)\n"
-            f"✅ <b>To'g'ri javoblar:</b> {corr} / {total} ta\n"
-            f"❌ <b>Noto'g'ri javoblar:</b> {incorr} ta\n"
-            f"🎯 <b>To'plangan ball:</b> {score} ball\n"
-            f"🕒 <b>E'lon vaqti:</b> {format_uzb_time()}\n\n"
-            f"💡 <i>Qaysi savollaringiz to'g'ri yoki noto'g'ri ekanligini ko'rish uchun quyidagi <b>«📊 Test tahlili»</b> tugmasini bosing:</i>\n\n"
-            f"🏆 <i>Ishtirokingiz uchun tashakkur!</i>"
+            f"• <b>Baholash turi:</b> Standart (To'g'ri javoblar soni)\n"
+            f"✓ <b>To'g'ri javoblar:</b> {corr} / {total} ta\n"
+            f"✕ <b>Noto'g'ri javoblar:</b> {incorr} ta\n"
+            f"✦ <b>To'plangan ball:</b> {score} ball\n"
+            f"• <b>E'lon vaqti:</b> {format_uzb_time()}\n\n"
+            f"ℹ <i>Qaysi savollaringiz to'g'ri yoki noto'g'ri ekanligini ko'rish uchun quyidagi <b>«◈ Test tahlili»</b> tugmasini bosing:</i>\n\n"
+            f"✦ <i>Ishtirokingiz uchun tashakkur!</i>"
         )
 
     kb_rows = [
-        [InlineKeyboardButton(text="📊 Test tahlili", callback_data=f"user_req_tahlil_{test['id']}")]
+        [InlineKeyboardButton(text="◈ Test tahlili", callback_data=f"user_req_tahlil_{test['id']}")]
     ]
     if yt_url:
-        kb_rows.append([InlineKeyboardButton(text="🎬 Video tahlilni ko'rish (YouTube)", url=yt_url)])
+        kb_rows.append([InlineKeyboardButton(text="› Video tahlilni ko'rish (YouTube)", url=yt_url)])
     else:
-        kb_rows.append([InlineKeyboardButton(text="🎬 Video tahlil (mavjud emas)", callback_data="no_video_analysis")])
+        kb_rows.append([InlineKeyboardButton(text="› Video tahlil (mavjud emas)", callback_data="no_video_analysis")])
 
-    kb_rows.append([InlineKeyboardButton(text="📱 Mini ilovada to'liq ko'rish", web_app=WebAppInfo(url=f"{WEBAPP_URL}/app.html?tab=tests"))])
+    kb_rows.append([InlineKeyboardButton(text="✦ Mini ilovada to'liq ko'rish", web_app=WebAppInfo(url=f"{WEBAPP_URL}/app.html?tab=tests"))])
 
     return msg_text, InlineKeyboardMarkup(inline_keyboard=kb_rows)
 
 @router.callback_query(F.data == "no_video_analysis")
 async def no_video_analysis_cb(call: CallbackQuery):
-    await call.answer("⚠️ Ushbu test uchun video tahlil kiritilmagan.", show_alert=True)
+    await call.answer("ℹ Ushbu test uchun video tahlil kiritilmagan.", show_alert=True)
 
 # ── FOYDALANUVCHI TEST TAHLILI HANDLERLARI (KOD SO'RASH VA TAHLILNI MATN QILIB YUBORISH) ──
 @router.callback_query(F.data.startswith("user_req_tahlil_"))
@@ -4144,10 +4149,10 @@ async def user_req_tahlil_cb(call: CallbackQuery, state: FSMContext):
     await state.update_data(tahlil_test_id=test_id)
 
     cancel_kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="❌ Bekor qilish", callback_data="cancel_tahlil_code")]
+        [InlineKeyboardButton(text="✕ Bekor qilish", callback_data="cancel_tahlil_code")]
     ])
     await call.message.answer(
-        f"🔐 <b>«{test['title']}» (<code>#{test.get('test_code', '')}</code>) testi tahlili</b>\n\n"
+        f"✦ <b>«{test['title']}» (<code>#{test.get('test_code', '')}</code>) testi tahlili</b>\n\n"
         f"Savollar tahlilini ko'rish uchun test kodini yoki admin tomonidan berilgan maxsus parolni kiriting:\n\n"
         f"<i>(Masalan: <code>{test.get('test_code', '101')}</code>)</i>",
         reply_markup=cancel_kb
@@ -4158,7 +4163,7 @@ async def user_req_tahlil_cb(call: CallbackQuery, state: FSMContext):
 async def cancel_tahlil_code_cb(call: CallbackQuery, state: FSMContext):
     await state.clear()
     try:
-        await call.message.edit_text("❌ Tahlil kodini kiritish bekor qilindi.")
+        await call.message.edit_text("✕ Tahlil kodini kiritish bekor qilindi.")
     except Exception:
         pass
     await call.answer()
@@ -4170,27 +4175,32 @@ async def process_tahlil_code(message: Message, state: FSMContext):
         return
 
     menu_cmds = [
-        "⚛️ Test kodini kiritish", "🔢 Test kodini kiritish", "📊 Mening natijalarim", "👤 Profilim",
-        "ℹ️ Yordam", "ℹ️ Bot haqida", "⚙️ Admin Panel",
-        "➕ Yangi test yaratish", "📊 Test natijalari va reyting", "🔬 Testlarni boshqarish", "📋 Testlarni boshqarish"
+        "✦ Test kodini kiritish", "⚛️ Test kodini kiritish", "🔢 Test kodini kiritish",
+        "◈ Mening natijalarim", "📊 Mening natijalarim",
+        "• Profilim", "👤 Profilim",
+        "ℹ Bot haqida", "ℹ️ Yordam", "ℹ️ Bot haqida", "💡 Yordam",
+        "⚙ Admin Panel", "⚙️ Admin Panel",
+        "✦ Yangi test yaratish", "➕ Yangi test yaratish",
+        "◈ Test natijalari va reyting", "📊 Test natijalari va reyting",
+        "› Testlarni boshqarish", "🔬 Testlarni boshqarish", "📋 Testlarni boshqarish"
     ]
     if text in menu_cmds:
         await state.clear()
-        if text == "📊 Mening natijalarim":
+        if text in ["◈ Mening natijalarim", "📊 Mening natijalarim"]:
             await show_my_results(message)
-        elif text == "👤 Profilim":
+        elif text in ["• Profilim", "👤 Profilim"]:
             await show_profile(message)
-        elif text in ["💡 Yordam", "ℹ️ Yordam", "ℹ️ Bot haqida"]:
+        elif text in ["ℹ Bot haqida", "💡 Yordam", "ℹ️ Yordam", "ℹ️ Bot haqida"]:
             await show_help(message)
-        elif text == "⚙️ Admin Panel":
+        elif text in ["⚙ Admin Panel", "⚙️ Admin Panel"]:
             await admin_panel_handler(message)
-        elif text == "➕ Yangi test yaratish":
+        elif text in ["✦ Yangi test yaratish", "➕ Yangi test yaratish"]:
             await admin_create_test_text_handler(message)
-        elif text == "📊 Test natijalari va reyting":
+        elif text in ["◈ Test natijalari va reyting", "📊 Test natijalari va reyting"]:
             await admin_leaderboard_text_handler(message)
-        elif text in ["🔬 Testlarni boshqarish", "📋 Testlarni boshqarish"]:
+        elif text in ["› Testlarni boshqarish", "🔬 Testlarni boshqarish", "📋 Testlarni boshqarish"]:
             await admin_manage_tests_text_handler(message)
-        elif text in ["⚛️ Test kodini kiritish", "🔢 Test kodini kiritish"]:
+        elif text in ["✦ Test kodini kiritish", "⚛️ Test kodini kiritish", "🔢 Test kodini kiritish"]:
             await enter_test_code_prompt(message, state)
         return
 
@@ -5048,14 +5058,14 @@ async def handle_submit_test_api(request):
             # Oddiy, vaqtida topshirilgan test
             if user_tg_id:
                 msg_user = (
-                    f"✅ <b>Hurmatli {result['fullname']}, javoblaringiz qabul qilindi!</b>\n\n"
-                    f"📚 <b>Test:</b> {result['test_title']} (<code>#{result['test_code']}</code>)\n"
-                    f"📌 <b>Holat:</b> ⏳ <b>Javoblaringiz qabul qilindi (Jarayonda)...</b>\n"
-                    f"🕒 <b>Topshirilgan vaqt:</b> {format_uzb_time()}\n\n"
-                    f"ℹ️ <b>Eslatma:</b> Test hozirda barcha o'quvchilar uchun davom etmoqda. "
+                    f"✓ <b>Hurmatli {result['fullname']}, javoblaringiz qabul qilindi!</b>\n\n"
+                    f"• <b>Test:</b> {result['test_title']} (<code>#{result['test_code']}</code>)\n"
+                    f"• <b>Holat:</b> <b>Javoblaringiz qabul qilindi (Jarayonda)...</b>\n"
+                    f"• <b>Topshirilgan vaqt:</b> {format_uzb_time()}\n\n"
+                    f"ℹ <b>Eslatma:</b> Test hozirda barcha o'quvchilar uchun davom etmoqda. "
                     f"Admin testni yakunlab, <b>Rasch modeli (JMLE)</b> bo'yicha tahlil o'tkazgach, "
                     f"to'g'ri ishlangan savollar soni, yakuniy ballingiz va Milliy sertifikat darajangiz botingizga shaxsiy xabar qilib yuboriladi!\n\n"
-                    f"🏆 <i>Javoblaringiz tizimda muvaffaqiyatli saqlandi.</i>"
+                    f"✦ <i>Javoblaringiz tizimda muvaffaqiyatli saqlandi.</i>"
                 )
                 try:
                     await bot.send_message(chat_id=user_tg_id, text=msg_user)
@@ -5390,13 +5400,13 @@ def _sync_extract_keys_gemini(image_bytes: bytes, mime_type: str = "image/jpeg")
         raise ValueError("GEMINI_API_KEY o'rnatilmagan")
 
     prompt = (
-        """Ushbu rasmda FIZIKA yoki MATEMATIKA fani bo'yicha test javoblari/kalitlari varaqasi yoki jadvali berilgan.
+        r"""Ushbu rasmda FIZIKA fani bo'yicha test javoblari/kalitlari varaqasi yoki jadvali berilgan.
 Iltimos, rasmdagi har bir savol javobini diqqat bilan o'qib, faqat to'g'ri JSON formatida qaytar.
 
 Test strukturasi (55 ta element):
 - 1 dan 32 gacha: 4 variantli yopiq savollar (A, B, C, D)
 - 33, 34, 35: 6 variantli yopiq savollar (A, B, C, D, E, F)
-- 36a dan 45b gacha: ochiq javoblar. FIZIKA bo'lsa, o'lchov birliklari va izohlari bilan aynan yozing (masalan: 400 J, 900 J, 4 m/s², 12 s, 9 m/s, 5 cm², 44 mm, ≈ 1450 nJ, 2400 J ga kamaydi, -800 J, 10 kV/m, ≈ 177 nC/m², 360 V, 4,8 nC, 10 cm, 22,5 cm, 2-nur (1,89 eV), hech qaysi nur). Matematika bo'lsa: 25, 25/6, √29, π/4 va h.k.
+- 36a dan 45b gacha: ochiq javoblar. O'lchov birliklari va izohlari bilan aynan yozing (masalan: 400 J, 900 J, 4 m/s², 12 s, 9 m/s, 5 cm², 44 mm, ≈ 1450 nJ, 2400 J ga kamaydi, -800 J, 10 kV/m, ≈ 177 nC/m², 360 V, 4,8 nC, 10 cm, 22,5 cm, 2-nur (1,89 eV), hech qaysi nur).
 
 MUHIM TALABLAR:
 1. Hech qachon LaTeX (\frac, \sqrt, \cdot) ishlatma! Faqat oddiy Unicode belgilari: kasrlar (a/b), ildizlar (√), darajalar (m/s², cm²).

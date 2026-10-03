@@ -46,7 +46,7 @@ def migrate():
         id SERIAL PRIMARY KEY,
         test_code TEXT UNIQUE NOT NULL,
         title TEXT NOT NULL,
-        subject TEXT DEFAULT 'Matematika',
+        subject TEXT DEFAULT 'Fizika',
         pdf_file_id TEXT,
         pdf_file_name TEXT,
         answers_json TEXT NOT NULL,
@@ -158,7 +158,7 @@ def migrate():
                     results_published = EXCLUDED.results_published
                 RETURNING id
             """, (
-                t["test_code"], t["title"], t.get("subject", "Matematika"),
+                t["test_code"], t["title"], t.get("subject", "Fizika"),
                 t.get("pdf_file_id"), t.get("pdf_file_name"),
                 t["answers_json"], t.get("total_questions", 45),
                 t.get("time_limit_min", 0), t.get("is_active", 1),

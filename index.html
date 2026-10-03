@@ -9,17 +9,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <!-- Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script src="/logo_data.js?v=20260926_shohruh3"></script>
-  <link rel="stylesheet" href="/test_style.css?v=20261003_physics_units">
+  <script src="/logo_data.js?v=20261003_cosmic_neon"></script>
+  <link rel="stylesheet" href="/test_style.css?v=20261003_cosmic_neon">
   <script>
     (function() {
-      var saved = localStorage.getItem('app_theme') || 'light';
-      if (saved === 'dark') {
-        document.documentElement.classList.add('dark-mode');
-        document.addEventListener('DOMContentLoaded', function() {
-          document.body.classList.add('dark-mode');
-        });
-      }
+      var saved = localStorage.getItem('app_theme') || 'dark';
+      document.documentElement.classList.add('dark-mode');
+      document.addEventListener('DOMContentLoaded', function() {
+        document.body.classList.add('dark-mode');
+      });
     })();
   </script>
 </head>
@@ -98,6 +96,26 @@
        ========================================= -->
   <div class="test-container" id="test-app">
 
+    <!-- TEST TAYMERI (VAQT): Yuqorida neon firuza (--accent-cyan) rangli progress chiziq bilan yurgiziladi, 1 daqiqadan kam qolganda avtomatik sariq/qizilga o'zgaradi -->
+    <div class="test-timer-strip" id="test-timer-strip">
+      <div class="test-timer-track">
+        <div class="test-timer-fill" id="test-timer-fill" style="width: 100%;"></div>
+      </div>
+      <div class="test-timer-status" id="test-timer-status">
+        <div class="timer-badge-neon" id="timer-badge">
+          <svg class="timer-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span class="timer-note-text" id="test-timer-note">Vaqt:</span>
+          <span class="timer-digits" id="timer-countdown-display">--:--</span>
+        </div>
+        <div class="timer-answered-chip" title="Belgilangan savollar soni">
+          <span id="answered-counter">0 / 55</span>
+        </div>
+      </div>
+    </div>
+
     <!-- 1. YUQORI HEADER (KOMPAKT) -->
     <header class="test-header">
       <div class="header-top-row">
@@ -110,15 +128,8 @@
         </div>
       </div>
 
-      <!-- Kichik o'lchamdagi to'ldirilgan javoblar shkalasi -->
-      <div class="progress-section-compact">
-        <div class="progress-bar-track">
-          <div class="progress-bar-fill" id="progress-bar-fill" style="width: 0%;"></div>
-        </div>
-        <span class="progress-count-mini" id="answered-counter">0 / 55</span>
-      </div>
-
       <!-- Yashirin yordamchi elementlar (JS bilan to'liq moslik uchun) -->
+      <div class="progress-bar-fill" id="progress-bar-fill" style="display: none; width: 0%;"></div>
       <span id="test-code-display" style="display: none;"></span>
       <span id="test-subject-badge" style="display: none;"></span>
       <span id="user-welcome-text" style="display: none;"></span>
@@ -649,9 +660,8 @@
     </div>
   </div>
 
-  <!-- Skriptlar -->
-  <script src="/logo_data.js?v=20260926_shohruh3"></script>
-  <script src="/math_keyboard.js?v=20261003_physics_units"></script>
-  <script src="/test_app.js?v=20261003_physics_units"></script>
+  <script src="/logo_data.js?v=20261003_cosmic_neon"></script>
+  <script src="/math_keyboard.js?v=20261003_cosmic_neon"></script>
+  <script src="/test_app.js?v=20261003_cosmic_neon"></script>
 </body>
 </html>
