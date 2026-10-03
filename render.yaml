@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: rash
+    name: fizika-rash
     runtime: python
     buildCommand: pip install -r requirements.txt
     startCommand: python3 test_bot.py
@@ -19,7 +19,7 @@ services:
         sync: false          # Neon.tech connection string — Dashboard orqali kiriting
 
       - key: WEBAPP_URL
-        value: https://rash-vmrm.onrender.com
+        value: https://fizika-rash.onrender.com
 
       - key: PYTHON_VERSION
         value: 3.11.9
