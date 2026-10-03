@@ -377,8 +377,8 @@ def main_menu_kb(user_tg_id: int) -> ReplyKeyboardMarkup:
         # 2-qator: Test natijalari va reyting + Testlarni boshqarish
         # 3-qator: Admin Panel
         buttons = [
-            [KeyboardButton(text="🔢 Test kodini kiritish"), create_test_btn],
-            [KeyboardButton(text="📊 Test natijalari va reyting"), KeyboardButton(text="📋 Testlarni boshqarish")],
+            [KeyboardButton(text="⚛️ Test kodini kiritish"), create_test_btn],
+            [KeyboardButton(text="📊 Test natijalari va reyting"), KeyboardButton(text="🔬 Testlarni boshqarish")],
             [KeyboardButton(text="⚙️ Admin Panel")]
         ]
     else:
@@ -386,8 +386,8 @@ def main_menu_kb(user_tg_id: int) -> ReplyKeyboardMarkup:
         # 1-qator: Test kodini kiritish + Mening natijalarim (Asosiy App)
         # 2-qator: Profilim + Yordam (adminga murojaat)
         buttons = [
-            [KeyboardButton(text="🔢 Test kodini kiritish"), results_btn],
-            [KeyboardButton(text="👤 Profilim"), KeyboardButton(text="ℹ️ Yordam")]
+            [KeyboardButton(text="⚛️ Test kodini kiritish"), results_btn],
+            [KeyboardButton(text="👤 Profilim"), KeyboardButton(text="💡 Yordam")]
         ]
 
     return ReplyKeyboardMarkup(keyboard=buttons, resize_keyboard=True)
@@ -787,7 +787,7 @@ async def reg_phone(message: Message, state: FSMContext):
     )
 
 # 1. 🔢 Test kodini kiritish (Prompt)
-@router.message(F.text == "🔢 Test kodini kiritish")
+@router.message(F.text.in_({"⚛️ Test kodini kiritish", "⚛️ Test kodini kiritish", "🔢 Test kodini kiritish"}))
 @router.message(Command("solve"))
 async def enter_test_code_prompt(message: Message, state: FSMContext):
     if not await check_access(message):
@@ -809,9 +809,9 @@ async def process_solve_test_code(message: Message, state: FSMContext):
     if not text:
         return
     menu_cmds = [
-        "🔢 Test kodini kiritish", "📊 Mening natijalarim", "👤 Profilim",
+        "⚛️ Test kodini kiritish", "🔢 Test kodini kiritish", "📊 Mening natijalarim", "👤 Profilim",
         "ℹ️ Yordam", "ℹ️ Bot haqida", "⚙️ Admin Panel",
-        "➕ Yangi test yaratish", "📊 Test natijalari va reyting", "📋 Testlarni boshqarish"
+        "➕ Yangi test yaratish", "📊 Test natijalari va reyting", "🔬 Testlarni boshqarish", "📋 Testlarni boshqarish"
     ]
     if text in menu_cmds:
         await state.clear()
@@ -819,7 +819,7 @@ async def process_solve_test_code(message: Message, state: FSMContext):
             await show_my_results(message)
         elif text == "👤 Profilim":
             await show_profile(message)
-        elif text in ["ℹ️ Yordam", "ℹ️ Bot haqida"]:
+        elif text in ["💡 Yordam", "ℹ️ Yordam", "ℹ️ Bot haqida"]:
             await show_help(message)
         elif text == "⚙️ Admin Panel":
             await admin_panel_handler(message)
@@ -827,9 +827,9 @@ async def process_solve_test_code(message: Message, state: FSMContext):
             await admin_create_test_text_handler(message)
         elif text == "📊 Test natijalari va reyting":
             await admin_leaderboard_text_handler(message)
-        elif text == "📋 Testlarni boshqarish":
+        elif text in ["🔬 Testlarni boshqarish", "📋 Testlarni boshqarish"]:
             await admin_manage_tests_text_handler(message)
-        elif text == "🔢 Test kodini kiritish":
+        elif text in ["⚛️ Test kodini kiritish", "🔢 Test kodini kiritish"]:
             await enter_test_code_prompt(message, state)
         return
 
@@ -1776,7 +1776,7 @@ async def adm_clean_blocked_start_cb(call: CallbackQuery):
     await call.message.edit_text(res_text, reply_markup=kb)
 
 # 4. ℹ️ Yordam va murojaat
-@router.message(F.text == "ℹ️ Yordam")
+@router.message(F.text.in_({"💡 Yordam", "ℹ️ Yordam"}))
 @router.message(F.text == "ℹ️ Bot haqida")
 @router.message(Command("help"))
 async def show_help(message: Message):
@@ -1815,7 +1815,7 @@ async def admin_create_test_text_handler(message: Message):
     )
 
 # 📋 Testlarni boshqarish (O'chirish, to'xtatish, vaqt)
-@router.message(F.text == "📋 Testlarni boshqarish")
+@router.message(F.text.in_({"🔬 Testlarni boshqarish", "🔬 Testlarni boshqarish", "📋 Testlarni boshqarish"}))
 async def admin_manage_tests_text_handler(message: Message):
     if not test_db.is_admin(message.from_user.id, ADMIN_ID):
         return
@@ -4170,9 +4170,9 @@ async def process_tahlil_code(message: Message, state: FSMContext):
         return
 
     menu_cmds = [
-        "🔢 Test kodini kiritish", "📊 Mening natijalarim", "👤 Profilim",
+        "⚛️ Test kodini kiritish", "🔢 Test kodini kiritish", "📊 Mening natijalarim", "👤 Profilim",
         "ℹ️ Yordam", "ℹ️ Bot haqida", "⚙️ Admin Panel",
-        "➕ Yangi test yaratish", "📊 Test natijalari va reyting", "📋 Testlarni boshqarish"
+        "➕ Yangi test yaratish", "📊 Test natijalari va reyting", "🔬 Testlarni boshqarish", "📋 Testlarni boshqarish"
     ]
     if text in menu_cmds:
         await state.clear()
@@ -4180,7 +4180,7 @@ async def process_tahlil_code(message: Message, state: FSMContext):
             await show_my_results(message)
         elif text == "👤 Profilim":
             await show_profile(message)
-        elif text in ["ℹ️ Yordam", "ℹ️ Bot haqida"]:
+        elif text in ["💡 Yordam", "ℹ️ Yordam", "ℹ️ Bot haqida"]:
             await show_help(message)
         elif text == "⚙️ Admin Panel":
             await admin_panel_handler(message)
@@ -4188,9 +4188,9 @@ async def process_tahlil_code(message: Message, state: FSMContext):
             await admin_create_test_text_handler(message)
         elif text == "📊 Test natijalari va reyting":
             await admin_leaderboard_text_handler(message)
-        elif text == "📋 Testlarni boshqarish":
+        elif text in ["🔬 Testlarni boshqarish", "📋 Testlarni boshqarish"]:
             await admin_manage_tests_text_handler(message)
-        elif text == "🔢 Test kodini kiritish":
+        elif text in ["⚛️ Test kodini kiritish", "🔢 Test kodini kiritish"]:
             await enter_test_code_prompt(message, state)
         return
 
@@ -4794,9 +4794,9 @@ async def handle_direct_text(message: Message, state: FSMContext):
         return
 
     menu_cmds = [
-        "🔢 Test kodini kiritish", "📊 Mening natijalarim", "👤 Profilim",
+        "⚛️ Test kodini kiritish", "🔢 Test kodini kiritish", "📊 Mening natijalarim", "👤 Profilim",
         "ℹ️ Yordam", "ℹ️ Bot haqida", "⚙️ Admin Panel",
-        "➕ Yangi test yaratish", "📊 Test natijalari va reyting", "📋 Testlarni boshqarish"
+        "➕ Yangi test yaratish", "📊 Test natijalari va reyting", "🔬 Testlarni boshqarish", "📋 Testlarni boshqarish"
     ]
     if raw_text in menu_cmds:
         return

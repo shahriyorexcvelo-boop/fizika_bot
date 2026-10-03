@@ -75,7 +75,7 @@ function initApp() {
   }
 
   if (window.BM_LOGO_B64) {
-    document.querySelectorAll('.header-logo-img, .header-bm-logo').forEach(function(img) {
+    document.querySelectorAll('.header-logo-img, .header-bm-logo, .splash-emblem-img').forEach(function(img) {
       img.src = window.BM_LOGO_B64;
     });
   }
@@ -99,7 +99,7 @@ function startSplashCanvas() {
   var width = canvas.width = window.innerWidth;
   var height = canvas.height = window.innerHeight;
 
-  var symbols = ['∞', 'π', '∑', '∫', '√x', 'f(x)', '∆', 'θ', 'λ', '≈', '≠', 'e', 'α', 'β', 'γ', 'dx', 'dy', 'lim'];
+  var symbols = ['E=mc²', 'F=ma', 'v=s/t', 'λ', 'Ω', 'Hz', 'ρ', 'F', 'a', 'm', 'v', 'p', 'h', 'c', 'g', 'q', 'U', 'I', 'R', 'N', 'J', 'W', 'eV', '⚛', '⚡'];
   var particles = [];
   var count = Math.min(26, Math.max(16, Math.floor(width / 16)));
 

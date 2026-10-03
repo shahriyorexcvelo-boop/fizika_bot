@@ -168,7 +168,7 @@ function startBootCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
-  var symbols = ['∞', 'π', '∑', '∫', '√x', 'f(x)', '∆', 'θ', 'λ', '≈', '≠', 'e²', 'α', 'β', '∂y', 'lim', 'dx', '∇'];
+  var symbols = ['E=mc²', 'F=ma', 'v=s/t', 'λ', 'Ω', 'Hz', 'ρ', 'F', 'a', 'm', 'v', 'p', 'h', 'c', 'g', 'q', 'U', 'I', 'R', 'N', 'J', 'W', 'eV', '⚛', '⚡'];
   var count = Math.min(28, Math.max(16, Math.floor(canvas.width / 18)));
   var particles = [];
   for (var i = 0; i < count; i++) {
