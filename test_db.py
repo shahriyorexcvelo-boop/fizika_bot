@@ -1728,7 +1728,7 @@ def normalize_answer(ans: Any) -> str:
     s = re.sub(r"[\u00f7]", "/", s)
 
     # 5. O'nlik kasrlardagi vergul: 2,5 -> 2.5
-    s = re.sub(r"(\d+),(\d+)", r"\1.\2", s)
+    s = re.sub(r"(\d+),(\d+)", r"\g<1>.\g<2>", s)
 
     # 6. Plus-minus belgisi
     s = re.sub(r"(\+\/\-|\+\s*\-|\+\-)", "±", s)
@@ -1859,6 +1859,71 @@ def count_binary_plus_minus(s: str) -> int:
     return cnt
 
 
+
+def clean_physics_str(s: str) -> str:
+    if not s:
+        return ""
+    s = str(s).strip().lower()
+    s = s.replace("≈", "").replace("~", "").replace("`", "'")
+    s = s.replace("²", "^2").replace("³", "^3")
+    s = re.sub(r"(\d+),(\d+)", r"\g<1>.\g<2>", s)
+    s = re.sub(r"\s+", " ", s).strip()
+    return s
+
+def extract_physics_number_and_unit(s: str):
+    clean = clean_physics_str(s)
+    # Asosiy sonni topish (masalan: 400, -800, 4.8, 1450, 22.5)
+    m = re.search(r"([-+]?\d+(?:\.\d+)?)", clean)
+    if m:
+        num_str = m.group(1)
+        try:
+            num_val = float(num_str)
+        except Exception:
+            return None, "", clean
+        unit_part = (clean[:m.start()] + clean[m.end():]).strip()
+        unit_part = re.sub(r"(?:ga\s+kamaydi|kamaydi|ga\s+ortdi|ortdi|nur)", "", unit_part).strip()
+        unit_part = unit_part.replace(" ", "")
+        return num_val, unit_part, clean
+    return None, "", clean
+
+def check_physics_match(u_raw: Any, c_raw: Any) -> bool:
+    """Fizika o'lchov birliklari, o'nlik kasrlar (vergul/nuqta), taqribiy belgilar va so'zlarni moslashtirish."""
+    if u_raw is None or c_raw is None:
+        return False
+    u = clean_physics_str(str(u_raw))
+    c = clean_physics_str(str(c_raw))
+    if not u or not c:
+        return False
+    
+    if u == c or u.replace(" ", "") == c.replace(" ", ""):
+        return True
+    
+    u_num, u_unit, _ = extract_physics_number_and_unit(u)
+    c_num, c_unit, _ = extract_physics_number_and_unit(c)
+
+    if u_num is not None and c_num is not None:
+        # Sonli tenglik (1.5% gacha taqribiy farqni ham inobatga oladi: masalan 1450 vs 1449)
+        num_match = abs(u_num - c_num) < 1e-4 or (abs(u_num - c_num) / (abs(c_num) + 1e-9) < 0.02)
+        if num_match:
+            # Agar birlik biri yoki ikkalasida kiritilmagan bo'lsa (faqat son bo'lsa) -> Qabul qilish!
+            if not u_unit or not c_unit:
+                return True
+            # Birliklarni normallashtirish: masalan m/s^2 vs m/s2, j vs joul
+            u_u = u_unit.replace("^2", "2").replace("^3", "3").replace("joul", "j")
+            c_u = c_unit.replace("^2", "2").replace("^3", "3").replace("joul", "j")
+            if u_u == c_u or u_u in c_u or c_u in u_u:
+                return True
+
+    # Matnli maxsus javoblar (masalan: "hech qaysi nur" vs "hech qaysi", "2-nur" vs "2")
+    if "hech" in c and "hech" in u:
+        return True
+    if "2-nur" in c and ("2-nur" in u or "2 nur" in u or u == "2"):
+        return True
+    if "1-nur" in c and ("1-nur" in u or "1 nur" in u or u == "1"):
+        return True
+
+    return False
+
 def check_answer_match(user_ans: Any, correct_ans: Any) -> Tuple[bool, float, str]:
     """
     Foydalanuvchi javobini to'g'ri kalitga solishtirish va moslik koeffitsientini hisoblash:
@@ -1886,6 +1951,10 @@ def check_answer_match(user_ans: Any, correct_ans: Any) -> Tuple[bool, float, st
             if best_res[1] >= 1.0:
                 return best_res
         return best_res
+
+    # 0. Fizika maxsus mosligi (birliklar, vergulli sonlar, taqribiy qiymatlar)
+    if check_physics_match(u_str, c_str):
+        return (True, 1.0, "correct")
 
     u = normalize_answer(u_str)
     c = normalize_answer(c_str)

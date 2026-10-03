@@ -2156,3 +2156,58 @@ body.dark-mode .kb-key.kb-nav-next {
 }
 
 
+
+/* ── FIZIKA TEZKOR BIRLIKLAR VA CHIPLAR ── */
+.kb-quick-chips-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 6px 10px;
+  background: #F1F5F9;
+  border-bottom: 1px solid #E2E8F0;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.kb-quick-chips-bar::-webkit-scrollbar {
+  display: none;
+}
+body.dark-mode .kb-quick-chips-bar {
+  background: #1E293B;
+  border-bottom-color: #334155;
+}
+.kb-chip-btn {
+  flex-shrink: 0;
+  padding: 5px 11px;
+  border-radius: 8px;
+  border: 1px solid rgba(14, 165, 233, 0.35);
+  background: #FFFFFF;
+  color: #0284c7;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+body.dark-mode .kb-chip-btn {
+  background: #0F172A;
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.35);
+}
+.kb-chip-btn:active {
+  transform: scale(0.93);
+  background: #0284c7;
+  color: #FFFFFF;
+}
+.kb-chip-btn.accent {
+  background: rgba(14, 165, 233, 0.12);
+  border-color: #0284c7;
+  color: #0284c7;
+}
+body.dark-mode .kb-chip-btn.accent {
+  background: rgba(56, 189, 248, 0.18);
+  color: #38bdf8;
+}

@@ -267,7 +267,7 @@ const AdminApp = {
             <div class="open-admin-sub-row">
               <span style="font-size: 12px; font-weight: 800; color: var(--primary); min-width: 28px;">${q}a:</span>
               <div class="savol-input-box" id="box-${q}a" onclick="MathKeyboard.openFor('${q}a')" style="height: 38px; flex: 1; padding: 0 8px; cursor: pointer;">
-                <input type="text" class="savol-input" id="input-${q}a" readonly inputmode="none" placeholder="Kalitni klaviaturadan kiriting" value="${itemA.ans}" onclick="MathKeyboard.openFor('${q}a')" style="font-size: 13px; cursor: pointer;">
+                <input type="text" class="savol-input" id="input-${q}a" readonly inputmode="none" placeholder="Masalan: 400 J, 4 m/s²" value="${itemA.ans}" onclick="MathKeyboard.openFor('${q}a')" style="font-size: 13px; cursor: pointer;">
               </div>
               <button type="button" class="btn-kb-icon" style="width: 36px; height: 38px; font-size: 16px; border-radius: 10px;" onclick="MathKeyboard.openFor('${q}a')" title="Matematik klaviatura">⌨️</button>
             </div>
@@ -276,7 +276,7 @@ const AdminApp = {
             <div class="open-admin-sub-row">
               <span style="font-size: 12px; font-weight: 800; color: var(--primary); min-width: 28px;">${q}b:</span>
               <div class="savol-input-box" id="box-${q}b" onclick="MathKeyboard.openFor('${q}b')" style="height: 38px; flex: 1; padding: 0 8px; cursor: pointer;">
-                <input type="text" class="savol-input" id="input-${q}b" readonly inputmode="none" placeholder="Kalitni klaviaturadan kiriting" value="${itemB.ans}" onclick="MathKeyboard.openFor('${q}b')" style="font-size: 13px; cursor: pointer;">
+                <input type="text" class="savol-input" id="input-${q}b" readonly inputmode="none" placeholder="Masalan: 400 J, 4 m/s²" value="${itemB.ans}" onclick="MathKeyboard.openFor('${q}b')" style="font-size: 13px; cursor: pointer;">
               </div>
               <button type="button" class="btn-kb-icon" style="width: 36px; height: 38px; font-size: 16px; border-radius: 10px;" onclick="MathKeyboard.openFor('${q}b')" title="Matematik klaviatura">⌨️</button>
             </div>

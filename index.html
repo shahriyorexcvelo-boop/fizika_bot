@@ -10,7 +10,7 @@
   <!-- Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="/logo_data.js?v=20260926_shohruh3"></script>
-  <link rel="stylesheet" href="/test_style.css?v=20261002_compacttop">
+  <link rel="stylesheet" href="/test_style.css?v=20261003_physics_units">
   <script>
     (function() {
       var saved = localStorage.getItem('app_theme') || 'light';
@@ -159,7 +159,7 @@
         <div class="section-group-header">
           <div class="section-badge math-badge">3-BO'LIM (YOPIQ TEST)</div>
           <h2 class="section-heading">Yozma javoblar (36 — 45)</h2>
-          <span class="section-subtext">Har bir savolning <b>a</b> va <b>b</b> bandlariga hisoblangan javobni yozing. Maxsus matematik klaviaturadan foydalaning (√, kasr, daraja va b.)</span>
+          <span class="section-subtext">Har bir savolning <b>a</b> va <b>b</b> bandlariga hisoblangan javobni yozing. Son va fizik birliklarni kiriting (masalan: <b>400 J</b>, <b>4 m/s²</b>, <b>12 s</b>, <b>4,8 nC</b>).</span>
         </div>
         <div class="questions-list" id="questions-part-3">
           <!-- JS orqali 36a-45b savollar chiqariladi -->
@@ -193,30 +193,45 @@
       <button type="button" class="kb-done-btn" onclick="MathKeyboard.close()">Tayyor ✓</button>
     </div>
 
-    <!-- 2. BO'LIMLAR TUGMALARI (Segmented Control Tabs: 4 ta teng ustun telefonga 100% sig'adi) -->
+    <!-- TEZKOR FIZIK BIRLIKLAR CHIPLARI -->
+    <div class="kb-quick-chips-bar" id="kb-quick-chips-bar">
+      <button type="button" class="kb-chip-btn accent" onclick="MathKeyboard.insertWithSpace('J')">J</button>
+      <button type="button" class="kb-chip-btn accent" onclick="MathKeyboard.insertWithSpace('m/s')">m/s</button>
+      <button type="button" class="kb-chip-btn accent" onclick="MathKeyboard.insertWithSpace('m/s²')">m/s²</button>
+      <button type="button" class="kb-chip-btn accent" onclick="MathKeyboard.insertWithSpace('s')">s</button>
+      <button type="button" class="kb-chip-btn" onclick="MathKeyboard.insertWithSpace('V')">V</button>
+      <button type="button" class="kb-chip-btn" onclick="MathKeyboard.insertWithSpace('N')">N</button>
+      <button type="button" class="kb-chip-btn" onclick="MathKeyboard.insertWithSpace('cm')">cm</button>
+      <button type="button" class="kb-chip-btn" onclick="MathKeyboard.insertWithSpace('mm')">mm</button>
+      <button type="button" class="kb-chip-btn" onclick="MathKeyboard.insertWithSpace('cm²')">cm²</button>
+      <button type="button" class="kb-chip-btn" onclick="MathKeyboard.insertWithSpace('nC')">nC</button>
+      <button type="button" class="kb-chip-btn" onclick="MathKeyboard.insertWithSpace('kV/m')">kV/m</button>
+      <button type="button" class="kb-chip-btn" onclick="MathKeyboard.insertWithSpace('nC/m²')">nC/m²</button>
+      <button type="button" class="kb-chip-btn" onclick="MathKeyboard.insertWithSpace('Pa')">Pa</button>
+      <button type="button" class="kb-chip-btn" onclick="MathKeyboard.insertWithSpace('W')">W</button>
+      <button type="button" class="kb-chip-btn" onclick="MathKeyboard.insertWithSpace('eV')">eV</button>
+      <button type="button" class="kb-chip-btn" onclick="MathKeyboard.insert('≈ ')">≈</button>
+      <button type="button" class="kb-chip-btn" onclick="MathKeyboard.insertWithSpace('ga kamaydi')">ga kamaydi</button>
+      <button type="button" class="kb-chip-btn" onclick="MathKeyboard.insertWithSpace('ga oshdi')">ga oshdi</button>
+      <button type="button" class="kb-chip-btn" onclick="MathKeyboard.insertWithSpace('hech qaysi nur')">hech qaysi nur</button>
+    </div>
+
+        <!-- 2. BO'LIMLAR TUGMALARI -->
     <div class="kb-tabs-bar">
       <button type="button" class="kb-tab-btn active" id="kb-tab-math" onclick="MathKeyboard.switchTab('math')">123</button>
-      <button type="button" class="kb-tab-btn" id="kb-tab-power" onclick="MathKeyboard.switchTab('power')">√ / xⁿ</button>
-      <button type="button" class="kb-tab-btn" id="kb-tab-func" onclick="MathKeyboard.switchTab('func')">f(x)</button>
+      <button type="button" class="kb-tab-btn" id="kb-tab-fizika" onclick="MathKeyboard.switchTab('fizika')">⚡️ Birliklar</button>
       <button type="button" class="kb-tab-btn" id="kb-tab-vars" onclick="MathKeyboard.switchTab('vars')">abc</button>
+      <button type="button" class="kb-tab-btn" id="kb-tab-power" onclick="MathKeyboard.switchTab('power')">√ / xⁿ</button>
     </div>
 
     <!-- 3. TUGMALAR TANASI -->
-    <!-- TAB 1: Asosiy Raqam va Kalkulyator (iPhone kalkulyatori uslubida 5-6 ustunli tekis grid) -->
+        <!-- TAB 1: Asosiy Raqamlar va Fizik Amallar -->
     <div class="kb-body" id="keyboard-body-math">
       <div class="kb-row">
-        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('√')">√</button>
-        <button type="button" class="kb-key kb-power" onclick="MathKeyboard.insertPower('²')">x²</button>
-        <button type="button" class="kb-key kb-power" onclick="MathKeyboard.insertPower('³')">x³</button>
-        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertPiPower(2)">π²</button>
-        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertPiPower(3)">π³</button>
-        <button type="button" class="kb-key kb-op" onclick="MathKeyboard.insert('/')">/</button>
-      </div>
-      <div class="kb-row">
-        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('(')">(</button>
-        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert(')')">)</button>
-        <button type="button" class="kb-key kb-power" onclick="MathKeyboard.insertCustomPower()">^</button>
-        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('|')">|x|</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('J')" style="color:#0284c7;font-weight:800;">J</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('m/s')" style="color:#0284c7;font-weight:800;">m/s</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('m/s²')" style="color:#0284c7;font-weight:800;">m/s²</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('s')" style="color:#0284c7;font-weight:800;">s</button>
         <button type="button" class="kb-key kb-action" onclick="MathKeyboard.clear()">C</button>
         <button type="button" class="kb-key kb-backspace" onclick="MathKeyboard.backspace()">⌫</button>
       </div>
@@ -224,27 +239,26 @@
         <button type="button" class="kb-key kb-num" onclick="MathKeyboard.insert('7')">7</button>
         <button type="button" class="kb-key kb-num" onclick="MathKeyboard.insert('8')">8</button>
         <button type="button" class="kb-key kb-num" onclick="MathKeyboard.insert('9')">9</button>
-        <button type="button" class="kb-key kb-op" onclick="MathKeyboard.insert('*')">×</button>
-        <button type="button" class="kb-key kb-op" onclick="MathKeyboard.insert('-')">−</button>
+        <button type="button" class="kb-key kb-op" onclick="MathKeyboard.insert('-')" style="font-size:20px;font-weight:800;color:#ef4444;">−</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('≈ ')" style="font-weight:800;color:#8b5cf6;">≈</button>
       </div>
       <div class="kb-row">
         <button type="button" class="kb-key kb-num" onclick="MathKeyboard.insert('4')">4</button>
         <button type="button" class="kb-key kb-num" onclick="MathKeyboard.insert('5')">5</button>
         <button type="button" class="kb-key kb-num" onclick="MathKeyboard.insert('6')">6</button>
-        <button type="button" class="kb-key kb-op" onclick="MathKeyboard.insert('+')">+</button>
-        <button type="button" class="kb-key kb-op" onclick="MathKeyboard.insert('=')">=</button>
+        <button type="button" class="kb-key kb-op" onclick="MathKeyboard.insert('+')" style="font-size:18px;">+</button>
+        <button type="button" class="kb-key kb-op" onclick="MathKeyboard.insert('/')">/</button>
       </div>
       <div class="kb-row">
         <button type="button" class="kb-key kb-num" onclick="MathKeyboard.insert('1')">1</button>
         <button type="button" class="kb-key kb-num" onclick="MathKeyboard.insert('2')">2</button>
         <button type="button" class="kb-key kb-num" onclick="MathKeyboard.insert('3')">3</button>
+        <button type="button" class="kb-key kb-num" onclick="MathKeyboard.insert(',')" style="font-size:18px;font-weight:800;">,</button>
         <button type="button" class="kb-key kb-num" onclick="MathKeyboard.insert('.')">.</button>
-        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('π')">π</button>
       </div>
       <div class="kb-row">
         <button type="button" class="kb-key kb-num" onclick="MathKeyboard.insert('0')">0</button>
-        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('±')">±</button>
-        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert(';')">;</button>
+        <button type="button" class="kb-key kb-space" onclick="MathKeyboard.insert(' ')" style="flex:2;">probel ␣</button>
         <button type="button" class="kb-key kb-nav" onclick="MathKeyboard.prevField()">◀ Oldingi</button>
         <button type="button" class="kb-key kb-nav kb-nav-next" onclick="MathKeyboard.nextField()">Keyingi ▶</button>
       </div>
@@ -330,6 +344,64 @@
         <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('(')">(</button>
         <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert(')')">)</button>
         <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert(';')">;</button>
+        <button type="button" class="kb-key kb-nav" onclick="MathKeyboard.prevField()">◀ Oldingi</button>
+        <button type="button" class="kb-key kb-nav kb-nav-next" onclick="MathKeyboard.nextField()">Keyingi ▶</button>
+      </div>
+    </div>
+
+        <!-- TAB: Fizika Birliklari va Iboralari -->
+    <div class="kb-body" id="keyboard-body-fizika" style="display: none;">
+      <div class="kb-row">
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('J')">J</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('kJ')">kJ</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('mJ')">mJ</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('nJ')">nJ</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('eV')">eV</button>
+        <button type="button" class="kb-key kb-backspace" onclick="MathKeyboard.backspace()">⌫</button>
+      </div>
+      <div class="kb-row">
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('m/s')">m/s</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('m/s²')">m/s²</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('km/h')">km/h</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('s')">s</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('min')">min</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('h')">h</button>
+      </div>
+      <div class="kb-row">
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('m')">m</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('cm')">cm</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('mm')">mm</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('km')">km</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('cm²')">cm²</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('m²')">m²</button>
+      </div>
+      <div class="kb-row">
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('V')">V</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('kV')">kV</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('kV/m')">kV/m</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('A')">A</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('mA')">mA</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('C')">C</button>
+      </div>
+      <div class="kb-row">
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('nC')">nC</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('μC')">μC</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('nC/m²')">nC/m²</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('Ω')">Ω</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('N')">N</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('Pa')">Pa</button>
+      </div>
+      <div class="kb-row">
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('W')">W</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('kW')">kW</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('Hz')">Hz</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('ga kamaydi')" style="font-size:11px;">ga kamaydi</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('ga oshdi')" style="font-size:11px;">ga oshdi</button>
+      </div>
+      <div class="kb-row">
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('hech qaysi nur')" style="font-size:11px;flex:1.5;">hech qaysi nur</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertWithSpace('2-nur')">2-nur</button>
+        <button type="button" class="kb-key kb-action" onclick="MathKeyboard.clear()">C</button>
         <button type="button" class="kb-key kb-nav" onclick="MathKeyboard.prevField()">◀ Oldingi</button>
         <button type="button" class="kb-key kb-nav kb-nav-next" onclick="MathKeyboard.nextField()">Keyingi ▶</button>
       </div>
@@ -578,7 +650,7 @@
 
   <!-- Skriptlar -->
   <script src="/logo_data.js?v=20260926_shohruh3"></script>
-  <script src="/math_keyboard.js?v=20261002_compacttop"></script>
-  <script src="/test_app.js?v=20261003_questions_fix"></script>
+  <script src="/math_keyboard.js?v=20261003_physics_units"></script>
+  <script src="/test_app.js?v=20261003_physics_units"></script>
 </body>
 </html>

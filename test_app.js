@@ -237,7 +237,7 @@ const TestApp = {
             <div class="open-question-row" id="qrow-${key}">
               <div class="savol-badge">${key}-savol</div>
               <div class="savol-input-box" id="box-${key}" onclick="MathKeyboard.openFor('${key}')">
-                <input type="text" class="savol-input" id="input-${key}" readonly inputmode="none" placeholder="" onclick="MathKeyboard.openFor('${key}')">
+                <input type="text" class="savol-input" id="input-${key}" readonly inputmode="none" placeholder="Masalan: 400 J, 4 m/s²" onclick="MathKeyboard.openFor('${key}')">
               </div>
               <button type="button" class="btn-kb-icon" onclick="MathKeyboard.openFor('${key}')" title="Klaviaturani ochish">⌨️</button>
             </div>
