@@ -34,17 +34,32 @@ const TestApp = {
       )
     );
 
-    if (window.Telegram && window.Telegram.WebApp) {
-      const tg = window.Telegram.WebApp;
+        const tg = window.Telegram && window.Telegram.WebApp;
+    if (tg) {
       try { tg.ready(); tg.expand(); } catch(e) {}
-
-      // Foydalanuvchi ma'lumotlari
-      if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-        const u = tg.initDataUnsafe.user;
-        this.userTgId = u.id;
-        this.userFullname = `${u.first_name || ''} ${u.last_name || ''}`.trim() || u.username || 'Foydalanuvchi';
-      }
     }
+    const tgU = tg && tg.initDataUnsafe && tg.initDataUnsafe.user;
+    const hasTgContext = !!(tg && ((tg.platform && tg.platform !== 'unknown') || (tg.initData && tg.initData.length > 0) || (tgU && tgU.id)));
+
+    // ⛔️ QAT'IY XAVFSIZLIK: AGAR TELEGRAMSIZ WEB ORQALI KIRILSA — TO'LIQ BLOKLASH!
+    if (!hasTgContext || !tgU || !tgU.id) {
+      const webBlock = document.getElementById('web-block-screen');
+      if (webBlock) {
+        webBlock.style.display = 'flex';
+      }
+      const introSplash = document.getElementById('intro-splash') || document.getElementById('splashScreen');
+      if (introSplash) {
+        introSplash.style.display = 'none';
+      }
+      const testContent = document.querySelector('.test-body') || document.querySelector('.main-container');
+      if (testContent) {
+        testContent.style.display = 'none';
+      }
+      return; // To'xtatish! Web orqali kirganlarga testni umuman ochmaslik!
+    }
+
+    this.userTgId = tgU.id;
+    this.userFullname = `${tgU.first_name || ''} ${tgU.last_name || ''}`.trim() || tgU.username || 'Foydalanuvchi';
 
     // Mavzu (birinchi kirishda oq/light, agar foydalanuvchi qoraga o'tkazsa saqlanadi)
     const savedTheme = localStorage.getItem('app_theme') || 'light';
@@ -56,40 +71,6 @@ const TestApp = {
     if (params.has('test_id')) this.testId = parseInt(params.get('test_id')) || 1;
     if (params.has('title')) this.testTitle = params.get('title');
     if (params.has('subject')) this.subject = params.get('subject');
-
-    // Faqat agar Telegram WebApp ichida bo'lsa yoki URL parametrda tg_id bo'lsa fallback olish
-    if (!this.userTgId && params.has('tg_id')) {
-      const parsedId = parseInt(params.get('tg_id'), 10);
-      if (parsedId && !isNaN(parsedId)) {
-        this.userTgId = parsedId;
-      }
-    }
-    if (!this.userTgId) {
-      try {
-        const savedUser = JSON.parse(localStorage.getItem('app_user') || '{}');
-        if (savedUser && savedUser.tg_id) {
-          this.userTgId = parseInt(savedUser.tg_id, 10);
-        }
-      } catch (e) {}
-    }
-
-    // ⚠️ AGAR WEB ORQALI KIRILGAN BO'LSA (TELEGRAMSIZ) — TO'LIQ BLOKLASH!
-    if (!this.userTgId || this.userTgId <= 0) {
-      const webBlock = document.getElementById('web-block-screen');
-      if (webBlock) {
-        webBlock.style.display = 'flex';
-      }
-      const introSplash = document.getElementById('intro-splash') || document.getElementById('splashScreen');
-      if (introSplash) {
-        introSplash.style.display = 'none';
-      }
-      const testContent = document.querySelector('.test-body') || document.querySelector('.main-container');
-      if (testContent) {
-        testContent.style.filter = 'blur(10px)';
-        testContent.style.pointerEvents = 'none';
-      }
-      return; // To'xtatish! Savollarni yuklamaslik va ishlashga ruxsat bermaslik!
-    }
 
     // UI ga o'rnatish
     const titleEl = document.getElementById('test-title-display');

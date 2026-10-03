@@ -7,6 +7,24 @@ const AdminApp = {
   editTestId: null,
 
   init() {
+    const tg = window.Telegram && window.Telegram.WebApp;
+    if (tg) {
+      try { tg.ready(); tg.expand(); } catch(e) {}
+    }
+    const tgU = tg && tg.initDataUnsafe && tg.initDataUnsafe.user;
+    const hasTgContext = !!(tg && ((tg.platform && tg.platform !== 'unknown') || (tg.initData && tg.initData.length > 0) || (tgU && tgU.id)));
+
+    // ⛔️ QAT'IY XAVFSIZLIK: AGAR TELEGRAMSIZ WEB ORQALI KIRILSA — TO'LIQ BLOKLASH!
+    if (!hasTgContext || !tgU || !tgU.id) {
+      const wb = document.getElementById('web-block-screen');
+      if (wb) wb.style.display = 'flex';
+      const sp = document.getElementById('admin-splash');
+      if (sp) sp.style.display = 'none';
+      const container = document.querySelector('.admin-container') || document.querySelector('.main-container');
+      if (container) container.style.display = 'none';
+      return;
+    }
+    this.creatorTgId = tgU.id;
     if (window.BM_LOGO_B64) {
       document.querySelectorAll('.header-bm-logo').forEach(img => {
         img.src = window.BM_LOGO_B64;

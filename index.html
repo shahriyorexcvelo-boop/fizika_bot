@@ -22,6 +22,24 @@
       }
     })();
   </script>
+  <script>
+    (function() {
+      try {
+        var tg = window.Telegram && window.Telegram.WebApp;
+        var isTg = !!(tg && ((tg.platform && tg.platform !== 'unknown') || (tg.initData && tg.initData.length > 0) || (tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id)));
+        if (!isTg) {
+          document.addEventListener('DOMContentLoaded', function() {
+            var wb = document.getElementById('web-block-screen');
+            if (wb) wb.style.display = 'flex';
+            var sp = document.getElementById('splashScreen') || document.getElementById('intro-splash') || document.getElementById('admin-splash');
+            if (sp) sp.style.display = 'none';
+            var app = document.getElementById('app') || document.querySelector('.main-container') || document.querySelector('.app-container') || document.querySelector('.test-body');
+            if (app) app.style.display = 'none';
+          });
+        }
+      } catch(e) {}
+    })();
+  </script>
 </head>
 <body>
 

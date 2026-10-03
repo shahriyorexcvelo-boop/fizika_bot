@@ -37,41 +37,25 @@ function initApp() {
   renderOnboardingSlides();
 
   try {
-    var urlParams = new URLSearchParams(window.location.search);
-    var queryTgId = urlParams.get('tg_id');
-    var isPreview = urlParams.get('preview') === 'user' || urlParams.get('mode') === 'user' || urlParams.get('demo') === '1';
     var tg = window.Telegram && window.Telegram.WebApp;
     if (tg) {
       try { tg.ready(); tg.expand(); } catch (e) {}
     }
     var tgU = tg && tg.initDataUnsafe && tg.initDataUnsafe.user;
-    var hasTgContext = !!(tg && (tg.platform && tg.platform !== 'unknown' || tg.initData || tgU));
+    var hasTgContext = !!(tg && ((tg.platform && tg.platform !== 'unknown') || (tg.initData && tg.initData.length > 0) || (tgU && tgU.id)));
 
-    if (isPreview) {
-      state.tgUser = { id: 7080517395, first_name: "O'quvchi", last_name: '', username: 'demo_user' };
-      state.userInfo = { tg_id: 7080517395, fullname: "O'quvchi (Namuna)", phone: '+998901234567', status: 'approved', is_registered: true };
-      state.isAdmin = false;
-    } else if (tgU && tgU.id) {
-      state.tgUser = tgU;
-    } else if (queryTgId && parseInt(queryTgId, 10) > 0) {
-      state.tgUser = { id: parseInt(queryTgId, 10), first_name: (tgU && tgU.first_name) || 'Foydalanuvchi', last_name: (tgU && tgU.last_name) || '', username: (tgU && tgU.username) || '' };
-    } else {
-      var saved = null;
-      try {
-        var rawSaved = localStorage.getItem(LS_USER);
-        if (rawSaved) saved = JSON.parse(rawSaved);
-      } catch (e) {}
-      if (saved && saved.tg_id) {
-        state.tgUser = { id: saved.tg_id, first_name: saved.fullname || 'Foydalanuvchi', last_name: '', username: '' };
-        state.userInfo = saved;
-      } else if (hasTgContext || window.Telegram) {
-        state.tgUser = { id: 0, first_name: 'Foydalanuvchi', last_name: '', username: '' };
-      } else {
-        // Telegramsiz to'g'ridan-to'g'ri brauzerda ochilganda demo rejimida ishga tushirish
-        state.tgUser = { id: 7080517395, first_name: "O'quvchi", last_name: '', username: 'demo' };
-        state.userInfo = { tg_id: 7080517395, fullname: "O'quvchi (Demo)", phone: '', status: 'approved', is_registered: true };
-      }
+    // ⛔️ QAT'IY XAVFSIZLIK: AGAR TELEGRAMSIZ WEB ORQALI KIRILSA — TO'LIQ BLOKLASH!
+    if (!hasTgContext || !tgU || !tgU.id) {
+      var wb = document.getElementById('web-block-screen');
+      if (wb) wb.style.display = 'flex';
+      var sp = document.getElementById('splashScreen');
+      if (sp) sp.style.display = 'none';
+      var appEl = document.getElementById('app');
+      if (appEl) appEl.style.display = 'none';
+      return;
     }
+
+    state.tgUser = tgU;
     try {
       var savedUser = localStorage.getItem(LS_USER);
       if (savedUser && !isPreview && !state.userInfo) state.userInfo = JSON.parse(savedUser);
