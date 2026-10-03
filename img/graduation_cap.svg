@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 90" width="120" height="90">
+  <defs>
+    <linearGradient id="boardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2A3B53" />
+      <stop offset="50%" stop-color="#182538" />
+      <stop offset="100%" stop-color="#0E1724" />
+    </linearGradient>
+    <linearGradient id="edgeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#141E2E" />
+      <stop offset="100%" stop-color="#080E17" />
+    </linearGradient>
+    <linearGradient id="capGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1E2B3E" />
+      <stop offset="100%" stop-color="#0F1824" />
+    </linearGradient>
+    <linearGradient id="tasselGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#55E4D6" />
+      <stop offset="60%" stop-color="#2EC4B6" />
+      <stop offset="100%" stop-color="#1FA89B" />
+    </linearGradient>
+    <filter id="capShadow" x="-20%" y="-20%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#05101E" flood-opacity="0.55" />
+    </filter>
+  </defs>
+  <g filter="url(#capShadow)">
+    <!-- Qalpoqning logoni quchoqlab turadigan pastki aylanasi -->
+    <path d="M 38 42 Q 60 48 82 42 L 85 55 Q 60 63 35 55 Z" fill="url(#capGrad)" />
+    <path d="M 35 55 Q 60 63 85 55 Q 60 59 35 55 Z" fill="#060A10" opacity="0.6" />
+    <!-- 3D Rombsimon taxta qirrasi -->
+    <polygon points="12,32 60,14 108,32 108,36 60,54 12,36" fill="url(#edgeGrad)" />
+    <!-- Ustki taxta -->
+    <polygon points="60,12 108,30 60,48 12,30" fill="url(#boardGrad)" stroke="#3D516E" stroke-width="0.8" />
+    <line x1="60" y1="12" x2="108" y2="30" stroke="rgba(255,255,255,0.25)" stroke-width="1" />
+    <line x1="60" y1="12" x2="12" y2="30" stroke="rgba(255,255,255,0.15)" stroke-width="1" />
+    <!-- Markaziy tugma -->
+    <ellipse cx="60" cy="30" rx="4.5" ry="3.2" fill="url(#tasselGrad)" stroke="#116B62" stroke-width="0.7" />
+    <!-- Popuk ipi va cho'tkasi -->
+    <path d="M 60 30 Q 78 28 88 38 Q 94 45 92 56" fill="none" stroke="url(#tasselGrad)" stroke-width="2.6" stroke-linecap="round" />
+    <ellipse cx="92" cy="56" rx="3" ry="1.5" fill="#55E4D6" />
+    <polygon points="89,57 95,57 98,74 86,74" fill="url(#tasselGrad)" />
+    <line x1="88" y1="74" x2="88" y2="76" stroke="#2EC4B6" stroke-width="1.2" stroke-linecap="round" />
+    <line x1="91" y1="74" x2="91" y2="77" stroke="#55E4D6" stroke-width="1.2" stroke-linecap="round" />
+    <line x1="94" y1="74" x2="94" y2="76" stroke="#2EC4B6" stroke-width="1.2" stroke-linecap="round" />
+  </g>
+</svg>

@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: rash
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python3 test_bot.py
+    plan: free
+    region: frankfurt
+    autoDeploy: true
+    healthCheckPath: /healthz
+    envVars:
+      - key: BOT_TOKEN
+        sync: false          # Render Dashboard orqali qo'lda kiriting
+
+      - key: ADMIN_ID
+        sync: false          # Render Dashboard orqali qo'lda kiriting
+
+      - key: DATABASE_URL
+        sync: false          # Neon.tech connection string — Dashboard orqali kiriting
+
+      - key: WEBAPP_URL
+        value: https://rash-vmrm.onrender.com
+
+      - key: PYTHON_VERSION
+        value: 3.11.9

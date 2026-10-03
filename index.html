@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>SHOHRUH RASH TEST — Shohruh Fizika</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="/logo_data.js?v=20260926_shohruh3"></script>
+  <link rel="stylesheet" href="/test_style.css?v=20261002_compacttop">
+  <script>
+    (function() {
+      var saved = localStorage.getItem('app_theme') || 'light';
+      if (saved === 'dark') {
+        document.documentElement.classList.add('dark-mode');
+        document.addEventListener('DOMContentLoaded', function() {
+          document.body.classList.add('dark-mode');
+        });
+      }
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- =========================================
+       MAVZUGA MOS ANIMATSIYALI INTRO EKRAN
+       ========================================= -->
+  <!-- =========================================
+       VEB BRAUZERDA KIRISHNI CHEKLASH EKRANI
+       ========================================= -->
+  <div id="web-block-screen" class="web-block-screen" style="display:none;">
+    <div class="web-block-card">
+      <div class="web-block-icon">🚫</div>
+      <h2 class="web-block-title">Web orqali ishlash taqiqlangan!</h2>
+      <p class="web-block-desc">
+        Ushbu testni faqat rasmiy <b>Telegram botimiz (@fizika_rash_testbot)</b> va Mini ilova orqali ishlash mumkin.
+      </p>
+      <div class="web-block-warning">
+        ⚠️ Oddiy veb-brauzer orqali ishlashga ruxsat berilmagan.
+      </div>
+      <a href="https://t.me/fizika_rash_testbot" class="btn-action-primary" style="margin-top: 18px; text-decoration: none;">
+        <span>Telegram Botga o'tish</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- KIRISH ANIMATSIYASI EKRANI -->
+  <div class="splash-screen" id="intro-splash">
+    <!-- Markaziy nur/fon nurlanishi -->
+    <div class="splash-glow"></div>
+    <!-- 1. Markaziy Logo va Qalpoqcha -->
+    <div class="splash-logo-container">
+      <div class="splash-circle-badge">
+        <img src="/img/bm_emblem_fill.png?v=20260927_fill" alt="Logo" class="splash-emblem-img">
+      </div>
+      <!-- Logoga kiyiladigan 3D akademik qalpoqcha -->
+      <img src="/img/graduation_cap.svg" class="splash-grad-cap" alt="Cap">
+    </div>
+    <!-- 2. Sakrab chiquvchi Harflar -->
+    <div class="splash-brand-text">
+      <span class="bounce-char" style="--d: 0.95s">S</span>
+      <span class="bounce-char" style="--d: 1.02s">H</span>
+      <span class="bounce-char" style="--d: 1.09s">O</span>
+      <span class="bounce-char" style="--d: 1.16s">H</span>
+      <span class="bounce-char" style="--d: 1.23s">R</span>
+      <span class="bounce-char" style="--d: 1.30s">U</span>
+      <span class="bounce-char" style="--d: 1.37s">H</span>
+      <span class="bounce-char space">&nbsp;</span>
+      <span class="bounce-char teal" style="--d: 1.48s">F</span>
+      <span class="bounce-char teal" style="--d: 1.57s">I</span>
+      <span class="bounce-char teal" style="--d: 1.66s">Z</span>
+      <span class="bounce-char teal" style="--d: 1.75s">I</span>
+      <span class="bounce-char teal" style="--d: 1.84s">K</span>
+      <span class="bounce-char teal" style="--d: 1.93s">A</span>
+    </div>
+    <!-- 3. Ostki Tagline/Izoh -->
+    <div class="splash-subtitle">MILLIY SERTIFIKAT VA RASCH TIZIMI</div>
+    <!-- 4. O'tkazib yuborish (Skip) tugmasi -->
+    <div class="splash-skip-hint" onclick="if(window.TestApp && typeof TestApp.finishSplashImmediately==='function'){TestApp.finishSplashImmediately();}else{var s=document.getElementById('intro-splash')||document.getElementById('splashScreen');if(s)s.style.display='none';}">
+      <span>Davom etish ➔</span>
+    </div>
+  </div>
+
+  <!-- Dinamik harakatlanuvchi orqa fon (Oq va qora mavzularga mos) -->
+  <div class="ambient-moving-mesh" aria-hidden="true">
+    <div class="ambient-mesh-orb ambient-orb-1"></div>
+    <div class="ambient-mesh-orb ambient-orb-2"></div>
+    <div class="ambient-mesh-orb ambient-orb-3"></div>
+  </div>
+
+  <!-- =========================================
+       ASOSIY KONTEYNER
+       ========================================= -->
+  <div class="test-container" id="test-app">
+
+    <!-- 1. YUQORI HEADER (KOMPAKT) -->
+    <header class="test-header">
+      <div class="header-top-row">
+        <div class="header-brand-wrap">
+          <img src="/img/bm_logo.png?v=20260926_shohruh3" class="header-bm-logo" alt="Shohruh Fizika Logo">
+          <h1 class="header-test-title" id="test-title-display">#122 test</h1>
+        </div>
+        <div class="header-actions">
+          <button class="theme-toggle-btn" onclick="TestApp.toggleTheme()" title="Mavzu">🌓</button>
+        </div>
+      </div>
+
+      <!-- Kichik o'lchamdagi to'ldirilgan javoblar shkalasi -->
+      <div class="progress-section-compact">
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progress-bar-fill" style="width: 0%;"></div>
+        </div>
+        <span class="progress-count-mini" id="answered-counter">0 / 55</span>
+      </div>
+
+      <!-- Yashirin yordamchi elementlar (JS bilan to'liq moslik uchun) -->
+      <span id="test-code-display" style="display: none;"></span>
+      <span id="test-subject-badge" style="display: none;"></span>
+      <span id="user-welcome-text" style="display: none;"></span>
+      <div class="questions-nav-map" id="questions-nav-map" style="display: none;">
+        <div class="map-grid" id="map-grid"></div>
+      </div>
+    </header>
+
+    <!-- 2. SAVOLLAR RO'YXATI -->
+    <main class="questions-list-wrapper">
+
+      <!-- BO'LIM 1: 1-32 Variantli Savollar (A, B, C, D) -->
+      <section class="section-group">
+        <div class="section-group-header">
+          <div class="section-badge">1-BO'LIM (1 — 32)</div>
+          <h2 class="section-heading">Variantli savollar (1 — 32)</h2>
+          <span class="section-subtext">Har bir savol uchun 1 ta to'g'ri variantni tanlang (A, B, C, D)</span>
+        </div>
+        <div class="questions-list" id="questions-part-1">
+          <!-- JS orqali 1-32 savollar chiqariladi -->
+        </div>
+      </section>
+
+      <!-- BO'LIM 2: 33, 34, 35 (6 ta variantli: A, B, C, D, E, F) -->
+      <section class="section-group">
+        <div class="section-group-header">
+          <div class="section-badge special-badge">2-BO'LIM (33, 34, 35)</div>
+          <h2 class="section-heading">6 ta Variantli Savollar (33 — 35)</h2>
+          <span class="section-subtext">Moslik yoki 6 ta variantli savollar uchun tanlang (A, B, C, D, E, F)</span>
+        </div>
+        <div class="questions-list" id="questions-part-2">
+          <!-- JS orqali 33, 34, 35 savollar chiqariladi -->
+        </div>
+      </section>
+
+      <!-- BO'LIM 3: 36-45 Yopiq Yozma Savollar -->
+      <section class="section-group">
+        <div class="section-group-header">
+          <div class="section-badge math-badge">3-BO'LIM (YOPIQ TEST)</div>
+          <h2 class="section-heading">Yozma javoblar (36 — 45)</h2>
+          <span class="section-subtext">Har bir savolning <b>a</b> va <b>b</b> bandlariga hisoblangan javobni yozing. Maxsus matematik klaviaturadan foydalaning (√, kasr, daraja va b.)</span>
+        </div>
+        <div class="questions-list" id="questions-part-3">
+          <!-- JS orqali 36a-45b savollar chiqariladi -->
+        </div>
+      </section>
+
+    </main>
+
+    <!-- 3. PASTKI SUZUVCHI TOPSHIRISH PANELI -->
+    <footer class="bottom-submit-dock">
+      <div class="submit-dock-inner">
+        <button class="btn-submit-test" id="btn-submit-test" onclick="TestApp.openConfirmSubmitModal()">
+          Testni yakunlash
+        </button>
+      </div>
+    </footer>
+
+  </div> <!-- /.test-container -->
+
+  <!-- =========================================
+       4. INTERAKTIV MATEMATIK KLAVIATURA
+       ========================================= -->
+  <div class="math-keyboard-panel" id="math-keyboard-panel">
+    
+    <!-- 1. YUQORI BOSHQARUV: Maydon Nomi + Jonli Kiritish + Tayyor Tugmasi -->
+    <div class="kb-top-bar">
+      <div class="kb-target-wrap">
+        <span class="kb-target-badge" id="keyboard-target-name">36a</span>
+        <input type="text" class="kb-live-input" id="keyboard-live-input" readonly inputmode="none" placeholder="Javobni kiriting...">
+      </div>
+      <button type="button" class="kb-done-btn" onclick="MathKeyboard.close()">Tayyor ✓</button>
+    </div>
+
+    <!-- 2. BO'LIMLAR TUGMALARI (Segmented Control Tabs: 4 ta teng ustun telefonga 100% sig'adi) -->
+    <div class="kb-tabs-bar">
+      <button type="button" class="kb-tab-btn active" id="kb-tab-math" onclick="MathKeyboard.switchTab('math')">123</button>
+      <button type="button" class="kb-tab-btn" id="kb-tab-power" onclick="MathKeyboard.switchTab('power')">√ / xⁿ</button>
+      <button type="button" class="kb-tab-btn" id="kb-tab-func" onclick="MathKeyboard.switchTab('func')">f(x)</button>
+      <button type="button" class="kb-tab-btn" id="kb-tab-vars" onclick="MathKeyboard.switchTab('vars')">abc</button>
+    </div>
+
+    <!-- 3. TUGMALAR TANASI -->
+    <!-- TAB 1: Asosiy Raqam va Kalkulyator (iPhone kalkulyatori uslubida 5-6 ustunli tekis grid) -->
+    <div class="kb-body" id="keyboard-body-math">
+      <div class="kb-row">
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('√')">√</button>
+        <button type="button" class="kb-key kb-power" onclick="MathKeyboard.insertPower('²')">x²</button>
+        <button type="button" class="kb-key kb-power" onclick="MathKeyboard.insertPower('³')">x³</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertPiPower(2)">π²</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertPiPower(3)">π³</button>
+        <button type="button" class="kb-key kb-op" onclick="MathKeyboard.insert('/')">/</button>
+      </div>
+      <div class="kb-row">
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('(')">(</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert(')')">)</button>
+        <button type="button" class="kb-key kb-power" onclick="MathKeyboard.insertCustomPower()">^</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('|')">|x|</button>
+        <button type="button" class="kb-key kb-action" onclick="MathKeyboard.clear()">C</button>
+        <button type="button" class="kb-key kb-backspace" onclick="MathKeyboard.backspace()">⌫</button>
+      </div>
+      <div class="kb-row">
+        <button type="button" class="kb-key kb-num" onclick="MathKeyboard.insert('7')">7</button>
+        <button type="button" class="kb-key kb-num" onclick="MathKeyboard.insert('8')">8</button>
+        <button type="button" class="kb-key kb-num" onclick="MathKeyboard.insert('9')">9</button>
+        <button type="button" class="kb-key kb-op" onclick="MathKeyboard.insert('*')">×</button>
+        <button type="button" class="kb-key kb-op" onclick="MathKeyboard.insert('-')">−</button>
+      </div>
+      <div class="kb-row">
+        <button type="button" class="kb-key kb-num" onclick="MathKeyboard.insert('4')">4</button>
+        <button type="button" class="kb-key kb-num" onclick="MathKeyboard.insert('5')">5</button>
+        <button type="button" class="kb-key kb-num" onclick="MathKeyboard.insert('6')">6</button>
+        <button type="button" class="kb-key kb-op" onclick="MathKeyboard.insert('+')">+</button>
+        <button type="button" class="kb-key kb-op" onclick="MathKeyboard.insert('=')">=</button>
+      </div>
+      <div class="kb-row">
+        <button type="button" class="kb-key kb-num" onclick="MathKeyboard.insert('1')">1</button>
+        <button type="button" class="kb-key kb-num" onclick="MathKeyboard.insert('2')">2</button>
+        <button type="button" class="kb-key kb-num" onclick="MathKeyboard.insert('3')">3</button>
+        <button type="button" class="kb-key kb-num" onclick="MathKeyboard.insert('.')">.</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('π')">π</button>
+      </div>
+      <div class="kb-row">
+        <button type="button" class="kb-key kb-num" onclick="MathKeyboard.insert('0')">0</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('±')">±</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert(';')">;</button>
+        <button type="button" class="kb-key kb-nav" onclick="MathKeyboard.prevField()">◀ Oldingi</button>
+        <button type="button" class="kb-key kb-nav kb-nav-next" onclick="MathKeyboard.nextField()">Keyingi ▶</button>
+      </div>
+    </div>
+
+    <!-- TAB 2: Ildizlar va Darajalar (Kengaytirilgan) -->
+    <div class="kb-body" id="keyboard-body-power" style="display: none;">
+      <div class="kb-row">
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('√')">√</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('∛')">³√</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('∜')">⁴√</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertNthRoot()">ⁿ√</button>
+        <button type="button" class="kb-key kb-backspace" onclick="MathKeyboard.backspace()">⌫</button>
+      </div>
+      <div class="kb-row">
+        <button type="button" class="kb-key kb-power" onclick="MathKeyboard.insertPower('²')">x²</button>
+        <button type="button" class="kb-key kb-power" onclick="MathKeyboard.insertPower('³')">x³</button>
+        <button type="button" class="kb-key kb-power" onclick="MathKeyboard.insertPower('⁴')">x⁴</button>
+        <button type="button" class="kb-key kb-power" onclick="MathKeyboard.insertPower('⁵')">x⁵</button>
+        <button type="button" class="kb-key kb-power" onclick="MathKeyboard.insertCustomPower()">xⁿ (^)</button>
+      </div>
+      <div class="kb-row">
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertPiPower(1)">π</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertPiPower(2)">π²</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insertPiPower(3)">π³</button>
+        <button type="button" class="kb-key kb-power" onclick="MathKeyboard.insertPiPower('^')">πⁿ</button>
+        <button type="button" class="kb-key kb-power" onclick="MathKeyboard.insert('^')">^</button>
+      </div>
+      <div class="kb-row">
+        <button type="button" class="kb-key kb-power kb-power-num" onclick="MathKeyboard.insert('⁰')">⁰</button>
+        <button type="button" class="kb-key kb-power kb-power-num" onclick="MathKeyboard.insert('¹')">¹</button>
+        <button type="button" class="kb-key kb-power kb-power-num" onclick="MathKeyboard.insert('²')">²</button>
+        <button type="button" class="kb-key kb-power kb-power-num" onclick="MathKeyboard.insert('³')">³</button>
+        <button type="button" class="kb-key kb-power kb-power-num" onclick="MathKeyboard.insert('⁴')">⁴</button>
+      </div>
+      <div class="kb-row">
+        <button type="button" class="kb-key kb-power kb-power-num" onclick="MathKeyboard.insert('⁵')">⁵</button>
+        <button type="button" class="kb-key kb-power kb-power-num" onclick="MathKeyboard.insert('⁶')">⁶</button>
+        <button type="button" class="kb-key kb-power kb-power-num" onclick="MathKeyboard.insert('⁷')">⁷</button>
+        <button type="button" class="kb-key kb-power kb-power-num" onclick="MathKeyboard.insert('⁸')">⁸</button>
+        <button type="button" class="kb-key kb-power kb-power-num" onclick="MathKeyboard.insert('⁹')">⁹</button>
+      </div>
+      <div class="kb-row">
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('≤')">≤</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('≥')">≥</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('≠')">≠</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('≈')">≈</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('∞')">∞</button>
+      </div>
+      <div class="kb-row">
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('[')">[</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert(']')">]</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('e')">e</button>
+        <button type="button" class="kb-key kb-nav" onclick="MathKeyboard.prevField()">◀ Oldingi</button>
+        <button type="button" class="kb-key kb-nav kb-nav-next" onclick="MathKeyboard.nextField()">Keyingi ▶</button>
+      </div>
+    </div>
+
+    <!-- TAB 3: Funksiyalar -->
+    <div class="kb-body" id="keyboard-body-func" style="display: none;">
+      <div class="kb-row">
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('sin(')">sin</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('cos(')">cos</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('tg(')">tg</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('ctg(')">ctg</button>
+        <button type="button" class="kb-key kb-backspace" onclick="MathKeyboard.backspace()">⌫</button>
+      </div>
+      <div class="kb-row">
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('arcsin(')">arcsin</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('arccos(')">arccos</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('arctg(')">arctg</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('arcctg(')">arcctg</button>
+        <button type="button" class="kb-key kb-action" onclick="MathKeyboard.clear()">C</button>
+      </div>
+      <div class="kb-row">
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('log(')">log</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('ln(')">ln</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('lg(')">lg</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('lim(')">lim</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('|')">|x|</button>
+      </div>
+      <div class="kb-row">
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert('(')">(</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert(')')">)</button>
+        <button type="button" class="kb-key kb-func" onclick="MathKeyboard.insert(';')">;</button>
+        <button type="button" class="kb-key kb-nav" onclick="MathKeyboard.prevField()">◀ Oldingi</button>
+        <button type="button" class="kb-key kb-nav kb-nav-next" onclick="MathKeyboard.nextField()">Keyingi ▶</button>
+      </div>
+    </div>
+
+    <!-- TAB 4: Harflar -->
+    <div class="kb-body" id="keyboard-body-vars" style="display: none;">
+      <div class="kb-row">
+        <button type="button" class="kb-key" onclick="MathKeyboard.insert('x')">x</button>
+        <button type="button" class="kb-key" onclick="MathKeyboard.insert('y')">y</button>
+        <button type="button" class="kb-key" onclick="MathKeyboard.insert('z')">z</button>
+        <button type="button" class="kb-key" onclick="MathKeyboard.insert('t')">t</button>
+        <button type="button" class="kb-key kb-backspace" onclick="MathKeyboard.backspace()">⌫</button>
+      </div>
+      <div class="kb-row">
+        <button type="button" class="kb-key" onclick="MathKeyboard.insert('a')">a</button>
+        <button type="button" class="kb-key" onclick="MathKeyboard.insert('b')">b</button>
+        <button type="button" class="kb-key" onclick="MathKeyboard.insert('c')">c</button>
+        <button type="button" class="kb-key" onclick="MathKeyboard.insert('d')">d</button>
+        <button type="button" class="kb-key kb-action" onclick="MathKeyboard.clear()">C</button>
+      </div>
+      <div class="kb-row">
+        <button type="button" class="kb-key" onclick="MathKeyboard.insert('k')">k</button>
+        <button type="button" class="kb-key" onclick="MathKeyboard.insert('m')">m</button>
+        <button type="button" class="kb-key" onclick="MathKeyboard.insert('n')">n</button>
+        <button type="button" class="kb-key" onclick="MathKeyboard.insert('p')">p</button>
+        <button type="button" class="kb-key" onclick="MathKeyboard.insert('r')">r</button>
+      </div>
+      <div class="kb-row">
+        <button type="button" class="kb-key" onclick="MathKeyboard.insert('α')">α</button>
+        <button type="button" class="kb-key" onclick="MathKeyboard.insert('β')">β</button>
+        <button type="button" class="kb-key" onclick="MathKeyboard.insert('γ')">γ</button>
+        <button type="button" class="kb-key" onclick="MathKeyboard.insert('Δ')">Δ</button>
+        <button type="button" class="kb-key" onclick="MathKeyboard.insert('λ')">λ</button>
+      </div>
+      <div class="kb-row">
+        <button type="button" class="kb-key kb-space" onclick="MathKeyboard.insert(' ')" style="flex: 2;">probel ␣</button>
+        <button type="button" class="kb-key" onclick="MathKeyboard.insert(',')">,</button>
+        <button type="button" class="kb-key kb-nav" onclick="MathKeyboard.prevField()">◀ Oldingi</button>
+        <button type="button" class="kb-key kb-nav kb-nav-next" onclick="MathKeyboard.nextField()">Keyingi ▶</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================
+       5. TOPSHIRISHNI TASDIQLASH MODALI (2 BOSQICHLI XAVFSIZ TIZIM)
+       ========================================= -->
+  <div class="modal-overlay" id="confirm-modal">
+    <div class="modal-card">
+      
+      <!-- 1-BOSQICH: Siz yakunlamoqchimisiz? (Ha / Yo'q) -->
+      <div id="confirm-step-1">
+        <div class="modal-icon-circle" style="font-size: 38px;">❓</div>
+        <h3 class="modal-heading" style="font-size: 19px; margin-bottom: 8px;">Testni yakunlamoqchimisiz?</h3>
+        <p class="modal-desc" style="font-size: 13px; margin-bottom: 20px;">
+          Javoblarni topshirishdan oldin tasdiqlang. Keyingi bosqichda belgilangan va qolib ketgan savollaringiz soni ko'rsatiladi.
+        </p>
+        <div class="modal-buttons">
+          <button type="button" class="btn-modal-cancel" onclick="TestApp.closeConfirmSubmitModal()">Yo'q, ishlashda davom etish</button>
+          <button type="button" class="btn-modal-confirm" style="background: linear-gradient(135deg, #2563EB, #1D4ED8);" onclick="TestApp.proceedToSubmitStep2()">Ha, yakunlash ➔</button>
+        </div>
+      </div>
+
+      <!-- 2-BOSQICH: Qancha belgilandi / Qancha qolib ketdi va Oxirgi yakunlash -->
+      <div id="confirm-step-2" style="display: none;">
+        <div class="modal-icon-circle" id="confirm-step-2-icon" style="font-size: 38px;">📊</div>
+        <h3 class="modal-heading" id="confirm-step-2-title" style="font-size: 18px; margin-bottom: 6px;">Javoblaringiz holati</h3>
+        <p class="modal-desc" id="confirm-step-2-desc" style="font-size: 12.5px; margin-bottom: 14px;">
+          Quyida belgilangan va qolib ketgan savollar soni:
+        </p>
+        
+        <div class="modal-stats-summary" id="modal-stats-summary">
+          <div class="m-stat-item">
+            <strong id="m-stat-answered">0</strong>
+            <span>Belgilangan</span>
+          </div>
+          <div class="m-stat-item warn">
+            <strong id="m-stat-empty">0</strong>
+            <span>Qolib ketgan</span>
+          </div>
+        </div>
+
+        <!-- 0 ta javob bo'lganda chiqadigan qat'iy to'siq -->
+        <div id="zero-answers-warning" style="display: none; background: rgba(239, 68, 68, 0.1); border: 1.5px solid #EF4444; border-radius: 12px; padding: 12px; margin-bottom: 16px; text-align: left;">
+          <div style="font-weight: 800; font-size: 13px; color: #EF4444; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+            <span>⚠️</span> Birorta ham javob belgilanmagan!
+          </div>
+          <div style="font-size: 12px; color: var(--text-main); line-height: 1.4;">
+            Siz birorta ham savolga javob belgilamadingiz (0/55). Bo'sh testni topshirib bo'lmaydi. Iltimos, savollarni ishlab, javoblarni belgilang!
+          </div>
+        </div>
+
+        <!-- Qolib ketgan savollar haqida eslatma -->
+        <div id="partial-answers-warning" style="display: none; font-size: 11.5px; color: #D97706; margin-bottom: 14px; font-weight: 700; line-height: 1.35;">
+          ⚠️ Diqqat: Qolib ketgan savollarga 0 ball hisoblanadi.
+        </div>
+
+        <div class="modal-buttons">
+          <button type="button" class="btn-modal-cancel" onclick="TestApp.backToSubmitStep1()">◀ Ortga</button>
+          <button type="button" class="btn-modal-confirm" id="btn-final-submit" onclick="TestApp.submitTestNow()">Oxirgi yakunlash 🚀</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========================================
+       6. NATIJA EKRANI (ANIMATSIYALI CHECKMARK MODALI)
+       ========================================= -->
+  <div class="modal-overlay" id="result-modal">
+    <div class="result-card">
+      
+      <div class="success-checkmark-box">
+        <div class="success-pulse-ring"></div>
+        <div class="success-circle-icon">
+          <svg class="success-svg-check" viewBox="0 0 52 52">
+            <circle class="success-circle-bg" cx="26" cy="26" r="24" fill="none"/>
+            <path class="success-check-path" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+          </svg>
+        </div>
+      </div>
+
+      <h2 class="result-title">Test Yakunlandi! 🎉</h2>
+      <p class="result-subtitle" id="result-user-name">Shaxriyor Eshimbetov</p>
+
+      <div id="result-grade-container" style="margin: 14px auto 6px; padding: 10px 18px; border-radius: 14px; background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(234, 88, 12, 0.15)); border: 1.5px solid #F59E0B; display: inline-flex; align-items: center; justify-content: center; gap: 10px;">
+        <span style="font-size: 26px;">🎖</span>
+        <div style="text-align: left;">
+          <div style="font-size: 11px; text-transform: uppercase; font-weight: 800; color: #D97706; letter-spacing: 0.5px;">Milliy Sertifikat Darajasi</div>
+          <div style="font-size: 18px; font-weight: 900; color: #B45309;" id="result-grade-val">—</div>
+        </div>
+      </div>
+
+      <div class="result-details-grid" style="margin-top: 14px;">
+        <div class="r-detail-item success">
+          <span class="r-icon">✅</span>
+          <div>
+            <strong id="r-correct-count">0 ta</strong>
+            <p>To'g'ri javob</p>
+          </div>
+        </div>
+        <div class="r-detail-item error">
+          <span class="r-icon">❌</span>
+          <div>
+            <strong id="r-incorrect-count">0 ta</strong>
+            <p>Noto'g'ri javob</p>
+          </div>
+        </div>
+        <div class="r-detail-item empty">
+          <span class="r-icon">⚪</span>
+          <div>
+            <strong id="r-unanswered-count">0 ta</strong>
+            <p>Belgilanmagan</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-actions" style="display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 14px;">
+        <div style="text-align:center; padding: 6px; font-size: 12px; color: var(--text-muted); font-weight: 500;">
+          💡 Eslatma: To'g'ri javoblarni (kalitlarni) asosiy Profil ilovasidagi "Testlar" bo'limida tekshirishingiz mumkin.
+        </div>
+        <button class="btn-result-close" onclick="TestApp.closeWebApp()" style="margin-top: 0;">
+          Botga qaytish ↩️
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========================================
+       7. JAVOBLAR TAHLILI VA XATOLAR MODALI
+       ========================================= -->
+  <div class="modal-overlay" id="analysis-modal" style="z-index: 10000;">
+    <div class="modal-card" style="max-width: 95%; width: 440px; max-height: 85vh; display: flex; flex-direction: column; text-align: left; padding: 18px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 10px;">
+        <h3 style="font-size: 16px; font-weight: 800; color: var(--text-main); margin: 0;">🔍 Javoblar Tahlili (1 — 55)</h3>
+        <button onclick="TestApp.closeAnswersAnalysis()" style="background: var(--bg-card-sub); border: 1px solid var(--border); border-radius: 8px; width: 30px; height: 30px; font-size: 16px; cursor: pointer;">✕</button>
+      </div>
+      
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">Har bir savolda belgilangan javobingiz va to'g'ri kalit taqqoslanishi:</p>
+
+      <div id="analysis-items-container" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 4px; max-height: 55vh;">
+        <!-- JS orqali to'ldiriladi -->
+      </div>
+
+      <div style="margin-top: 14px; border-top: 1px solid var(--border); padding-top: 10px;">
+        <button class="btn-modal-cancel" onclick="TestApp.closeAnswersAnalysis()" style="width: 100%; border-radius: 10px; padding: 10px; font-weight: 700;">
+          Yopish
+        </button>
+      </div>
+    </div>
+  </div><!-- /#analysis-modal yopilishi -->
+
+  <!-- =========================================
+       8. JAVOBLARNI TOPSHIRISH VAQTINCHA CHEKLANGAN (45 DAQIQA) MODALI
+       ========================================= -->
+  <div class="modal-overlay" id="min-submit-modal" style="z-index: 9999;">
+    <div class="modal-card" style="max-width: 420px; padding: 24px 20px; border: 1.5px solid rgba(245, 158, 11, 0.45); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);">
+      
+      <!-- Icon with pulse -->
+      <div id="min-submit-icon-wrap" style="width: 62px; height: 62px; margin: 0 auto 14px; border-radius: 50%; background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(239, 68, 68, 0.15)); border: 2px solid #F59E0B; display: flex; align-items: center; justify-content: center; font-size: 30px;">
+        ⏳
+      </div>
+
+      <h3 id="min-submit-title" style="font-size: 18px; font-weight: 800; color: var(--text-main); margin: 0 0 6px;">
+        Hali javob yubora olmaysiz!
+      </h3>
+      <p id="min-submit-desc" style="font-size: 13px; color: var(--text-muted); margin: 0 0 16px; line-height: 1.45;">
+        Test boshlanganidan so'ng dastlabki <b>45 daqiqa</b> davomida javoblarni topshirish cheklangan.
+      </p>
+
+      <!-- Countdown Card -->
+      <div style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(124, 58, 237, 0.08)); border: 1.5px solid rgba(124, 58, 237, 0.35); border-radius: 16px; padding: 14px; margin-bottom: 16px; text-align: center;">
+        <div style="font-size: 11px; text-transform: uppercase; font-weight: 800; letter-spacing: 0.6px; color: #7C3AED; margin-bottom: 4px;">
+          ⏱ Qolgan kutish vaqti:
+        </div>
+        <div id="min-submit-countdown" style="font-family: var(--font-mono, monospace); font-size: 36px; font-weight: 900; color: var(--primary, #2563EB); letter-spacing: 2px; text-shadow: 0 2px 10px rgba(37, 99, 235, 0.25);">
+          --:--
+        </div>
+        <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); margin-top: 6px;" id="min-submit-unlock-info">
+          Topshirish ochiladigan vaqt: <b style="color: var(--text-main);">--:--</b>
+        </div>
+      </div>
+
+      <!-- Sababi / Reason Box -->
+      <div style="background: var(--bg-card-sub); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 18px; text-align: left;">
+        <div style="font-size: 12.5px; font-weight: 800; color: #D97706; display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+          <span>💡</span> <b>Nega bunday tartib o'rnatilgan? (Sababi)</b>
+        </div>
+        <div style="font-size: 12px; color: var(--text-main); line-height: 1.55;">
+          Milliy sertifikat qoidalari va imtihon shaffofligini ta'minlash, shoshmashosharlik hamda tasodifiy (tavakkal) belgilashlarning oldini olish maqsadida test boshlanganidan so'ng dastlabki <b>45 daqiqa</b> davomida javoblarni topshirishga ruxsat berilmaydi.
+        </div>
+        <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 8px; font-style: italic; border-top: 1px dashed var(--border); padding-top: 6px;">
+          Iltimos, ajratilgan vaqtdan unumli foydalanib barcha 55 ta savol va ochiq yozma javoblaringizni qayta tekshirib chiqing!
+        </div>
+      </div>
+
+      <div class="modal-buttons" style="display: flex; gap: 10px;">
+        <button type="button" id="min-submit-action-btn" class="btn-modal-cancel" onclick="TestApp.closeMinSubmitModal()" style="flex: 1; padding: 12px 16px; font-size: 13.5px; font-weight: 700; border-radius: 12px;">
+          Savollarni qayta tekshirish 🔍
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Skriptlar -->
+  <script src="/logo_data.js?v=20260926_shohruh3"></script>
+  <script src="/math_keyboard.js?v=20261002_compacttop"></script>
+  <script src="/test_app.js?v=20261002_modalfix"></script>
+</body>
+</html>
