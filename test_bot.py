@@ -357,8 +357,8 @@ class ContactUserState(StatesGroup):
 def main_menu_kb(user_tg_id: int) -> ReplyKeyboardMarkup:
     is_adm = test_db.is_admin(user_tg_id, ADMIN_ID)
     
-    app_url = f"{WEBAPP_URL}/app.html?tg_id={user_tg_id}&v=20261004_cherryred1"
-    admin_webapp_url = f"{WEBAPP_URL}/admin.html?tg_id={user_tg_id}&v=20261004_cherryred1"
+    app_url = f"{WEBAPP_URL}/app.html?tg_id={user_tg_id}&v=20261004_physickb1"
+    admin_webapp_url = f"{WEBAPP_URL}/admin.html?tg_id={user_tg_id}&v=20261004_physickb1"
 
     # Agar HTTPS bo'lsa to'g'ridan-to'g'ri Telegram WebApp ochadi
     if app_url.startswith("https://"):
@@ -394,7 +394,7 @@ def main_menu_kb(user_tg_id: int) -> ReplyKeyboardMarkup:
 
 def profile_webapp_kb(user_tg_id: int) -> InlineKeyboardMarkup:
     """Shaxsiy profil mini ilovasini ochish tugmasi."""
-    app_url = f"{WEBAPP_URL}/app.html?tg_id={user_tg_id}&v=20261004_cherryred1"
+    app_url = f"{WEBAPP_URL}/app.html?tg_id={user_tg_id}&v=20261004_physickb1"
     buttons = [
         [make_webapp_button("◈ Shaxsiy profilni ochish", app_url, fallback_cb="open_app_info")]
     ]
@@ -402,7 +402,7 @@ def profile_webapp_kb(user_tg_id: int) -> InlineKeyboardMarkup:
 
 def results_webapp_kb(user_tg_id: int = 0) -> InlineKeyboardMarkup:
     """Natijalarni ko'rish mini ilovasi tugmasi."""
-    qs = f"?tg_id={user_tg_id}&v=20261004_cherryred1" if user_tg_id else "?v=20261004_cherryred1"
+    qs = f"?tg_id={user_tg_id}&v=20261004_physickb1" if user_tg_id else "?v=20261004_physickb1"
     app_url = f"{WEBAPP_URL}/app.html{qs}"
     buttons = [
         [make_webapp_button("◈ Asosiy ilovani ochish", app_url, fallback_cb="open_app_info")]
@@ -523,7 +523,7 @@ async def send_test_card_to_user_chat(user_tg_id: int, test: Dict[str, Any]):
         "title": test["title"],
         "subject": test.get("subject", "Fizika"),
         "tg_id": user_tg_id,
-        "v": f"20261004_cherryred1_{int(time.time())}"
+        "v": f"20261004_physickb1_{int(time.time())}"
     }
     encoded_url = f"{WEBAPP_URL}?{urllib.parse.urlencode(params)}"
 
@@ -884,7 +884,7 @@ async def solve_test_cb(call: CallbackQuery):
         "test_code": t["test_code"],
         "title": t["title"],
         "subject": t.get("subject", "Fizika"),
-        "v": "20261004_cherryred1"
+        "v": "20261004_physickb1"
     }
     encoded_url = f"{WEBAPP_URL}?{urllib.parse.urlencode(params)}"
     reply_kb = InlineKeyboardMarkup(inline_keyboard=[
@@ -5751,9 +5751,8 @@ async def handle_static_file(request):
         import web_assets_fallback
         if hasattr(web_assets_fallback, 'get_asset_bytes'):
             # Eski app.js va app.html fallbackdan qaytarilmasin —
-            # ular endi js/app.js va real app.html dan to'g'ri yuklanadi
             _basename = os.path.basename(path_name)
-            _STALE_SKIP = {'app.js', 'app.html'}
+            _STALE_SKIP = {'app.js', 'app.html', 'admin.html', 'index.html', 'physics_keyboard.js', 'math_keyboard.js', 'test_style.css'}
             if _basename not in _STALE_SKIP:
                 data, mime = web_assets_fallback.get_asset_bytes(path_name)
                 if data:

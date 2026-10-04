@@ -676,16 +676,23 @@ body.dark-mode .ambient-orb-3,
 }
 
 /* Ochiq savollarni yozayotganda barcha tepadagi elementlar va pastki dock to'liq yashirilishi */
-body.keyboard-open .test-header {
+body.keyboard-open .test-header,
+body.keyboard-open header.test-header,
+body.keyboard-open .header-wrapper {
   display: none !important;
 }
 
-body.keyboard-open .bottom-submit-dock {
+body.keyboard-open .bottom-submit-dock,
+body.keyboard-open .admin-compact-dock,
+body.keyboard-open .admin-save-dock {
   display: none !important;
 }
 
-body.keyboard-open .test-container {
-  padding-bottom: 380px !important;
+body.keyboard-open .test-container,
+body.keyboard-open .admin-container,
+body.keyboard-open .admin-content-wrap,
+body.keyboard-open main {
+  padding-bottom: 420px !important;
 }
 
 .header-top-row {
@@ -1407,8 +1414,9 @@ body[data-theme="dark"] .btn-submit-test:active {
    ========================================= */
 /* =========================================
 /* =========================================
-   4. MATEMATIK KLAVIATURA (PRO SOLID, NON-LIQUID)
+   4. MATEMATIK & FIZIKA KLAVIATURA (PRO SOLID, NON-LIQUID)
    ========================================= */
+.physics-keyboard-panel,
 .math-keyboard-panel {
   position: fixed;
   bottom: 0;
@@ -1427,12 +1435,14 @@ body[data-theme="dark"] .btn-submit-test:active {
   opacity: 1 !important;
 }
 
+body.dark-mode .physics-keyboard-panel,
 body.dark-mode .math-keyboard-panel {
   background: #0F172A !important;
   border-top: 1.5px solid #334155 !important;
   box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.65) !important;
 }
 
+.physics-keyboard-panel.open,
 .math-keyboard-panel.open {
   display: flex;
 }
@@ -1686,6 +1696,86 @@ body.dark-mode .kb-key.kb-power {
   background: rgba(59, 7, 100, 0.5) !important;
   color: #D8B4FE !important;
   border-color: #6B21A8 !important;
+}
+
+/* Maxsus Fizika Birliklari (.kb-unit) — Yengil Yashil/Zumrad */
+.kb-key.kb-unit {
+  background: #F0FDF4 !important;
+  color: #166534 !important;
+  border: 1px solid #BBF7D0 !important;
+  font-weight: 800;
+  font-size: 13.5px;
+}
+.kb-key.kb-unit:hover {
+  background: #DCFCE7 !important;
+  border-color: #86EFAC !important;
+}
+body.dark-mode .kb-key.kb-unit {
+  background: rgba(16, 185, 129, 0.14) !important;
+  color: #34D399 !important;
+  border-color: rgba(52, 211, 153, 0.32) !important;
+}
+body.dark-mode .kb-key.kb-unit:hover {
+  background: rgba(16, 185, 129, 0.24) !important;
+  border-color: #34D399 !important;
+}
+
+/* Maxsus Yunon Harflari (.kb-greek) — Yengil Binafsha/Siyohrang */
+.kb-key.kb-greek {
+  background: #FAF5FF !important;
+  color: #6B21A8 !important;
+  border: 1px solid #E9D5FF !important;
+  font-weight: 800;
+  font-size: 15px;
+}
+.kb-key.kb-greek:hover {
+  background: #F3E8FF !important;
+  border-color: #D8B4FE !important;
+}
+body.dark-mode .kb-key.kb-greek {
+  background: rgba(168, 85, 247, 0.14) !important;
+  color: #C084FC !important;
+  border-color: rgba(192, 132, 252, 0.32) !important;
+}
+body.dark-mode .kb-key.kb-greek:hover {
+  background: rgba(168, 85, 247, 0.24) !important;
+  border-color: #C084FC !important;
+}
+
+/* Maxsus Doimiylar va Pastki Indekslar (.kb-const) — Yengil Qahrabo/Sariq */
+.kb-key.kb-const {
+  background: #FFFBEB !important;
+  color: #92400E !important;
+  border: 1px solid #FDE68A !important;
+  font-weight: 800;
+  font-size: 13.5px;
+}
+.kb-key.kb-const:hover {
+  background: #FEF3C7 !important;
+  border-color: #FCD34D !important;
+}
+body.dark-mode .kb-key.kb-const {
+  background: rgba(245, 158, 11, 0.14) !important;
+  color: #FBBF24 !important;
+  border-color: rgba(251, 191, 36, 0.32) !important;
+}
+body.dark-mode .kb-key.kb-const:hover {
+  background: rgba(245, 158, 11, 0.24) !important;
+  border-color: #FBBF24 !important;
+}
+
+/* Ilmiy ko'paytirish (·10ⁿ) (.kb-sci) — Yengil Moviy */
+.kb-key.kb-sci {
+  background: #EFF6FF !important;
+  color: #1E40AF !important;
+  border: 1px solid #BFDBFE !important;
+  font-weight: 800;
+  font-size: 13.5px;
+}
+body.dark-mode .kb-key.kb-sci {
+  background: rgba(59, 130, 246, 0.18) !important;
+  color: #60A5FA !important;
+  border-color: rgba(96, 165, 250, 0.35) !important;
 }
 
 .kb-key.kb-action {
