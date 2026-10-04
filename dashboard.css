@@ -279,13 +279,13 @@ body {
   height: 100% !important;
   object-fit: contain !important;
   border-radius: 0 !important;
-  filter: drop-shadow(0 0 22px rgba(244, 63, 94, 0.45));
+  filter: drop-shadow(0 0 24px rgba(250, 204, 21, 0.6)) drop-shadow(0 0 10px rgba(56, 189, 248, 0.35));
   will-change: transform;
 }
 
 .boot-logo-emoji {
   font-size: 52px;
-  color: #F43F5E;
+  color: #FACC15;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -296,8 +296,9 @@ body {
   position: absolute;
   inset: -14px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(244, 63, 94, 0.35) 0%, rgba(225, 29, 72, 0.12) 55%, transparent 75%);
-  border: 1.5px solid rgba(244, 63, 94, 0.55);
+  background: radial-gradient(circle, rgba(250, 204, 21, 0.32) 0%, rgba(245, 158, 11, 0.12) 55%, transparent 75%);
+  border: 1.5px solid rgba(250, 204, 21, 0.65);
+  box-shadow: 0 0 22px rgba(250, 204, 21, 0.35);
   pointer-events: none;
   z-index: -1;
   animation: ringPulseExpand 2.6s 0.85s cubic-bezier(0.4, 0, 0.2, 1) infinite;
@@ -310,8 +311,8 @@ body {
   }
   50% {
     transform: scale(1.24);
-    opacity: 0.3;
-    border-color: rgba(244, 63, 94, 0.25);
+    opacity: 0.35;
+    border-color: rgba(250, 204, 21, 0.35);
   }
   100% {
     transform: scale(1.4);

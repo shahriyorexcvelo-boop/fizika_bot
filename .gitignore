@@ -41,3 +41,4 @@ test_quantum_composite.py
 create_3d_splash.py
 render_3d_splash.py
 build_animation_assets.py
+generate_medallion_texture.py
