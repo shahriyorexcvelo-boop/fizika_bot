@@ -276,7 +276,7 @@ if _raw_url:
         _raw_url = f"https://{_raw_url}"
     WEBAPP_URL = _raw_url.rstrip("/")
 else:
-    WEBAPP_URL = "https://shohruh-fizika.onrender.com"
+    WEBAPP_URL = "https://fizika-bot-t560.onrender.com"
 
 CACHED_BOT_USERNAME = os.getenv("BOT_USERNAME", "fizika_rash_testbot")
 
@@ -7117,7 +7117,7 @@ async def maintain_tunnel(local_port: int):
     is_render = os.getenv("RENDER") == "true" or bool(os.getenv("RENDER_SERVICE_ID")) or bool(os.getenv("RENDER_INSTANCE_ID"))
     if render_domain or is_render:
         if not render_domain:
-            render_domain = os.getenv("WEBAPP_URL") or "https://shohruh-fizika.onrender.com"
+            render_domain = os.getenv("WEBAPP_URL") or "https://fizika-bot-t560.onrender.com"
         WEBAPP_URL = (render_domain if render_domain.startswith("http") else f"https://{render_domain}").rstrip("/")
         log.info(f"🚀 Render.com Production muhiti aniqlandi: {WEBAPP_URL}")
         try:
@@ -7616,7 +7616,7 @@ async def main():
                     except Exception:
                         pass
                 if not app_url:
-                    app_url = os.getenv("WEBAPP_URL") or "https://shohruh-fizika.onrender.com"
+                    app_url = os.getenv("WEBAPP_URL") or "https://fizika-bot-t560.onrender.com"
                 if "/dashboard" in app_url:
                     app_url = app_url.split("/dashboard")[0]
                 menu_btn = MenuButtonWebApp(text="Profil 👤", web_app=WebAppInfo(url=f"{app_url.rstrip('/')}/app.html"))
