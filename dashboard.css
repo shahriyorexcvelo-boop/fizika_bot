@@ -79,22 +79,37 @@ body {
   background-attachment: fixed;
 }
 
-/* ===== macOS BOOT SPLASH — MAIN APP STYLE ===== */
-#mac-boot-splash {
+/* ===== macOS BOOT SPLASH — QUANTUM GENESIS & IRIS DIVE ===== */
+#mac-boot-splash,
+.mac-boot-splash {
   position: fixed;
   inset: 0;
-  z-index: 9999;
-  background: #060b14;
+  z-index: 99999;
+  background: radial-gradient(circle at 50% 42%, #22030e 0%, #120207 50%, #060b14 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  transition: opacity 0.65s ease, transform 0.65s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  /* 3.a) Circular Reveal / Mask */
+  clip-path: circle(150% at 50% 50%);
+  -webkit-clip-path: circle(150% at 50% 50%);
+  will-change: clip-path, transform, opacity;
+  transition: clip-path 0.75s cubic-bezier(0.7, 0, 0.2, 1),
+              -webkit-clip-path 0.75s cubic-bezier(0.7, 0, 0.2, 1),
+              opacity 0.75s ease;
 }
-#mac-boot-splash.hidden {
-  opacity: 0;
-  transform: scale(1.03);
-  pointer-events: none;
+
+/* 3.a) Chiqish: Butun splash container clip-path: circle(...) orqali markazga tortilib yopilsin */
+#mac-boot-splash.hidden,
+#mac-boot-splash.dismissed,
+.mac-boot-splash.hidden,
+.mac-boot-splash.dismissed {
+  clip-path: circle(0% at 50% 50%) !important;
+  -webkit-clip-path: circle(0% at 50% 50%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 #boot-splash-canvas {
@@ -104,125 +119,294 @@ body {
   height: 100%;
   pointer-events: none;
   opacity: 0.55;
+  z-index: 1;
 }
 
-.boot-inner {
+/* Orqa fondagi mayin neon nur */
+.splash-glow {
+  position: absolute;
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, rgba(244, 63, 94, 0.38) 0%, rgba(225, 29, 72, 0.14) 50%, transparent 72%);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: splashAmbientGlow 3s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes splashAmbientGlow {
+  0%   { transform: translate(-50%, -50%) scale(0.85); opacity: 0.55; }
+  100% { transform: translate(-50%, -50%) scale(1.25); opacity: 0.95; }
+}
+
+/* Markaziy kontent konteyneri */
+.boot-inner,
+.splash-quantum-container {
   position: relative;
   z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0;
+  will-change: transform, opacity, filter;
+  transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.75s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Logo */
-.boot-logo-wrap {
-  margin-bottom: 18px;
-  animation: bootLogoIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+/* 3.b) Chiqishda markaziy kontent scale(1.4) ga kattalashib (zoom-in dive effekti) kirib ketsin */
+#mac-boot-splash.hidden .boot-inner,
+#mac-boot-splash.hidden .splash-quantum-container,
+#mac-boot-splash.dismissed .boot-inner,
+#mac-boot-splash.dismissed .splash-quantum-container {
+  transform: scale(1.4) !important;
+  opacity: 0 !important;
+  filter: blur(12px) brightness(1.6) !important;
+  pointer-events: none !important;
 }
-@keyframes bootLogoIn {
-  from { opacity: 0; transform: scale(0.5) translateY(20px); }
-  to   { opacity: 1; transform: scale(1) translateY(0); }
+
+/* 1. Kirish animatsiyasi (Variant A - Kvant tug'ilishi: scale 0.15 -> 1.08 -> 1.0) */
+@keyframes quantumBirth {
+  0% {
+    opacity: 0;
+    transform: scale(0.15);
+    filter: brightness(2.8) drop-shadow(0 0 60px rgba(244, 63, 94, 1)) blur(8px);
+  }
+  65% {
+    opacity: 1;
+    transform: scale(1.08);
+    filter: brightness(1.4) drop-shadow(0 0 35px rgba(225, 29, 72, 0.85)) blur(0px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.0);
+    filter: brightness(1.0) drop-shadow(0 0 25px rgba(225, 29, 72, 0.45));
+  }
 }
-.boot-logo-img {
-  width: 96px;
-  height: 96px;
-  border-radius: 22px;
+
+/* 2. Kutish holati (Variant B - Pulsatsiya: doimiy mayin kengayib-torayuvchi neon/glow) */
+@keyframes idleNeonPulse {
+  0% {
+    box-shadow:
+      0 0 0 3px rgba(244, 63, 94, 0.45),
+      0 0 25px rgba(244, 63, 94, 0.55),
+      0 12px 35px rgba(225, 29, 72, 0.4),
+      inset 0 0 15px rgba(244, 63, 94, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow:
+      0 0 0 6px rgba(244, 63, 94, 0.85),
+      0 0 52px rgba(244, 63, 94, 0.95),
+      0 16px 65px rgba(225, 29, 72, 0.7),
+      inset 0 0 25px rgba(244, 63, 94, 0.4);
+    transform: scale(1.035);
+  }
+  100% {
+    box-shadow:
+      0 0 0 3px rgba(244, 63, 94, 0.45),
+      0 0 25px rgba(244, 63, 94, 0.55),
+      0 12px 35px rgba(225, 29, 72, 0.4),
+      inset 0 0 15px rgba(244, 63, 94, 0.2);
+    transform: scale(1);
+  }
+}
+
+/* Logo konteyneri */
+.boot-logo-wrap,
+.splash-logo-container {
+  position: relative;
+  width: 104px;
+  height: 104px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+/* Logotip badge (Kvant tug'ilishi + Pulsatsiya) */
+.boot-logo-badge,
+.splash-circle-badge {
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  background: #150208;
+  border: 3px solid #F43F5E;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform, box-shadow, filter;
+  animation: quantumBirth 0.85s cubic-bezier(0.175, 0.885, 0.32, 1.275) both,
+             idleNeonPulse 2.6s 0.85s ease-in-out infinite alternate !important;
+}
+
+.boot-logo-img,
+.splash-emblem-img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  box-shadow: 0 0 0 3px rgba(244,63,94,0.4), 0 12px 40px rgba(225,29,72,0.35);
-  animation: bootLogoGlow 2.5s ease-in-out infinite alternate;
-}
-@keyframes bootLogoGlow {
-  from { box-shadow: 0 0 0 3px rgba(244,63,94,0.3), 0 12px 40px rgba(225,29,72,0.25); }
-  to   { box-shadow: 0 0 0 4px rgba(244,63,94,0.7), 0 16px 60px rgba(225,29,72,0.55); }
-}
-.boot-logo-emoji {
-  font-size: 72px;
-  animation: bootLogoIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both, bootLogoGlow 2.5s ease-in-out infinite alternate;
+  border-radius: 50%;
+  display: block;
 }
 
-/* Bouncing letters */
-.boot-brand-text {
+.boot-logo-emoji {
+  font-size: 52px;
+  color: #F43F5E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 2. Gradient ring: mayin kengayib-torayuvchi pulsatsiya halqasi */
+.splash-pulse-ring {
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(244, 63, 94, 0.35) 0%, rgba(225, 29, 72, 0.12) 55%, transparent 75%);
+  border: 1.5px solid rgba(244, 63, 94, 0.55);
+  pointer-events: none;
+  z-index: -1;
+  animation: ringPulseExpand 2.6s 0.85s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes ringPulseExpand {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.24);
+    opacity: 0.3;
+    border-color: rgba(244, 63, 94, 0.25);
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+/* 1. Matnlar ("FIZIKA", "MILLIY SERTIFIKAT") mayin fade-in bilan chiqsin */
+@keyframes textFadeInSoft {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.boot-brand-text,
+.splash-brand-text {
   display: flex;
   align-items: baseline;
-  gap: 1px;
-  margin-bottom: 10px;
+  justify-content: center;
+  gap: 2px;
+  margin-bottom: 8px;
+  animation: textFadeInSoft 0.75s 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
-.boot-char {
+
+.boot-char,
+.splash-char {
   display: inline-block;
   font-family: var(--font-sans);
   font-size: 32px;
   font-weight: 900;
+  letter-spacing: 0.5px;
   color: #fff;
-  opacity: 0;
-  animation: bootCharBounce 0.55s cubic-bezier(0.34, 1.6, 0.64, 1) var(--bd, 0s) both;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
 }
+
 .boot-char.cherry,
-.boot-char.teal {
+.splash-char.cherry {
   color: #F43F5E;
-  text-shadow: 0 0 20px rgba(244,63,94,0.8);
-}
-.boot-char-space { display: inline-block; width: 12px; }
-
-@keyframes bootCharBounce {
-  0%   { opacity: 0; transform: translateY(28px) scale(0.7); }
-  60%  { opacity: 1; transform: translateY(-6px) scale(1.08); }
-  80%  { transform: translateY(3px) scale(0.97); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
+  text-shadow: 0 0 25px rgba(244, 63, 94, 0.85), 0 0 10px rgba(225, 29, 72, 0.6);
 }
 
-/* Subtitle */
-.boot-subtitle {
+/* Subtitle fade-in */
+.boot-subtitle,
+.splash-subtitle {
   font-family: var(--font-sans);
   font-size: 11px;
-  font-weight: 600;
-  color: rgba(255,255,255,0.38);
-  letter-spacing: 2px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: 2.2px;
   text-transform: uppercase;
-  margin-bottom: 24px;
-  animation: bootFadeUp 0.35s ease 0.4s both;
+  margin-bottom: 22px;
+  text-align: center;
+  animation: textFadeInSoft 0.8s 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* Progress bar */
+/* Progress bar (Red/Cherry gradient) */
 .boot-progress-wrap {
   width: 220px;
-  height: 3px;
-  background: rgba(255,255,255,0.08);
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 99px;
   overflow: hidden;
   margin-bottom: 18px;
-  animation: bootFadeUp 0.3s ease 0.35s both;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+  animation: textFadeInSoft 0.6s 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
+
 .boot-progress-bar {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, #00a389, #3b82f6, #8b5cf6);
+  background: linear-gradient(90deg, #DC2626, #E11D48, #F43F5E, #FDA4AF);
   background-size: 200% 100%;
   border-radius: 99px;
   transition: width 0.08s linear;
   animation: bootBarShimmer 1.5s linear infinite;
-  box-shadow: 0 0 12px rgba(0,163,137,0.7);
+  box-shadow: 0 0 14px rgba(244, 63, 94, 0.85);
 }
+
 @keyframes bootBarShimmer {
   0%   { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
 
-/* Skip button */
-.boot-skip {
-  font-size: 12px;
-  font-weight: 600;
-  color: rgba(255,255,255,0.3);
+/* Skip / Davom etish tugmasi */
+.boot-skip,
+.splash-skip-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #FFFFFF;
+  background: rgba(244, 63, 94, 0.18);
+  border: 1px solid rgba(244, 63, 94, 0.38);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 8px 18px;
+  border-radius: 30px;
   cursor: pointer;
-  transition: color 0.2s ease;
-  animation: bootFadeUp 0.3s ease 0.5s both;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: textFadeInSoft 0.6s 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
   user-select: none;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3), 0 0 16px rgba(225, 29, 72, 0.25);
 }
-.boot-skip:hover { color: rgba(255,255,255,0.7); }
 
-@keyframes bootFadeUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
+.boot-skip:hover,
+.splash-skip-hint:hover {
+  background: rgba(244, 63, 94, 0.32);
+  border-color: #F43F5E;
+  color: #FFFFFF;
+  transform: scale(1.05);
+  box-shadow: 0 6px 24px rgba(244, 63, 94, 0.45);
+}
+
+.boot-skip:active,
+.splash-skip-hint:active {
+  transform: scale(0.96);
 }
 /* ===== END BOOT SPLASH ===== */
 

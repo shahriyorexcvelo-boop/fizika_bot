@@ -64,30 +64,34 @@
     </div>
   </div>
 
-  <!-- KIRISH ANIMATSIYASI EKRANI -->
+  <!-- KIRISH ANIMATSIYASI EKRANI (Quantum Genesis + Idle Pulse + Iris Dive Exit) -->
   <div class="splash-screen" id="intro-splash">
     <!-- Markaziy nur/fon nurlanishi -->
     <div class="splash-glow"></div>
-        <!-- 1. Markaziy Fizika Robot Logosi -->
-    <div class="splash-logo-container">
-      <div class="splash-circle-badge fizika-glow-badge" style="background:#150208;border:3px solid #F43F5E;box-shadow:0 0 35px rgba(244,63,94,0.7),0 0 15px rgba(225,29,72,0.45);border-radius:50%;overflow:hidden;width:140px;height:140px;display:flex;align-items:center;justify-content:center;">
-        <img src="/bm_logo.png?v=20261004_fizika_milliysert1" alt="Fizika Test Bot Logo" class="splash-emblem-img header-bm-logo" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+    <!-- Markaziy kvant konteyneri -->
+    <div class="splash-quantum-container">
+      <!-- 1. Markaziy Fizika Robot Logosi va Pulsatsiya Halqasi -->
+      <div class="splash-logo-container">
+        <div class="splash-circle-badge fizika-glow-badge">
+          <img src="/bm_logo.png?v=20261004_fizika_milliysert1" alt="Fizika Test Bot Logo" class="splash-emblem-img header-bm-logo" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+        </div>
+        <div class="splash-pulse-ring"></div>
       </div>
-    </div>
-    <!-- 2. Sakrab chiquvchi Harflar -->
-    <div class="splash-brand-text">
-      <span class="bounce-char cherry" style="--d: 0.25s">F</span>
-      <span class="bounce-char cherry" style="--d: 0.35s">I</span>
-      <span class="bounce-char cherry" style="--d: 0.45s">Z</span>
-      <span class="bounce-char cherry" style="--d: 0.55s">I</span>
-      <span class="bounce-char cherry" style="--d: 0.65s">K</span>
-      <span class="bounce-char cherry" style="--d: 0.75s">A</span>
-    </div>
-    <!-- 3. Ostki Tagline/Izoh -->
-    <div class="splash-subtitle">MILLIY SERTIFIKAT</div>
-    <!-- 4. O'tkazib yuborish (Skip) tugmasi -->
-    <div class="splash-skip-hint" onclick="if(window.TestApp && typeof TestApp.finishSplashImmediately==='function'){TestApp.finishSplashImmediately();}else{var s=document.getElementById('intro-splash')||document.getElementById('splashScreen');if(s)s.style.display='none';}">
-      <span>Davom etish ➔</span>
+      <!-- 2. Matnlar ("FIZIKA") -->
+      <div class="splash-brand-text">
+        <span class="bounce-char cherry splash-char" style="--d: 0.15s">F</span>
+        <span class="bounce-char cherry splash-char" style="--d: 0.22s">I</span>
+        <span class="bounce-char cherry splash-char" style="--d: 0.29s">Z</span>
+        <span class="bounce-char cherry splash-char" style="--d: 0.36s">I</span>
+        <span class="bounce-char cherry splash-char" style="--d: 0.43s">K</span>
+        <span class="bounce-char cherry splash-char" style="--d: 0.50s">A</span>
+      </div>
+      <!-- 3. Ostki Tagline/Izoh -->
+      <div class="splash-subtitle">MILLIY SERTIFIKAT</div>
+      <!-- 4. O'tkazib yuborish (Skip) tugmasi -->
+      <div class="splash-skip-hint" onclick="if(window.TestApp && typeof TestApp.finishSplashImmediately==='function'){TestApp.finishSplashImmediately();}else{var s=document.getElementById('intro-splash')||document.getElementById('splashScreen');if(s)s.style.display='none';}">
+        <span>Davom etish ➔</span>
+      </div>
     </div>
   </div>
 

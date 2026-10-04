@@ -243,13 +243,17 @@ function enterFullscreen() {
 function skipBootSplash() {
   var splash = document.getElementById('mac-boot-splash');
   if (!splash) return;
+  if (splash._dismissed) return;
+  splash._dismissed = true;
   if (_bootCanvasStop) _bootCanvasStop();
+  splash.classList.add('dismissed');
   splash.classList.add('hidden');
   setTimeout(() => {
+    splash.style.display = 'none';
     if (splash.parentNode) splash.remove();
     // To'liq ekranga o'tish
     enterFullscreen();
-  }, 700);
+  }, 750);
 }
 window.skipBootSplash = skipBootSplash;
 

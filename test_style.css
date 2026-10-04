@@ -173,13 +173,19 @@ body[data-theme="dark"] {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
   user-select: none;
   -webkit-user-select: none;
+  /* 3.a) Circular Reveal / Mask */
+  clip-path: circle(150% at 50% 50%);
+  -webkit-clip-path: circle(150% at 50% 50%);
+  will-change: clip-path, transform, opacity;
+  transition: clip-path 0.75s cubic-bezier(0.7, 0, 0.2, 1),
+              -webkit-clip-path 0.75s cubic-bezier(0.7, 0, 0.2, 1),
+              opacity 0.75s ease;
 }
 
-/* Yopilganda kattalashib yo'qolish */
+/* 3.a) Chiqish: Butun splash container clip-path: circle(...) orqali markazga tortilib yopilsin */
 .splash-screen.dismissed,
 .splash-screen.portal-warp-exit,
 .splash-screen.fade-out,
@@ -191,9 +197,35 @@ body[data-theme="dark"] {
 #intro-splash.fade-out,
 #admin-splash.dismissed,
 #admin-splash.portal-warp-exit {
-  opacity: 0;
-  transform: scale(1.08);
-  pointer-events: none;
+  clip-path: circle(0% at 50% 50%) !important;
+  -webkit-clip-path: circle(0% at 50% 50%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Markaziy kvant konteyneri */
+.splash-quantum-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  will-change: transform, opacity, filter;
+  transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 3.b) Chiqishda markaziy kontent scale(1.4) ga kattalashib (zoom-in dive effekti) kirib ketsin */
+.splash-screen.dismissed .splash-quantum-container,
+#admin-splash.dismissed .splash-quantum-container,
+#intro-splash.dismissed .splash-quantum-container,
+#splashScreen.dismissed .splash-quantum-container {
+  transform: scale(1.4) !important;
+  opacity: 0 !important;
+  filter: blur(12px) brightness(1.6) !important;
+  pointer-events: none !important;
 }
 
 /* Markaziy orqa fonning pulsatsiyalanishi */
@@ -215,12 +247,62 @@ body[data-theme="dark"] {
   100% { transform: translate(-50%, -50%) scale(1.22); opacity: 0.95; }
 }
 
+/* 1. Kirish animatsiyasi (Variant A - Kvant tug'ilishi: scale 0.15 -> 1.08 -> 1.0) */
+@keyframes quantumBirth {
+  0% {
+    opacity: 0;
+    transform: scale(0.15);
+    filter: brightness(2.8) drop-shadow(0 0 60px rgba(244, 63, 94, 1)) blur(8px);
+  }
+  65% {
+    opacity: 1;
+    transform: scale(1.08);
+    filter: brightness(1.4) drop-shadow(0 0 35px rgba(225, 29, 72, 0.85)) blur(0px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.0);
+    filter: brightness(1.0) drop-shadow(0 0 25px rgba(225, 29, 72, 0.45));
+  }
+}
+
+/* 2. Kutish holati (Variant B - Pulsatsiya: doimiy mayin kengayib-torayuvchi neon/glow) */
+@keyframes idleNeonPulse {
+  0% {
+    box-shadow:
+      0 0 0 3px rgba(244, 63, 94, 0.45),
+      0 0 25px rgba(244, 63, 94, 0.55),
+      0 12px 35px rgba(225, 29, 72, 0.4),
+      inset 0 0 15px rgba(244, 63, 94, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow:
+      0 0 0 6px rgba(244, 63, 94, 0.85),
+      0 0 52px rgba(244, 63, 94, 0.95),
+      0 16px 65px rgba(225, 29, 72, 0.7),
+      inset 0 0 25px rgba(244, 63, 94, 0.4);
+    transform: scale(1.035);
+  }
+  100% {
+    box-shadow:
+      0 0 0 3px rgba(244, 63, 94, 0.45),
+      0 0 25px rgba(244, 63, 94, 0.55),
+      0 12px 35px rgba(225, 29, 72, 0.4),
+      inset 0 0 15px rgba(244, 63, 94, 0.2);
+    transform: scale(1);
+  }
+}
+
 /* 2. Logo Konteyneri va Dumaloq Disk */
 .splash-logo-container {
   position: relative;
   width: 140px;
   height: 140px;
   margin: 0 auto 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 2;
 }
 
@@ -229,13 +311,14 @@ body[data-theme="dark"] {
   height: 140px;
   border-radius: 50%;
   background: #150208;
-  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.55), 0 0 35px rgba(225, 29, 72, 0.55);
   border: 3.5px solid #F43F5E;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden; /* Doiradan tashqariga burchaklar chiqmaydi */
-  animation: emblemEmerge 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  overflow: hidden;
+  will-change: transform, box-shadow, filter;
+  animation: quantumBirth 0.85s cubic-bezier(0.175, 0.885, 0.32, 1.275) both,
+             idleNeonPulse 2.6s 0.85s ease-in-out infinite alternate !important;
 }
 
 .fizika-glow-badge {
@@ -243,20 +326,31 @@ body[data-theme="dark"] {
   box-shadow: 0 0 35px rgba(244, 63, 94, 0.75), 0 0 16px rgba(225, 29, 72, 0.5) !important;
 }
 
-@keyframes emblemEmerge {
+/* 2. Gradient ring: mayin kengayib-torayuvchi pulsatsiya halqasi */
+.splash-pulse-ring {
+  position: absolute;
+  inset: -16px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(244, 63, 94, 0.35) 0%, rgba(225, 29, 72, 0.12) 55%, transparent 75%);
+  border: 1.5px solid rgba(244, 63, 94, 0.55);
+  pointer-events: none;
+  z-index: -1;
+  animation: ringPulseExpand 2.6s 0.85s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes ringPulseExpand {
   0% {
-    opacity: 0;
-    transform: scale(0.35) translateY(24px);
-    filter: blur(8px);
+    transform: scale(0.9);
+    opacity: 0.85;
   }
-  70% {
-    opacity: 1;
-    transform: scale(1.06) translateY(-4px);
-    filter: blur(0);
+  50% {
+    transform: scale(1.24);
+    opacity: 0.3;
+    border-color: rgba(244, 63, 94, 0.25);
   }
   100% {
-    opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: scale(1.4);
+    opacity: 0;
   }
 }
 
@@ -312,7 +406,21 @@ body[data-theme="dark"] {
   }
 }
 
-/* 4. Sakrab Chiqadigan Harflar */
+/* 1. Matnlar ("FIZIKA", "MILLIY SERTIFIKAT") mayin fade-in bilan chiqsin */
+@keyframes textFadeInSoft {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* 4. Matnlar ("FIZIKA") */
 .splash-brand-text {
   display: flex;
   align-items: baseline;
@@ -324,14 +432,16 @@ body[data-theme="dark"] {
   margin-bottom: 10px;
   z-index: 2;
   white-space: nowrap;
+  animation: textFadeInSoft 0.75s 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.bounce-char {
+.bounce-char,
+.splash-char {
   display: inline-block;
   color: #FFFFFF;
   opacity: 0;
-  transform: translateY(45px) scale(0.3);
-  animation: letterBounce 0.65s var(--d) cubic-bezier(0.175, 0.885, 0.32, 1.35) forwards;
+  transform: translateY(25px) scale(0.6);
+  animation: letterBounce 0.55s var(--d) cubic-bezier(0.175, 0.885, 0.32, 1.35) forwards;
   text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
@@ -345,7 +455,8 @@ body[data-theme="dark"] {
 }
 
 .bounce-char.cherry,
-.bounce-char.teal {
+.bounce-char.teal,
+.splash-char.cherry {
   color: #F43F5E;
   text-shadow: 0 0 20px rgba(244, 63, 94, 0.85), 0 0 35px rgba(225, 29, 72, 0.45);
 }
@@ -353,15 +464,11 @@ body[data-theme="dark"] {
 @keyframes letterBounce {
   0% {
     opacity: 0;
-    transform: translateY(45px) scale(0.3);
+    transform: translateY(25px) scale(0.6);
   }
-  55% {
+  65% {
     opacity: 1;
-    transform: translateY(-20px) scale(1.25);
-  }
-  78% {
-    opacity: 1;
-    transform: translateY(6px) scale(0.92);
+    transform: translateY(-8px) scale(1.12);
   }
   100% {
     opacity: 1;
@@ -377,23 +484,10 @@ body[data-theme="dark"] {
   color: #FDA4AF;
   letter-spacing: 3px;
   text-transform: uppercase;
-  opacity: 0;
-  animation: subtitleReveal 0.7s 0.95s ease forwards;
+  margin-bottom: 24px;
   z-index: 2;
   text-align: center;
-}
-
-@keyframes subtitleReveal {
-  0% {
-    opacity: 0;
-    transform: translateY(12px);
-    letter-spacing: 1px;
-  }
-  100% {
-    opacity: 0.95;
-    transform: translateY(0);
-    letter-spacing: 3px;
-  }
+  animation: textFadeInSoft 0.8s 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .splash-skip-hint {

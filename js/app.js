@@ -173,6 +173,8 @@ function dismissSplash() {
   }
   var splash = document.getElementById('splashScreen') || document.getElementById('splash-screen');
   if (!splash) return;
+  if (splash._dismissed) return;
+  splash._dismissed = true;
 
   if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
     try { window.Telegram.WebApp.HapticFeedback.impactOccurred('medium'); } catch(e) {}
@@ -187,7 +189,7 @@ function dismissSplash() {
         openOnboardingModal();
       }, 300);
     }
-  }, 600);
+  }, 750);
 }
 window.dismissSplash = dismissSplash;
 window.finishSplashImmediately = dismissSplash;

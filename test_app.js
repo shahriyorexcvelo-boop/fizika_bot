@@ -156,7 +156,7 @@ const TestApp = {
     splash.classList.add('dismissed');
     setTimeout(() => {
       splash.style.display = 'none';
-    }, 600);
+    }, 750);
   },
 
   runIntroAnimation() {
