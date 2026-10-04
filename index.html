@@ -65,7 +65,7 @@
   </div>
 
   <!-- KIRISH ANIMATSIYASI EKRANI (Quantum Genesis + Idle Pulse + Iris Dive Exit) -->
-  <div class="splash-screen" id="intro-splash">
+  <div class="splash-screen" id="intro-splash" onclick="if(window.TestApp && typeof TestApp.finishSplashImmediately==='function'){TestApp.finishSplashImmediately();}else{var s=document.getElementById('intro-splash')||document.getElementById('splashScreen');if(s)s.style.display='none';}" style="cursor:pointer;" title="O'tkazish uchun ekranni bosing">
     <!-- Markaziy nur/fon nurlanishi -->
     <div class="splash-glow"></div>
     <!-- Markaziy kvant konteyneri -->
@@ -88,10 +88,6 @@
       </div>
       <!-- 3. Ostki Tagline/Izoh -->
       <div class="splash-subtitle">MILLIY SERTIFIKAT</div>
-      <!-- 4. O'tkazib yuborish (Skip) tugmasi -->
-      <div class="splash-skip-hint" onclick="if(window.TestApp && typeof TestApp.finishSplashImmediately==='function'){TestApp.finishSplashImmediately();}else{var s=document.getElementById('intro-splash')||document.getElementById('splashScreen');if(s)s.style.display='none';}">
-        <span>Davom etish ➔</span>
-      </div>
     </div>
   </div>
 

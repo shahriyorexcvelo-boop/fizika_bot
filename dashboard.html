@@ -14,7 +14,7 @@
 <body>
 
   <!-- macOS Boot Splash Screen (Quantum Genesis + Idle Pulse + Iris Dive Exit) -->
-  <div id="mac-boot-splash" class="splash-screen mac-boot-splash">
+  <div id="mac-boot-splash" class="splash-screen mac-boot-splash" onclick="skipBootSplash()" style="cursor:pointer;" title="O'tkazish uchun ekranni bosing">
     <!-- Floating math canvas background -->
     <canvas id="boot-splash-canvas"></canvas>
     <div class="splash-glow"></div>
@@ -47,9 +47,6 @@
       <div class="boot-progress-wrap">
         <div class="boot-progress-bar" id="boot-progress-bar"></div>
       </div>
-
-      <!-- Skip button -->
-      <div class="boot-skip splash-skip-hint" onclick="skipBootSplash()">Davom etish <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-left:2px;"><polyline points="9 18 15 12 9 6"/></svg></div>
     </div>
   </div>
 

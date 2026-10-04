@@ -490,35 +490,9 @@ body[data-theme="dark"] {
   animation: textFadeInSoft 0.8s 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+/* Skip tugmasi olib tashlangan - butun ekran bosilganda yopiladi */
 .splash-skip-hint {
-  position: absolute;
-  bottom: 40px;
-  background: rgba(225, 29, 72, 0.15);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(244, 63, 94, 0.35);
-  padding: 8px 18px;
-  border-radius: 30px;
-  color: #FFFFFF;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  opacity: 0;
-  animation: skipBtnAppear 0.5s 1.25s ease forwards;
-  transition: all 0.2s ease;
-  z-index: 10;
-}
-
-.splash-skip-hint:hover {
-  background: rgba(225, 29, 72, 0.3);
-  border-color: #F43F5E;
-  transform: scale(1.05);
-}
-
-@keyframes skipBtnAppear {
-  0% { opacity: 0; transform: translateY(10px); }
-  100% { opacity: 1; transform: translateY(0); }
+  display: none !important;
 }
 
 .intro-logo-glow {

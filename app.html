@@ -109,7 +109,7 @@
   </div>
 
   <!-- KIRISH ANIMATSIYASI EKRANI (Quantum Genesis + Idle Pulse + Iris Dive Exit) -->
-  <div class="splash-screen" id="splashScreen">
+  <div class="splash-screen" id="splashScreen" onclick="if(window.dismissSplash){window.dismissSplash();}else{var s=document.getElementById('splashScreen');if(s)s.style.display='none';var a=document.getElementById('app');if(a){a.style.display='flex';a.style.flexDirection='column';}}" style="cursor:pointer;" title="O'tkazish uchun ekranni bosing">
     <canvas id="splash-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;"></canvas>
     <!-- Markaziy nur/fon nurlanishi -->
     <div class="splash-glow"></div>
@@ -133,10 +133,6 @@
       </div>
       <!-- 3. Ostki Tagline/Izoh -->
       <div class="splash-subtitle">MILLIY SERTIFIKAT</div>
-      <!-- 4. O'tkazib yuborish (Skip) tugmasi -->
-      <div class="splash-skip-hint" onclick="if(window.dismissSplash){window.dismissSplash();}else{var s=document.getElementById('splashScreen');if(s)s.style.display='none';var a=document.getElementById('app');if(a){a.style.display='flex';a.style.flexDirection='column';}}">
-        <span>Davom etish ➔</span>
-      </div>
     </div>
   </div>
 
