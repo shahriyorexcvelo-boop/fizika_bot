@@ -2732,7 +2732,7 @@ def generate_test_results_pdf(test_id: int) -> Optional[str]:
                                    fontName=font_bold, fontSize=9, leading=12, alignment=1)
 
         elements = []
-        elements.append(Paragraph("SHOHRUH FIZIKA - RASH TEST", title_style))
+        elements.append(Paragraph("FIZIKA - MILLIY SERTIFIKAT", title_style))
         elements.append(Spacer(1, 6))
 
         test_title_clean = _clean_pdf_text(test['title'])

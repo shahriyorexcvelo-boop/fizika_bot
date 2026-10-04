@@ -51,12 +51,12 @@ var searchState = {
 var BOT_KNOWLEDGE_BASE = [
   {
     id: 'about_bot',
-    title: "Shohruh Fizika (BM Bot) haqida",
+    title: "Fizika — Milliy Sertifikat haqida",
     category: 'about',
     icon: 'ℹ️',
-    keywords: 'bot haqida nima buxoriylar maktabi shohruh fizika tizim platforma',
-    summary: "Shohruh Fizika o'quv markazining rasmiy test tekshirish va bilimni baholash tizimi.",
-    fullHtml: "<h4>Shohruh Fizika — BM Rasch Test Tizimi</h4>" +
+    keywords: 'bot haqida nima fizika milliy sertifikat tizim platforma',
+    summary: "Fizika fanidan milliy sertifikat test tekshirish va bilimni baholash tizimi.",
+    fullHtml: "<h4>Fizika — Milliy Sertifikat Test Tizimi</h4>" +
               "<p>Ushbu tizim o'quvchilarning fizika fanidan bilim darajasini zamonaviy psixometrik standartlar (Rasch modeli) asosida xolis va adolatli baholash uchun ishlab chiqilgan.</p>" +
               "<ul>" +
               "<li><b>Rasmiy Telegram Bot:</b> @fizika_rash_testbot</li>" +
@@ -140,7 +140,7 @@ var BOT_KNOWLEDGE_BASE = [
               "<ul>" +
               "<li>👤 <b>Bosh Admin:</b> @eshmbetov</li>" +
               "<li>🤖 <b>Rasmiy Bot:</b> @fizika_rash_testbot</li>" +
-              "<li>📢 <b>Rasmiy Kanal:</b> Shohruh Fizika o'quv kanali</li>" +
+              "<li>📢 <b>Rasmiy Kanal:</b> Fizika Milliy Sertifikat o'quv kanali</li>" +
               "</ul>" +
               "<div style='margin-top:14px;'><a href='https://t.me/eshmbetov' target='_blank' style='display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:12px;background:linear-gradient(135deg,#3B82F6,#6366F1);color:white;text-decoration:none;font-weight:700;'>Adminga yozish (@eshmbetov) ➔</a></div>"
   }

@@ -202,8 +202,8 @@ function startBootCanvas() {
       ctx.translate(p.x, p.y);
       ctx.rotate(p.angle);
       ctx.font = 'bold ' + p.size + 'px serif';
-      ctx.fillStyle = 'rgba(0, 200, 167, ' + p.opacity + ')';
-      ctx.shadowColor = 'rgba(0, 163, 137, 0.4)';
+      ctx.fillStyle = 'rgba(244, 63, 94, ' + p.opacity + ')';
+      ctx.shadowColor = 'rgba(225, 29, 72, 0.45)';
       ctx.shadowBlur = 8;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';

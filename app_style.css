@@ -216,7 +216,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 50% 38%, #0E345D 0%, #0B2B4C 52%, #061A2F 100%);
+  background: radial-gradient(circle at 50% 38%, #2B0512 0%, #150208 52%, #080104 100%);
   z-index: 99999;
   display: flex;
   flex-direction: column;
@@ -231,7 +231,7 @@ body {
 [data-theme="light"] .splash-screen,
 [data-theme="light"] #splash-screen,
 [data-theme="light"] #splashScreen {
-  background: radial-gradient(circle at 50% 38%, #0E345D 0%, #0B2B4C 52%, #061A2F 100%);
+  background: radial-gradient(circle at 50% 38%, #2B0512 0%, #150208 52%, #080104 100%);
 }
 
 /* Yopilganda kattalashib yo'qolish */
@@ -249,9 +249,9 @@ body {
 /* Markaziy orqa fonning pulsatsiyalanishi */
 .splash-glow {
   position: absolute;
-  width: 280px;
-  height: 280px;
-  background: radial-gradient(circle, rgba(46, 196, 182, 0.35) 0%, rgba(46, 196, 182, 0) 70%);
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(225, 29, 72, 0.45) 0%, rgba(244, 63, 94, 0.15) 50%, transparent 70%);
   border-radius: 50%;
   top: 40%;
   left: 50%;
@@ -261,8 +261,8 @@ body {
 }
 
 @keyframes splashGlowPulse {
-  0% { transform: translate(-50%, -50%) scale(0.85); opacity: 0.5; }
-  100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.9; }
+  0% { transform: translate(-50%, -50%) scale(0.85); opacity: 0.55; }
+  100% { transform: translate(-50%, -50%) scale(1.22); opacity: 0.95; }
 }
 
 /* 2. Logo Konteyneri va Dumaloq Disk */
@@ -278,14 +278,19 @@ body {
   width: 140px;
   height: 140px;
   border-radius: 50%;
-  background: #FFFFFF;
-  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.45), 0 0 35px rgba(46, 196, 182, 0.35);
-  border: 3.5px solid rgba(46, 196, 182, 0.8);
+  background: #150208;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.55), 0 0 35px rgba(225, 29, 72, 0.55);
+  border: 3.5px solid #F43F5E;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden; /* Doiradan tashqariga burchaklar chiqmaydi */
   animation: emblemEmerge 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.fizika-glow-badge {
+  border: 3px solid #F43F5E !important;
+  box-shadow: 0 0 35px rgba(244, 63, 94, 0.75), 0 0 16px rgba(225, 29, 72, 0.5) !important;
 }
 
 @keyframes emblemEmerge {
@@ -363,10 +368,10 @@ body {
   align-items: baseline;
   justify-content: center;
   font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
-  font-size: clamp(22px, 6vw, 30px);
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  margin-bottom: 8px;
+  font-size: clamp(26px, 7vw, 36px);
+  font-weight: 900;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
   z-index: 2;
   white-space: nowrap;
 }
@@ -385,13 +390,14 @@ body {
 }
 
 .bounce-char.dot {
-  color: #55E4D6;
+  color: #FB7185;
   margin: 0 1px;
 }
 
+.bounce-char.cherry,
 .bounce-char.teal {
-  color: #2EC4B6;
-  text-shadow: 0 0 18px rgba(46, 196, 182, 0.85);
+  color: #F43F5E;
+  text-shadow: 0 0 20px rgba(244, 63, 94, 0.85), 0 0 35px rgba(225, 29, 72, 0.45);
 }
 
 @keyframes letterBounce {
@@ -416,13 +422,13 @@ body {
 /* 5. Subtitle va Skip Tugmasi */
 .splash-subtitle {
   font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  color: #94A3B8;
-  letter-spacing: 2px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #FDA4AF;
+  letter-spacing: 3px;
   text-transform: uppercase;
   opacity: 0;
-  animation: subtitleReveal 0.8s 2.0s ease forwards;
+  animation: subtitleReveal 0.7s 0.95s ease forwards;
   z-index: 2;
   text-align: center;
 }
@@ -431,22 +437,22 @@ body {
   0% {
     opacity: 0;
     transform: translateY(12px);
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
   }
   100% {
-    opacity: 0.85;
+    opacity: 0.95;
     transform: translateY(0);
-    letter-spacing: 2.2px;
+    letter-spacing: 3px;
   }
 }
 
 .splash-skip-hint {
   position: absolute;
   bottom: 40px;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(225, 29, 72, 0.15);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(244, 63, 94, 0.35);
   padding: 8px 18px;
   border-radius: 30px;
   color: #FFFFFF;
@@ -455,14 +461,14 @@ body {
   font-weight: 700;
   cursor: pointer;
   opacity: 0;
-  animation: skipBtnAppear 0.5s 2.3s ease forwards;
+  animation: skipBtnAppear 0.5s 1.25s ease forwards;
   transition: all 0.2s ease;
   z-index: 10;
 }
 
 .splash-skip-hint:hover {
-  background: rgba(46, 196, 182, 0.25);
-  border-color: #2EC4B6;
+  background: rgba(225, 29, 72, 0.3);
+  border-color: #F43F5E;
   transform: scale(1.05);
 }
 

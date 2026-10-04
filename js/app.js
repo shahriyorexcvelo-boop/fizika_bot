@@ -140,12 +140,12 @@ function startSplashCanvas() {
       ctx.rotate(p.angle);
       ctx.font = 'bold ' + p.size + 'px serif';
       if (isDark) {
-        ctx.fillStyle = 'rgba(147, 197, 253, ' + p.opacity + ')';
-        ctx.shadowColor = 'rgba(56, 189, 248, 0.4)';
+        ctx.fillStyle = 'rgba(251, 113, 133, ' + p.opacity + ')';
+        ctx.shadowColor = 'rgba(244, 63, 94, 0.45)';
         ctx.shadowBlur = 8;
       } else {
-        ctx.fillStyle = 'rgba(37, 99, 235, ' + (p.opacity * 0.8) + ')';
-        ctx.shadowColor = 'rgba(37, 99, 235, 0.2)';
+        ctx.fillStyle = 'rgba(225, 29, 72, ' + (p.opacity * 0.85) + ')';
+        ctx.shadowColor = 'rgba(225, 29, 72, 0.25)';
         ctx.shadowBlur = 6;
       }
       ctx.textAlign = 'center';

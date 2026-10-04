@@ -1787,11 +1787,11 @@ async def adm_clean_blocked_start_cb(call: CallbackQuery):
 async def show_help(message: Message):
     contact_kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="› Adminga murojaat (@eshmbetov)", url="https://t.me/eshmbetov")],
-        [make_webapp_button("◈ Shohruh Fizika (Mini App)", f"{WEBAPP_URL}/app.html")]
+        [make_webapp_button("◈ Fizika (Mini App)", f"{WEBAPP_URL}/app.html")]
     ])
     await message.answer(
         "ℹ <b>YORDAM VA QO'LLAB-QUVVATLASH</b>\n\n"
-        "◈ <b>SHOHRUH FIZIKA — RASCH TEST TIZIMI</b>\n\n"
+        "◈ <b>FIZIKA — MILLIY SERTIFIKAT TEST TIZIMI</b>\n\n"
         "Ushbu tizim orqali siz:\n"
         "• Milliy sertifikat formatidagi 55 talik testlarni yechishingiz;\n"
         "• Virtual klaviaturadan foydalanib yozma javoblarni kiritishingiz;\n"
