@@ -7253,7 +7253,7 @@ async def create_web_app():
     app.router.add_get('/css/{path:.*}', handle_static_file)
     app.router.add_get('/js/{path:.*}', handle_static_file)
     app.router.add_get('/img/{path:.*}', handle_static_file)
-    app.router.add_get('/{path:[^/]+\\.(?:css|js|png|jpg|jpeg|svg|ico|json)}', handle_static_file)
+    app.router.add_get('/{path:[^/]+\\.(?:css|js|png|jpg|jpeg|svg|ico|json|webp|mp4)}', handle_static_file)
 
     return app
 

@@ -326,6 +326,35 @@ body[data-theme="dark"] {
   box-shadow: 0 0 35px rgba(244, 63, 94, 0.75), 0 0 16px rgba(225, 29, 72, 0.5) !important;
 }
 
+/* 3D Blender Quantum Core Animation */
+.splash-3d-wrap {
+  width: 154px;
+  height: 154px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.splash-3d-badge {
+  width: 154px !important;
+  height: 154px !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+.splash-3d-core-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  border-radius: 0 !important;
+  filter: drop-shadow(0 0 22px rgba(244, 63, 94, 0.45));
+  will-change: transform;
+}
+
 /* 2. Gradient ring: mayin kengayib-torayuvchi pulsatsiya halqasi */
 .splash-pulse-ring {
   position: absolute;

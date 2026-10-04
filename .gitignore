@@ -33,3 +33,11 @@ tunnel_url.txt
 *.db-*
 *.zip
 *.code-workspace
+assets/3d_splash/frames/
+assets/3d_splash/test_*.png
+test_medallion.py
+test_single_mesh.py
+test_quantum_composite.py
+create_3d_splash.py
+render_3d_splash.py
+build_animation_assets.py
