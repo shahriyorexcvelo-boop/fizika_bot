@@ -1947,6 +1947,43 @@ body.dark-mode .kb-key.kb-nav-next {
   border-color: rgba(244, 63, 94, 0.35) !important;
 }
 
+/* Tezkor Fizik Iboralar (.kb-phrase) — Moviy/Indigo */
+.kb-key.kb-phrase {
+  background: #EEF2FF !important;
+  color: #3730A3 !important;
+  border: 1px solid #C7D2FE !important;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 0 6px;
+  white-space: nowrap;
+}
+.kb-key.kb-phrase:hover {
+  background: #E0E7FF !important;
+  border-color: #A5B4FC !important;
+}
+body.dark-mode .kb-key.kb-phrase {
+  background: rgba(99, 102, 241, 0.16) !important;
+  color: #A5B4FC !important;
+  border-color: rgba(165, 180, 252, 0.35) !important;
+}
+body.dark-mode .kb-key.kb-phrase:hover {
+  background: rgba(99, 102, 241, 0.26) !important;
+}
+
+/* Lotin Harflari (.kb-letter) */
+.kb-key.kb-letter {
+  background: #FFFFFF !important;
+  color: #0F172A !important;
+  border: 1px solid #CBD5E1 !important;
+  font-weight: 700;
+  font-size: 14.5px;
+}
+body.dark-mode .kb-key.kb-letter {
+  background: #1E293B !important;
+  color: #F8FAFC !important;
+  border-color: #334155 !important;
+}
+
 /* =========================================
    5. MODALLAR (Tasdiqlash & Natija)
    ========================================= */

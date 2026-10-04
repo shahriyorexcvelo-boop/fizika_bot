@@ -20,7 +20,7 @@
     activeFieldKey: null,
     activeInputElement: null,
     activeFieldOrder: [],
-    currentTab: 'num', // 'num', 'units', 'greek', 'const'
+    currentTab: 'num', // 'num', 'units', 'words', 'greek'
 
     init() {
       // 36a dan 45b gacha bo'lgan maydonlar tartibi
@@ -69,7 +69,6 @@
     ensureMounted() {
       let panel = document.getElementById('physics-keyboard-panel');
       let oldPanel = document.getElementById('math-keyboard-panel');
-
       if (!panel && oldPanel) {
         panel = oldPanel;
         panel.id = 'physics-keyboard-panel';
@@ -108,21 +107,23 @@
           <button type="button" class="kb-tab-btn" id="pk-tab-units" onclick="PhysicsKeyboard.switchTab('units')">
             Birliklar (SI)
           </button>
-          <button type="button" class="kb-tab-btn" id="pk-tab-greek" onclick="PhysicsKeyboard.switchTab('greek')">
-            α β γ
+          <button type="button" class="kb-tab-btn" id="pk-tab-words" onclick="PhysicsKeyboard.switchTab('words')">
+            So'zlar / Matn
           </button>
-          <button type="button" class="kb-tab-btn" id="pk-tab-const" onclick="PhysicsKeyboard.switchTab('const')">
-            xₙ / g, c
+          <button type="button" class="kb-tab-btn" id="pk-tab-greek" onclick="PhysicsKeyboard.switchTab('greek')">
+            α β γ / x₀
           </button>
         </div>
 
         <!-- 3. TUGMALAR TANASI (Tab Panellari) -->
 
-        <!-- TAB 1: Raqamlar, amallar, ildiz, qavslar, ·10ⁿ -->
+        <!-- TAB 1: Raqamlar, amallar, ildiz, qavslar, ·10ⁿ, ≈, ² -->
         <div class="kb-body" id="pk-body-num">
           <div class="kb-row">
             <button type="button" class="kb-key kb-func kb-sci" onclick="PhysicsKeyboard.insertScientific()" title="Ko'paytirilgan o'n darajasi">·10ⁿ</button>
             <button type="button" class="kb-key kb-func" onclick="PhysicsKeyboard.insert('√')">√</button>
+            <button type="button" class="kb-key kb-func" onclick="PhysicsKeyboard.insert('≈')">≈</button>
+            <button type="button" class="kb-key kb-func" onclick="PhysicsKeyboard.insert('²')">²</button>
             <button type="button" class="kb-key kb-func" onclick="PhysicsKeyboard.insert('(')">(</button>
             <button type="button" class="kb-key kb-func" onclick="PhysicsKeyboard.insert(')')">)</button>
             <button type="button" class="kb-key kb-action" onclick="PhysicsKeyboard.clear()">C</button>
@@ -159,38 +160,126 @@
           </div>
         </div>
 
-        <!-- TAB 2: Birliklar (SI): m, s, kg, N, J, W, Pa, V, A, Ω, Hz, T, C, m/s, m/s² -->
+        <!-- TAB 2: Birliklar (SI) — Ochiq savollar uchun to'liq to'plam -->
         <div class="kb-body" id="pk-body-units" style="display: none;">
+          <!-- 1. Energiya, Ish & Vaqt -->
           <div class="kb-row">
-            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('m')">m</button>
-            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('s')">s</button>
-            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('kg')">kg</button>
-            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('N')">N</button>
             <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('J')">J</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('nJ')">nJ</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('kJ')">kJ</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('mJ')">mJ</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('eV')">eV</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('s')">s</button>
             <button type="button" class="kb-key kb-backspace" onclick="PhysicsKeyboard.backspace()">⌫</button>
           </div>
+          <!-- 2. Masofa, Maydon & Yuza -->
           <div class="kb-row">
-            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('W')">W</button>
-            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('Pa')">Pa</button>
-            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('V')">V</button>
-            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('A')">A</button>
-            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('Ω')">Ω</button>
-            <button type="button" class="kb-key kb-action" onclick="PhysicsKeyboard.clear()">C</button>
-          </div>
-          <div class="kb-row">
-            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('Hz')">Hz</button>
-            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('T')">T</button>
-            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('C')">C</button>
-            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('m/s')">m/s</button>
-            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('m/s²')" style="font-weight: 800;">m/s²</button>
-          </div>
-          <div class="kb-row">
-            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('kJ')">kJ</button>
-            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('nC')">nC</button>
-            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('μC')">μC</button>
-            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('kW')">kW</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('m')">m</button>
             <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('cm')">cm</button>
             <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('mm')">mm</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('cm²')">cm²</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('mm²')">mm²</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('m²')">m²</button>
+            <button type="button" class="kb-key kb-action" onclick="PhysicsKeyboard.clear()">C</button>
+          </div>
+          <!-- 3. Tezlik, Kuch, Bosim, Quvvat & Massa -->
+          <div class="kb-row">
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('m/s')">m/s</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('m/s²')" style="font-weight: 800;">m/s²</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('N')">N</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('Pa')">Pa</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('W')">W</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('kW')">kW</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('kg')">kg</button>
+          </div>
+          <!-- 4. Elektr & Zaryad, Maydon kuchlanganligi -->
+          <div class="kb-row">
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('V')">V</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('kV/m')">kV/m</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('V/m')">V/m</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('nC')">nC</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('nC/m²')">nC/m²</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('μC')">μC</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('C')">C</button>
+          </div>
+          <!-- 5. Tok, Qarshilik, Chastota, Magnit & Sig'im -->
+          <div class="kb-row">
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('A')">A</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('mA')">mA</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('Ω')">Ω</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('Hz')">Hz</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('T')">T</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('pF')">pF</button>
+            <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('μF')">μF</button>
+          </div>
+          <!-- 6. Taqribiy belgi & Navigatsiya -->
+          <div class="kb-row">
+            <button type="button" class="kb-key kb-func" onclick="PhysicsKeyboard.insert('≈')" style="flex: 0.8;">≈</button>
+            <button type="button" class="kb-key kb-space" onclick="PhysicsKeyboard.insert(' ')" style="flex: 1.8;">probel ␣</button>
+            <button type="button" class="kb-key kb-nav" onclick="PhysicsKeyboard.prevField()">◀ Oldingi</button>
+            <button type="button" class="kb-key kb-nav kb-nav-next" onclick="PhysicsKeyboard.nextField()">Keyingi ▶</button>
+          </div>
+        </div>
+
+        <!-- TAB 3: So'zlar / Matn — Fizika Iboralari va Lotin Alifbosi -->
+        <div class="kb-body" id="pk-body-words" style="display: none;">
+          <!-- 1. Tezkor fizik o'zgarish iboralari (Ochiq 40-savol kabi) -->
+          <div class="kb-row">
+            <button type="button" class="kb-key kb-phrase" onclick="PhysicsKeyboard.insertWithSpace('ga kamaydi')">ga kamaydi</button>
+            <button type="button" class="kb-key kb-phrase" onclick="PhysicsKeyboard.insertWithSpace('ga ortdi')">ga ortdi</button>
+            <button type="button" class="kb-key kb-phrase" onclick="PhysicsKeyboard.insertWithSpace('o\'zgarmaydi')">o'zgarmaydi</button>
+            <button type="button" class="kb-key kb-backspace" onclick="PhysicsKeyboard.backspace()">⌫</button>
+          </div>
+          <!-- 2. Optika va nurlar (Ochiq 45-savol kabi) -->
+          <div class="kb-row">
+            <button type="button" class="kb-key kb-phrase" onclick="PhysicsKeyboard.insertWithSpace('hech qaysi nur')">hech qaysi nur</button>
+            <button type="button" class="kb-key kb-phrase" onclick="PhysicsKeyboard.insertWithSpace('1-nur')">1-nur</button>
+            <button type="button" class="kb-key kb-phrase" onclick="PhysicsKeyboard.insertWithSpace('2-nur')">2-nur</button>
+            <button type="button" class="kb-key kb-phrase" onclick="PhysicsKeyboard.insertWithSpace('3-nur')">3-nur</button>
+            <button type="button" class="kb-key kb-phrase" onclick="PhysicsKeyboard.insertWithSpace('nur')">nur</button>
+          </div>
+          <!-- 3. Yo'nalish va holat iboralari -->
+          <div class="kb-row">
+            <button type="button" class="kb-key kb-phrase" onclick="PhysicsKeyboard.insertWithSpace('soat mili bo\'yicha')">soat mili bo'yicha</button>
+            <button type="button" class="kb-key kb-phrase" onclick="PhysicsKeyboard.insertWithSpace('soat miliga qarshi')">soat miliga qarshi</button>
+            <button type="button" class="kb-key kb-phrase" onclick="PhysicsKeyboard.insertWithSpace('o\'ngga')">o'ngga</button>
+            <button type="button" class="kb-key kb-phrase" onclick="PhysicsKeyboard.insertWithSpace('chapga')">chapga</button>
+          </div>
+          <!-- 4. Lotin Alifbosi QWERTY Qatorlari -->
+          <div class="kb-row">
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('q')">q</button>
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('w')">w</button>
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('e')">e</button>
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('r')">r</button>
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('t')">t</button>
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('y')">y</button>
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('u')">u</button>
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('i')">i</button>
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('o')">o</button>
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('p')">p</button>
+          </div>
+          <div class="kb-row">
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('a')">a</button>
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('s')">s</button>
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('d')">d</button>
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('f')">f</button>
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('g')">g</button>
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('h')">h</button>
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('j')">j</button>
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('k')">k</button>
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('l')">l</button>
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('\'')">'</button>
+          </div>
+          <div class="kb-row">
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('z')">z</button>
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('x')">x</button>
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('c')">c</button>
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('v')">v</button>
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('b')">b</button>
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('n')">n</button>
+            <button type="button" class="kb-key kb-letter" onclick="PhysicsKeyboard.insert('m')">m</button>
+            <button type="button" class="kb-key kb-op" onclick="PhysicsKeyboard.insert('-')">-</button>
+            <button type="button" class="kb-key kb-action" onclick="PhysicsKeyboard.clear()">C</button>
           </div>
           <div class="kb-row">
             <button type="button" class="kb-key kb-space" onclick="PhysicsKeyboard.insert(' ')" style="flex: 2;">probel ␣</button>
@@ -199,7 +288,7 @@
           </div>
         </div>
 
-        <!-- TAB 3: Fizika yunon harflari (λ, μ, ρ, ω, φ, Δ, α, β, γ, θ, π, ε, ν, σ, τ, Φ) -->
+        <!-- TAB 4: Yunon harflari (λ, μ, ρ, ω, φ, Δ, α, β...), Indekslar (x₀, x₁) va Formulalar -->
         <div class="kb-body" id="pk-body-greek" style="display: none;">
           <div class="kb-row">
             <button type="button" class="kb-key kb-greek" onclick="PhysicsKeyboard.insert('λ')">λ</button>
@@ -207,48 +296,17 @@
             <button type="button" class="kb-key kb-greek" onclick="PhysicsKeyboard.insert('ρ')">ρ</button>
             <button type="button" class="kb-key kb-greek" onclick="PhysicsKeyboard.insert('ω')">ω</button>
             <button type="button" class="kb-key kb-greek" onclick="PhysicsKeyboard.insert('φ')">φ</button>
+            <button type="button" class="kb-key kb-greek" onclick="PhysicsKeyboard.insert('Δ')">Δ</button>
             <button type="button" class="kb-key kb-backspace" onclick="PhysicsKeyboard.backspace()">⌫</button>
           </div>
           <div class="kb-row">
-            <button type="button" class="kb-key kb-greek" onclick="PhysicsKeyboard.insert('Δ')">Δ</button>
             <button type="button" class="kb-key kb-greek" onclick="PhysicsKeyboard.insert('α')">α</button>
             <button type="button" class="kb-key kb-greek" onclick="PhysicsKeyboard.insert('β')">β</button>
             <button type="button" class="kb-key kb-greek" onclick="PhysicsKeyboard.insert('γ')">γ</button>
             <button type="button" class="kb-key kb-greek" onclick="PhysicsKeyboard.insert('θ')">θ</button>
-            <button type="button" class="kb-key kb-action" onclick="PhysicsKeyboard.clear()">C</button>
-          </div>
-          <div class="kb-row">
             <button type="button" class="kb-key kb-greek" onclick="PhysicsKeyboard.insert('π')">π</button>
             <button type="button" class="kb-key kb-greek" onclick="PhysicsKeyboard.insert('ε')">ε</button>
-            <button type="button" class="kb-key kb-greek" onclick="PhysicsKeyboard.insert('ν')">ν</button>
-            <button type="button" class="kb-key kb-greek" onclick="PhysicsKeyboard.insert('σ')">σ</button>
-            <button type="button" class="kb-key kb-greek" onclick="PhysicsKeyboard.insert('τ')">τ</button>
-            <button type="button" class="kb-key kb-greek" onclick="PhysicsKeyboard.insert('Φ')">Φ</button>
-          </div>
-          <div class="kb-row">
-            <button type="button" class="kb-key kb-greek" onclick="PhysicsKeyboard.insert('η')">η</button>
-            <button type="button" class="kb-key kb-greek" onclick="PhysicsKeyboard.insert('ψ')">ψ</button>
-            <button type="button" class="kb-key kb-greek" onclick="PhysicsKeyboard.insert('Ω')">Ω</button>
-            <button type="button" class="kb-key kb-func" onclick="PhysicsKeyboard.insert('≈')">≈</button>
-            <button type="button" class="kb-key kb-func" onclick="PhysicsKeyboard.insert('°')">°</button>
-            <button type="button" class="kb-key kb-func" onclick="PhysicsKeyboard.insert('∞')">∞</button>
-          </div>
-          <div class="kb-row">
-            <button type="button" class="kb-key kb-space" onclick="PhysicsKeyboard.insert(' ')" style="flex: 2;">probel ␣</button>
-            <button type="button" class="kb-key kb-nav" onclick="PhysicsKeyboard.prevField()">◀ Oldingi</button>
-            <button type="button" class="kb-key kb-nav kb-nav-next" onclick="PhysicsKeyboard.nextField()">Keyingi ▶</button>
-          </div>
-        </div>
-
-        <!-- TAB 4: Pastki indekslar (x₀, x₁, x₂), doimiylar (g, c, e, k, h) va trigonometriya -->
-        <div class="kb-body" id="pk-body-const" style="display: none;">
-          <div class="kb-row">
-            <button type="button" class="kb-key kb-const" onclick="PhysicsKeyboard.insert('g')">g</button>
-            <button type="button" class="kb-key kb-const" onclick="PhysicsKeyboard.insert('c')">c</button>
-            <button type="button" class="kb-key kb-const" onclick="PhysicsKeyboard.insert('e')">e</button>
-            <button type="button" class="kb-key kb-const" onclick="PhysicsKeyboard.insert('k')">k</button>
-            <button type="button" class="kb-key kb-const" onclick="PhysicsKeyboard.insert('h')">h</button>
-            <button type="button" class="kb-key kb-backspace" onclick="PhysicsKeyboard.backspace()">⌫</button>
+            <button type="button" class="kb-key kb-action" onclick="PhysicsKeyboard.clear()">C</button>
           </div>
           <div class="kb-row">
             <button type="button" class="kb-key kb-const" onclick="PhysicsKeyboard.insert('x₀')">x₀</button>
@@ -256,25 +314,25 @@
             <button type="button" class="kb-key kb-const" onclick="PhysicsKeyboard.insert('x₂')">x₂</button>
             <button type="button" class="kb-key kb-const" onclick="PhysicsKeyboard.insert('v₀')">v₀</button>
             <button type="button" class="kb-key kb-const" onclick="PhysicsKeyboard.insert('t₀')">t₀</button>
-            <button type="button" class="kb-key kb-action" onclick="PhysicsKeyboard.clear()">C</button>
-          </div>
-          <div class="kb-row">
             <button type="button" class="kb-key kb-const" onclick="PhysicsKeyboard.insert('₀')">₀</button>
             <button type="button" class="kb-key kb-const" onclick="PhysicsKeyboard.insert('₁')">₁</button>
             <button type="button" class="kb-key kb-const" onclick="PhysicsKeyboard.insert('₂')">₂</button>
-            <button type="button" class="kb-key kb-const" onclick="PhysicsKeyboard.insert('₃')">₃</button>
-            <button type="button" class="kb-key kb-const" onclick="PhysicsKeyboard.insert('²')">²</button>
-            <button type="button" class="kb-key kb-const" onclick="PhysicsKeyboard.insert('³')">³</button>
           </div>
           <div class="kb-row">
+            <button type="button" class="kb-key kb-const" onclick="PhysicsKeyboard.insert('g')">g</button>
+            <button type="button" class="kb-key kb-const" onclick="PhysicsKeyboard.insert('c')">c</button>
+            <button type="button" class="kb-key kb-const" onclick="PhysicsKeyboard.insert('e')">e</button>
+            <button type="button" class="kb-key kb-const" onclick="PhysicsKeyboard.insert('h')">h</button>
+            <button type="button" class="kb-key kb-const" onclick="PhysicsKeyboard.insert('k')">k</button>
             <button type="button" class="kb-key kb-const" onclick="PhysicsKeyboard.insert('sin(')">sin</button>
             <button type="button" class="kb-key kb-const" onclick="PhysicsKeyboard.insert('cos(')">cos</button>
             <button type="button" class="kb-key kb-const" onclick="PhysicsKeyboard.insert('tg(')">tg</button>
-            <button type="button" class="kb-key kb-const" onclick="PhysicsKeyboard.insert('ctg(')">ctg</button>
-            <button type="button" class="kb-key kb-const" onclick="PhysicsKeyboard.insert('^')">^</button>
           </div>
           <div class="kb-row">
-            <button type="button" class="kb-key kb-space" onclick="PhysicsKeyboard.insert(' ')" style="flex: 2;">probel ␣</button>
+            <button type="button" class="kb-key kb-func" onclick="PhysicsKeyboard.insert('°')">°</button>
+            <button type="button" class="kb-key kb-func" onclick="PhysicsKeyboard.insert('∞')">∞</button>
+            <button type="button" class="kb-key kb-func" onclick="PhysicsKeyboard.insert('^')">^</button>
+            <button type="button" class="kb-key kb-space" onclick="PhysicsKeyboard.insert(' ')" style="flex: 1.8;">probel ␣</button>
             <button type="button" class="kb-key kb-nav" onclick="PhysicsKeyboard.prevField()">◀ Oldingi</button>
             <button type="button" class="kb-key kb-nav kb-nav-next" onclick="PhysicsKeyboard.nextField()">Keyingi ▶</button>
           </div>
@@ -347,7 +405,7 @@
 
     switchTab(tabId) {
       this.currentTab = tabId;
-      const tabs = ['num', 'units', 'greek', 'const'];
+      const tabs = ['num', 'units', 'words', 'greek'];
       tabs.forEach(t => {
         const btn = document.getElementById(`pk-tab-${t}`);
         const body = document.getElementById(`pk-body-${t}`);
