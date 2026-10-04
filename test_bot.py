@@ -6517,22 +6517,44 @@ _dashboard_overview_cache = {"data": None, "ts": 0}
 _dashboard_users_cache = {"data": None, "ts": 0}
 _dashboard_tests_cache = {"data": None, "ts": 0}
 
+def invalidate_dashboard_cache():
+    """Barcha dashboard keshlarini darhol tozalash."""
+    global _dashboard_overview_cache, _dashboard_users_cache, _dashboard_tests_cache
+    _dashboard_overview_cache["data"] = None
+    _dashboard_overview_cache["ts"] = 0
+    _dashboard_users_cache["data"] = None
+    _dashboard_users_cache["ts"] = 0
+    _dashboard_tests_cache["data"] = None
+    _dashboard_tests_cache["ts"] = 0
+
+test_db.register_cache_invalidator(invalidate_dashboard_cache)
+
 async def handle_dashboard_overview(request):
     global _dashboard_overview_cache
     now = time.time()
     refresh = request.rel_url.query.get('refresh') == 'true'
-    if not refresh and _dashboard_overview_cache["data"] and (now - _dashboard_overview_cache["ts"] < 30.0):
+    is_live = request.rel_url.query.get('live') == 'true'
+
+    # Agar live yoki refresh bo'lmasa, 30 soniyalik keshdan beramiz
+    if not refresh and not is_live and _dashboard_overview_cache["data"] and (now - _dashboard_overview_cache["ts"] < 30.0):
+        return web.json_response(_dashboard_overview_cache["data"])
+
+    # Agar live so'rov kelsa va kesh 2 soniyadan kam bo'lsa, tezkor javob qaytaramiz (yuklamani kamaytirish uchun)
+    if is_live and _dashboard_overview_cache["data"] and (now - _dashboard_overview_cache["ts"] < 2.0):
         return web.json_response(_dashboard_overview_cache["data"])
 
     try:
-        summary, recent_subs, logs, tests = await asyncio.gather(
+        summary, recent_subs, recent_users, logs, tests = await asyncio.gather(
             asyncio.to_thread(test_db.get_dashboard_summary),
-            asyncio.to_thread(test_db.get_all_submissions_for_admin, 15),
+            asyncio.to_thread(test_db.get_recent_submissions, 15),
+            asyncio.to_thread(test_db.get_recent_users, 15),
             asyncio.to_thread(test_db.get_activity_logs, 80),
             asyncio.to_thread(test_db.get_tests_with_stats)
         )
         for s in recent_subs:
             s['submitted_at_fmt'] = format_uzb_time(s.get('submitted_at'), fmt="%d.%m.%Y %H:%M:%S")
+        for u in recent_users:
+            u['registered_at_fmt'] = format_uzb_time(u.get('registered_at'), fmt="%d.%m.%Y %H:%M:%S")
         for l in logs:
             l['time_fmt'] = format_uzb_time(l.get('time'), fmt="%d.%m.%Y %H:%M:%S")
             
@@ -6542,6 +6564,7 @@ async def handle_dashboard_overview(request):
         resp_data = {
             "success": True,
             "summary": summary,
+            "recent_users": recent_users,
             "recent_submissions": recent_subs,
             "activity_logs": logs,
             "tests": tests,
@@ -7035,6 +7058,135 @@ async def handle_clean_blocked_users(request):
         return web.json_response({"success": False, "error": str(e)}, status=500)
 
 
+async def _dispatch_broadcast_task(log_id: int, target_user_ids: List[int], message_text: str, reply_markup=None):
+    sent_count = 0
+    failed_count = 0
+    sem = asyncio.Semaphore(15)
+
+    async def _send_to_one(uid: int):
+        nonlocal sent_count, failed_count
+        async with sem:
+            try:
+                await bot.send_message(
+                    chat_id=uid,
+                    text=message_text,
+                    parse_mode=ParseMode.HTML,
+                    reply_markup=reply_markup,
+                    disable_web_page_preview=False
+                )
+                sent_count += 1
+            except TelegramRetryAfter as e:
+                try:
+                    await asyncio.sleep(min(float(e.retry_after), 3.0))
+                    await bot.send_message(
+                        chat_id=uid,
+                        text=message_text,
+                        parse_mode=ParseMode.HTML,
+                        reply_markup=reply_markup,
+                        disable_web_page_preview=False
+                    )
+                    sent_count += 1
+                except Exception:
+                    failed_count += 1
+            except Exception:
+                failed_count += 1
+            finally:
+                await asyncio.sleep(0.04)
+
+    batch_size = 25
+    for i in range(0, len(target_user_ids), batch_size):
+        chunk = target_user_ids[i:i + batch_size]
+        await asyncio.gather(*[_send_to_one(uid) for uid in chunk], return_exceptions=True)
+
+    status = "completed" if failed_count < len(target_user_ids) else "failed"
+    await asyncio.to_thread(test_db.update_broadcast_log, log_id, sent_count, failed_count, status)
+    log.info(f"Broadcast #{log_id} yakunlandi: {sent_count} muvaffaqiyatli, {failed_count} xato")
+
+
+async def handle_dashboard_broadcast_history(request):
+    try:
+        limit = int(request.rel_url.query.get('limit', 50))
+        logs = await asyncio.to_thread(test_db.get_broadcast_logs, limit)
+        for l in logs:
+            l['created_at_fmt'] = format_uzb_time(l.get('created_at'), fmt="%d.%m.%Y %H:%M:%S")
+        return web.json_response({
+            "success": True,
+            "logs": logs
+        })
+    except Exception as e:
+        log.error(f"Dashboard broadcast history error: {e}", exc_info=True)
+        return web.json_response({"success": False, "error": str(e)}, status=500)
+
+
+async def handle_dashboard_broadcast_audience_count(request):
+    try:
+        target = request.rel_url.query.get('target', 'all')
+        target_param = request.rel_url.query.get('target_param', None)
+        cnt = await asyncio.to_thread(test_db.get_broadcast_audience_count, target, target_param)
+        return web.json_response({
+            "success": True,
+            "target": target,
+            "count": cnt
+        })
+    except Exception as e:
+        return web.json_response({"success": False, "error": str(e)}, status=500)
+
+
+async def handle_dashboard_broadcast_send(request):
+    try:
+        data = await request.json()
+        title = str(data.get('title', 'Telegram Xabarnoma')).strip()
+        msg_text = str(data.get('message', '')).strip()
+        target = str(data.get('target', 'all')).strip().lower()
+        target_param = str(data.get('target_param', '')).strip() or None
+        btn_text = str(data.get('btn_text', '')).strip()
+        btn_url = str(data.get('btn_url', '')).strip()
+
+        if not msg_text:
+            return web.json_response({"success": False, "error": "Xabar matni kiritilmagan!"}, status=400)
+
+        # Inline tugma agar mavjud bo'lsa
+        reply_markup = None
+        if btn_text and btn_url:
+            reply_markup = InlineKeyboardMarkup(inline_keyboard=[
+                [InlineKeyboardButton(text=btn_text, url=btn_url)]
+            ])
+
+        target_user_ids = await asyncio.to_thread(test_db.get_broadcast_target_users, target, target_param)
+        target_count = len(target_user_ids)
+
+        if target_count == 0:
+            return web.json_response({
+                "success": False,
+                "error": "Tanlangan guruhda foydalanuvchilar topilmadi!"
+            }, status=400)
+
+        target_desc = target
+        if target == 'test' and target_param:
+            target_desc = f"test:{target_param}"
+
+        log_id = await asyncio.to_thread(
+            test_db.create_broadcast_log,
+            title or "Ommaviy Xabar",
+            msg_text,
+            target_desc,
+            target_count,
+            "in_progress"
+        )
+
+        asyncio.create_task(_dispatch_broadcast_task(log_id, target_user_ids, msg_text, reply_markup))
+
+        return web.json_response({
+            "success": True,
+            "log_id": log_id,
+            "target_count": target_count,
+            "message": f"Xabar {target_count} nafar foydalanuvchiga yuborish navbatiga qo'yildi!"
+        })
+    except Exception as e:
+        log.error(f"Dashboard broadcast send error: {e}", exc_info=True)
+        return web.json_response({"success": False, "error": str(e)}, status=500)
+
+
 async def create_web_app():
     app = web.Application()
     app.router.add_post('/api/admin/clean-blocked-users', handle_clean_blocked_users)
@@ -7065,6 +7217,9 @@ async def create_web_app():
     app.router.add_post('/api/dashboard/query', handle_dashboard_query)
     app.router.add_post('/api/dashboard/warn-user', handle_dashboard_warn_user)
     app.router.add_post('/api/dashboard/warn-users-batch', handle_dashboard_warn_users_batch)
+    app.router.add_get('/api/dashboard/broadcast/history', handle_dashboard_broadcast_history)
+    app.router.add_get('/api/dashboard/broadcast/audience-count', handle_dashboard_broadcast_audience_count)
+    app.router.add_post('/api/dashboard/broadcast/send', handle_dashboard_broadcast_send)
 
     app.router.add_get('/api/rasch/{test_id}', handle_rasch_evaluate_api)
     app.router.add_post('/api/submit-test', handle_submit_test_api)

@@ -20,7 +20,19 @@ const State = {
   refreshTimer: null,
   currentModalSubmission: null,
   currentModalTest: null,
-  activityDayFilter: 'all'
+  activityDayFilter: 'all',
+  // Live Notifications Center (macOS Drawer + Push + Audio)
+  notifications: [],
+  notificationsFilter: 'all',
+  unreadNotificationsCount: 0,
+  lastKnownUserId: 0,
+  lastKnownSubmissionId: 0,
+  livePollingTimer: null,
+  // Telegram Broadcast Composer
+  broadcastHistory: [],
+  broadcastTarget: 'all',
+  broadcastSelectedTest: '',
+  broadcastAudienceCount: 0
 };
 
 // ----------------------------------------------------
@@ -273,6 +285,8 @@ document.addEventListener('DOMContentLoaded', () => {
   setupKeyboardShortcuts();
   fetchDashboardData();
   startAutoRefresh();
+  initNotificationCenter();
+  initBroadcastComposer();
 });
 
 function restoreCachedDashboard() {
@@ -340,7 +354,8 @@ function switchDashboardTab(tabId) {
     users: { t: 'Foydalanuvchilar Bazasi', sub: 'Bot a\'zolari va o\'quvchilar ro\'yxati' },
     tests: { t: 'Testlar Boshqaruvi', sub: 'Yaratilgan barcha milliy sertifikat va blok testlar' },
     activity: { t: 'Jarayonlar & Audit', sub: 'Tizimda sodir bo\'lgan barcha hodisalar jurnali' },
-    database: { t: 'Baza & SQL Konsoli', sub: 'PostgreSQL Cloud ma\'lumotlar bazasi va to\'g\'ridan-to\'g\'ri so\'rovlar' }
+    database: { t: 'Baza & SQL Konsoli', sub: 'PostgreSQL Cloud ma\'lumotlar bazasi va to\'g\'ridan-to\'g\'ri so\'rovlar' },
+    broadcast: { t: 'Telegram Xabarnoma', sub: 'O\'quvchilarga ommaviy xabarnomalar va e\'lonlar yuborish paneli' }
   };
 
   const info = titles[tabId] || { t: 'Boshqaruv', sub: '' };
@@ -358,6 +373,7 @@ function renderCurrentView() {
   else if (State.activeTab === 'tests') renderTests();
   else if (State.activeTab === 'activity') renderLogs();
   else if (State.activeTab === 'database') renderDatabase();
+  else if (State.activeTab === 'broadcast') renderBroadcast();
 }
 
 // ----------------------------------------------------
@@ -385,6 +401,7 @@ async function fetchDashboardData(manual = false) {
         State.overview = data.summary;
         State.tests = data.tests || [];
         updateHeaderAndBadges(data.summary);
+        processIncomingOverviewNotifications(data, false);
         if (State.activeTab === 'overview') {
           renderOverviewData(data);
         }
@@ -400,6 +417,8 @@ async function fetchDashboardData(manual = false) {
       await fetchTestsData();
     } else if (State.activeTab === 'activity') {
       await fetchLogsData();
+    } else if (State.activeTab === 'broadcast') {
+      await fetchBroadcastHistory();
     }
 
     if (manual) {
@@ -1875,7 +1894,7 @@ function handleGlobalSearch(val) {
 const NavState = {
   context: 'table', // 'sidebar' | 'table'
   sidebarIndex: 0,
-  sidebarTabs: ['overview', 'submissions', 'users', 'tests', 'activity', 'database'],
+  sidebarTabs: ['overview', 'submissions', 'users', 'tests', 'activity', 'database', 'broadcast'],
   selectedRowIndex: -1,
 };
 
@@ -2534,4 +2553,751 @@ async function executeCancelSubmission() {
   }
 }
 window.executeCancelSubmission = executeCancelSubmission;
+
+/* ============================================================
+   MODULE: WEB AUDIO API (CRYSTAL APPLE CHIME) & WEB PUSH
+   ============================================================ */
+
+function playAppleChime() {
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    const ctx = new AudioContextClass();
+    if (ctx.state === 'suspended') {
+      ctx.resume();
+    }
+
+    const now = ctx.currentTime;
+
+    // Tone 1: D5 (587.33 Hz)
+    const osc1 = ctx.createOscillator();
+    const gain1 = ctx.createGain();
+    osc1.type = 'sine';
+    osc1.frequency.setValueAtTime(587.33, now);
+    gain1.gain.setValueAtTime(0, now);
+    gain1.gain.linearRampToValueAtTime(0.28, now + 0.02);
+    gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+    osc1.connect(gain1);
+    gain1.connect(ctx.destination);
+    osc1.start(now);
+    osc1.stop(now + 0.5);
+
+    // Tone 2: A5 (880.00 Hz) harmonic
+    const osc2 = ctx.createOscillator();
+    const gain2 = ctx.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(880.0, now + 0.08);
+    gain2.gain.setValueAtTime(0, now + 0.08);
+    gain2.gain.linearRampToValueAtTime(0.35, now + 0.11);
+    gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.85);
+    osc2.connect(gain2);
+    gain2.connect(ctx.destination);
+    osc2.start(now + 0.08);
+    osc2.stop(now + 0.9);
+  } catch (e) {
+    console.warn('Web Audio chime not allowed or failed:', e);
+  }
+}
+
+function checkNotificationPermission() {
+  if (!('Notification' in window)) return;
+  const banner = document.getElementById('webpush-permission-banner');
+  if (!banner) return;
+
+  const dismissed = sessionStorage.getItem('dismissed_push_banner') === '1';
+  if (Notification.permission === 'default' && !dismissed) {
+    banner.classList.remove('hidden');
+  } else {
+    banner.classList.add('hidden');
+  }
+}
+
+async function requestNotificationPermission() {
+  if (!('Notification' in window)) {
+    showToast("Brauzeringiz Web Push bildirishnomalarini qo'llab-quvvatlamaydi", "warning");
+    return;
+  }
+  try {
+    const perm = await Notification.requestPermission();
+    const banner = document.getElementById('webpush-permission-banner');
+    if (banner) banner.classList.add('hidden');
+
+    if (perm === 'granted') {
+      playAppleChime();
+      showToast("Tizim bildirishnomalari muvaffaqiyatli yoqildi!", "success");
+      try {
+        new Notification("FIZIKA · Bildirishnomalar Markazi", {
+          body: "Jonli bildirishnomalar faollashtirildi!",
+          icon: "/favicon.ico"
+        });
+      } catch (e) {}
+    } else {
+      showToast("Bildirishnomalar ruxsati rad etildi", "info");
+    }
+  } catch (e) {
+    console.warn("Notification permission error:", e);
+  }
+}
+
+function dismissPermissionBanner() {
+  const banner = document.getElementById('webpush-permission-banner');
+  if (banner) banner.classList.add('hidden');
+  sessionStorage.setItem('dismissed_push_banner', '1');
+}
+
+function initNotificationCenter() {
+  checkNotificationPermission();
+  startLiveNotificationPolling();
+}
+
+
+/* ============================================================
+   MODULE: LIVE NOTIFICATION DRAWER & BACKGROUND POLLING
+   ============================================================ */
+
+function startLiveNotificationPolling() {
+  if (State.livePollingTimer) {
+    clearInterval(State.livePollingTimer);
+  }
+
+  // Har 7.5 soniyada fonda tekshirish (live=true parametri bilan)
+  State.livePollingTimer = setInterval(async () => {
+    try {
+      const res = await fetch('/api/dashboard/overview?live=true');
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.success) {
+          processIncomingOverviewNotifications(data, true);
+          // Agar admin ayni damda overview ko'rinishida bo'lsa, xulosani yangilaymiz
+          if (State.activeTab === 'overview' && data.summary) {
+            State.overview = data.summary;
+            updateHeaderAndBadges(data.summary);
+            renderOverviewData(data);
+          }
+        }
+      }
+    } catch (e) {
+      // Quiet background polling error handling
+    }
+  }, 7500);
+}
+
+function processIncomingOverviewNotifications(data, isPolling) {
+  if (!data || !data.success) return;
+
+  const users = data.recent_users || [];
+  const subs = data.recent_submissions || [];
+
+  // Dastlabki yuklanish: yangi signallarsiz eng oxirgi ID larni eslab qolish
+  if (State.lastKnownUserId === 0 && State.lastKnownSubmissionId === 0) {
+    if (users.length > 0) {
+      State.lastKnownUserId = Math.max(...users.map(u => Number(u.id) || 0));
+      users.slice(0, 10).forEach(u => {
+        State.notifications.push({
+          type: 'users',
+          id: u.id,
+          title: "Yangi o'quvchi ro'yxatdan o'tdi",
+          subtitle: `${u.fullname} (@${u.username || 'mavjud emas'})`,
+          meta: `Tel: ${u.phone || 'Kiritilmagan'} • Holat: ${u.status || 'faol'}`,
+          time: u.registered_at_fmt || 'Yaqinda',
+          rawTime: u.registered_at || 0,
+          data: u,
+          isRead: true
+        });
+      });
+    }
+    if (subs.length > 0) {
+      State.lastKnownSubmissionId = Math.max(...subs.map(s => Number(s.id) || 0));
+      subs.slice(0, 10).forEach(s => {
+        State.notifications.push({
+          type: 'submissions',
+          id: s.id,
+          title: `Test topshirildi: ${s.test_title || '#' + s.test_code}`,
+          subtitle: `${s.fullname}: ${s.correct_count} to'g'ri (${s.score} ball)`,
+          meta: `${s.is_late ? '⚠️ Kechikkan • ' : ''}Baho: ${s.grade || 'A'}`,
+          time: s.submitted_at_fmt || 'Yaqinda',
+          rawTime: s.submitted_at || 0,
+          data: s,
+          isRead: true
+        });
+      });
+    }
+    State.notifications.sort((a, b) => (b.rawTime || 0) - (a.rawTime || 0));
+    renderNotificationDrawer();
+    return;
+  }
+
+  let hasNew = false;
+
+  // Yangi foydalanuvchilarni tekshirish
+  users.forEach(u => {
+    const uid = Number(u.id) || 0;
+    if (uid > State.lastKnownUserId) {
+      hasNew = true;
+      if (uid > State.lastKnownUserId) State.lastKnownUserId = uid;
+
+      const notifItem = {
+        type: 'users',
+        id: u.id,
+        title: "👤 Yangi o'quvchi ro'yxatdan o'tdi!",
+        subtitle: `${u.fullname} (@${u.username || 'mavjud emas'})`,
+        meta: `Tel: ${u.phone || 'Kiritilmagan'} • Holat: ${u.status || 'faol'}`,
+        time: u.registered_at_fmt || 'Hozirgina',
+        rawTime: u.registered_at || Math.floor(Date.now() / 1000),
+        data: u,
+        isRead: false
+      };
+
+      State.notifications.unshift(notifItem);
+      State.unreadNotificationsCount += 1;
+
+      if ('Notification' in window && Notification.permission === 'granted') {
+        try {
+          new Notification("👤 Yangi o'quvchi!", {
+            body: `${u.fullname} botga muvaffaqiyatli qo'shildi.`,
+            icon: '/favicon.ico'
+          });
+        } catch (e) {
+          console.warn("Push xatoligi:", e);
+        }
+      }
+    }
+  });
+
+  // Yangi topshiriqlarni tekshirish
+  subs.forEach(s => {
+    const sid = Number(s.id) || 0;
+    if (sid > State.lastKnownSubmissionId) {
+      hasNew = true;
+      if (sid > State.lastKnownSubmissionId) State.lastKnownSubmissionId = sid;
+
+      const notifItem = {
+        type: 'submissions',
+        id: s.id,
+        title: `📝 Yangi test topshirildi: ${s.test_title || '#' + s.test_code}`,
+        subtitle: `${s.fullname}: ${s.correct_count} to'g'ri (${s.score} ball)`,
+        meta: `${s.is_late ? '⚠️ Kechikkan • ' : ''}Baho: ${s.grade || 'A'}`,
+        time: s.submitted_at_fmt || 'Hozirgina',
+        rawTime: s.submitted_at || Math.floor(Date.now() / 1000),
+        data: s,
+        isRead: false
+      };
+
+      State.notifications.unshift(notifItem);
+      State.unreadNotificationsCount += 1;
+
+      if ('Notification' in window && Notification.permission === 'granted') {
+        try {
+          new Notification("📝 Yangi test topshirildi!", {
+            body: `${s.fullname} — ${s.test_title || '#' + s.test_code}: ${s.correct_count} to'g'ri (${s.score} ball)`,
+            icon: '/favicon.ico'
+          });
+        } catch (e) {
+          console.warn("Push xatoligi:", e);
+        }
+      }
+    }
+  });
+
+  if (hasNew) {
+    playAppleChime();
+    ringBellButton();
+    updateBellBadge();
+    renderNotificationDrawer();
+    if (State.notifications.length > 100) {
+      State.notifications = State.notifications.slice(0, 100);
+    }
+  }
+}
+
+function updateBellBadge() {
+  const badge = document.getElementById('bell-badge-count');
+  if (!badge) return;
+  const count = State.unreadNotificationsCount;
+  if (count > 0) {
+    badge.textContent = count > 99 ? '99+' : count;
+    badge.classList.remove('hidden');
+  } else {
+    badge.textContent = '0';
+    badge.classList.add('hidden');
+  }
+
+  const drawerStatus = document.getElementById('drawer-unread-status');
+  if (drawerStatus) {
+    drawerStatus.textContent = count > 0 ? `${count} ta yangi o'qilmagan` : "Barcha bildirishnomalar o'qilgan";
+  }
+}
+
+function ringBellButton() {
+  const btn = document.getElementById('btn-notification-drawer');
+  if (btn) {
+    btn.classList.add('ringing');
+    setTimeout(() => {
+      btn.classList.remove('ringing');
+    }, 1000);
+  }
+}
+
+function toggleNotificationDrawer(forceOpen) {
+  const drawer = document.getElementById('notification-drawer');
+  const backdrop = document.getElementById('notification-backdrop');
+  if (!drawer || !backdrop) return;
+
+  const isOpen = drawer.classList.contains('open');
+  const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !isOpen;
+
+  if (shouldOpen) {
+    drawer.classList.add('open');
+    backdrop.classList.add('active');
+    renderNotificationDrawer();
+  } else {
+    drawer.classList.remove('open');
+    backdrop.classList.remove('active');
+  }
+}
+
+function setNotificationDrawerFilter(filter, el) {
+  State.notificationsFilter = filter || 'all';
+  document.querySelectorAll('.drawer-filter-btn').forEach(btn => btn.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderNotificationDrawer();
+}
+
+function markAllNotificationsRead() {
+  State.notifications.forEach(item => { item.isRead = true; });
+  State.unreadNotificationsCount = 0;
+  updateBellBadge();
+  renderNotificationDrawer();
+  showToast("Barcha bildirishnomalar o'qildi", "info");
+}
+
+function clearAllNotifications() {
+  State.notifications = [];
+  State.unreadNotificationsCount = 0;
+  updateBellBadge();
+  renderNotificationDrawer();
+  showToast("Bildirishnomalar tozalandi", "info");
+}
+
+function renderNotificationDrawer() {
+  const listEl = document.getElementById('notification-items-list');
+  if (!listEl) return;
+
+  let items = State.notifications;
+  if (State.notificationsFilter !== 'all') {
+    items = items.filter(n => n.type === State.notificationsFilter);
+  }
+
+  if (items.length === 0) {
+    listEl.innerHTML = `
+      <div class="drawer-empty-state" id="drawer-empty-state">
+        <div class="empty-icon-ring">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+          </svg>
+        </div>
+        <h4>Hozircha bildirishnomalar yo'q</h4>
+        <p>Yangi o'quvchilar qo'shilganda yoki test topshirilganda shu yerda paydo bo'ladi.</p>
+      </div>
+    `;
+    return;
+  }
+
+  listEl.innerHTML = items.map((item, idx) => {
+    const isSub = item.type === 'submissions';
+    const typeLabel = isSub ? 'Test Natijasi' : 'Yangi O\'quvchi';
+    const typeColor = isSub ? '#10b981' : '#3b82f6';
+    const iconSvg = isSub
+      ? `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${typeColor}" stroke-width="2.2"><path d="m8 21 8 0"/><path d="M12 17v4"/><path d="M7 4h10"/><path d="M17 4v8a5 5 0 0 1-10 0V4"/><path d="M3 9a4 4 0 0 0 4 4"/><path d="M21 9a4 4 0 0 1-4 4"/></svg>`
+      : `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${typeColor}" stroke-width="2.2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>`;
+
+    return `
+      <div class="drawer-card ${item.isRead ? '' : 'unread'}" onclick="handleNotificationClick(${idx})">
+        <div class="drawer-card-header">
+          <div class="drawer-card-type" style="color:${typeColor};">
+            ${iconSvg}
+            <span>${typeLabel}</span>
+          </div>
+          <span class="drawer-card-time">${escapeHtml(item.time)}</span>
+        </div>
+        <div class="drawer-card-title">${escapeHtml(item.title)}</div>
+        <div class="drawer-card-meta">${escapeHtml(item.subtitle)}</div>
+        ${item.meta ? `<div style="font-size:11px;color:var(--text-dim);margin-top:4px;">${escapeHtml(item.meta)}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function handleNotificationClick(idx) {
+  const item = State.notifications[idx];
+  if (!item) return;
+
+  if (!item.isRead) {
+    item.isRead = true;
+    if (State.unreadNotificationsCount > 0) State.unreadNotificationsCount -= 1;
+    updateBellBadge();
+    renderNotificationDrawer();
+  }
+
+  if (item.type === 'submissions' && item.data && item.data.id) {
+    toggleNotificationDrawer(false);
+    if (typeof openSubmissionDetailModal === 'function') {
+      openSubmissionDetailModal(item.data.id);
+    }
+  } else if (item.type === 'users' && item.data) {
+    toggleNotificationDrawer(false);
+    switchDashboardTab('users');
+    const searchInput = document.getElementById('global-search-input');
+    if (searchInput) {
+      searchInput.value = item.data.fullname || String(item.data.tg_id);
+      handleGlobalSearch(searchInput.value);
+    }
+  }
+}
+
+
+/* ============================================================
+   MODULE: TELEGRAM BROADCAST COMPOSER & LIVE PREVIEW
+   ============================================================ */
+
+function initBroadcastComposer() {
+  updateTelegramPreview();
+  const msgEl = document.getElementById('bc-message');
+  if (msgEl) {
+    msgEl.addEventListener('input', updateTelegramPreview);
+  }
+}
+
+function renderBroadcast() {
+  populateBroadcastTestSelector();
+  updateBroadcastAudienceCount();
+  updateTelegramPreview();
+  fetchBroadcastHistory();
+}
+
+function populateBroadcastTestSelector() {
+  const sel = document.getElementById('bc-target-test');
+  if (!sel) return;
+  const curVal = sel.value;
+  sel.innerHTML = `<option value="">Testni tanlang...</option>` +
+    (State.tests || []).map(t => {
+      const code = t.test_code || t.id;
+      const title = t.title || `Test #${code}`;
+      return `<option value="${escapeHtmlAttr(code)}">${escapeHtml(code)} — ${escapeHtml(title)}</option>`;
+    }).join('');
+  if (curVal) sel.value = curVal;
+}
+
+function handleBroadcastTargetChange(val) {
+  State.broadcastTarget = val;
+  const pickerWrap = document.getElementById('bc-test-picker-wrap');
+  if (pickerWrap) {
+    pickerWrap.style.display = val === 'test' ? 'block' : 'none';
+  }
+  updateBroadcastAudienceCount();
+}
+
+async function updateBroadcastAudienceCount() {
+  const badge = document.getElementById('bc-audience-count-badge');
+  const target = document.getElementById('bc-target')?.value || 'all';
+  const testVal = document.getElementById('bc-target-test')?.value || '';
+
+  if (badge) badge.textContent = "👥 Hisoblanmoqda...";
+
+  try {
+    let url = `/api/dashboard/broadcast/audience-count?target=${encodeURIComponent(target)}`;
+    if (target === 'test' && testVal) {
+      url += `&target_param=${encodeURIComponent(testVal)}`;
+    }
+    const res = await fetch(url);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success) {
+        State.broadcastAudienceCount = data.count || 0;
+        if (badge) badge.textContent = `👥 ${State.broadcastAudienceCount} qabul qiluvchi`;
+        return;
+      }
+    }
+  } catch (e) {}
+
+  if (badge) badge.textContent = `👥 Qabul qiluvchilar`;
+}
+
+function insertBcFormat(tag) {
+  const textarea = document.getElementById('bc-message');
+  if (!textarea) return;
+  const start = textarea.selectionStart;
+  const end = textarea.selectionEnd;
+  const selText = textarea.value.substring(start, end) || 'matn';
+  const openTag = `<${tag}>`;
+  const closeTag = `</${tag}>`;
+  const replacement = openTag + selText + closeTag;
+  textarea.setRangeText(replacement, start, end, 'select');
+  textarea.focus();
+  updateTelegramPreview();
+}
+
+function insertBcLink() {
+  const textarea = document.getElementById('bc-message');
+  if (!textarea) return;
+  const start = textarea.selectionStart;
+  const end = textarea.selectionEnd;
+  const selText = textarea.value.substring(start, end) || 'havola matni';
+  const url = prompt('Havola URL manzilini kiriting (https://...):', 'https://');
+  if (!url) return;
+  const replacement = `<a href="${escapeHtmlAttr(url)}">${selText}</a>`;
+  textarea.setRangeText(replacement, start, end, 'select');
+  textarea.focus();
+  updateTelegramPreview();
+}
+
+function insertBcTemplate(type) {
+  const textarea = document.getElementById('bc-message');
+  if (!textarea) return;
+  if (type === 'test_announce') {
+    const tpl = 
+`🔔 <b>DIQQAT: YANGI TEST BOSHLANDI!</b>
+
+Hurmatli o'quvchilar!
+<b>FIZIKA — Milliy sertifikat</b> navbatdagi rasmiy aprobatsiya testi ochildi.
+
+📚 <b>Savollar soni:</b> 45 ta (55 ball)
+⏳ <b>Ajratilgan vaqt:</b> 150 daqiqa
+💡 <i>Testni diqqat bilan ishlab, javoblarni bot orqali topshiring!</i>
+
+Quyidagi tugma orqali to'g'ridan-to'g'ri Mini ilovaga o'tishingiz mumkin 👇`;
+    textarea.value = tpl;
+    const btnText = document.getElementById('bc-btn-text');
+    const btnUrl = document.getElementById('bc-btn-url');
+    if (btnText && !btnText.value) btnText.value = "📱 Testni ochish (Mini App)";
+    if (btnUrl && !btnUrl.value) btnUrl.value = "https://t.me/fizika_rash_testbot";
+    updateTelegramPreview();
+  }
+}
+
+function sanitizeTelegramPreviewHtml(text) {
+  if (!text) return '';
+  let s = text
+    .replace(/&/g, '&amp;')
+    .replace(/<(?!\/?(b|i|code|pre|a|tg-spoiler)(\s|>|\/))/gi, '&lt;');
+  s = s.replace(/\n/g, '<br>');
+  return s;
+}
+
+function updateTelegramPreview() {
+  const msgEl = document.getElementById('bc-message');
+  const previewTextEl = document.getElementById('tg-preview-text');
+  const previewTimeEl = document.getElementById('tg-preview-time');
+  const counterEl = document.getElementById('bc-char-counter');
+  const btnWrap = document.getElementById('tg-preview-btn-wrap');
+  const btnLabel = document.getElementById('tg-preview-btn-label');
+  const btnText = document.getElementById('bc-btn-text');
+
+  const text = msgEl ? msgEl.value : '';
+  if (counterEl) counterEl.textContent = `${text.length} belgi`;
+
+  if (previewTextEl) {
+    if (!text.trim()) {
+      previewTextEl.innerHTML = `<span style="opacity:0.45;font-style:italic;">Xabar matnini chapdagi maydonga yozing...</span>`;
+    } else {
+      previewTextEl.innerHTML = sanitizeTelegramPreviewHtml(text);
+    }
+  }
+
+  if (previewTimeEl) {
+    const d = new Date();
+    const h = String(d.getHours()).padStart(2, '0');
+    const m = String(d.getMinutes()).padStart(2, '0');
+    previewTimeEl.textContent = `${h}:${m}`;
+  }
+
+  const bTxt = btnText ? btnText.value.trim() : '';
+  if (btnWrap && btnLabel) {
+    if (bTxt) {
+      btnWrap.style.display = 'block';
+      btnLabel.textContent = bTxt;
+    } else {
+      btnWrap.style.display = 'none';
+    }
+  }
+}
+
+function openBroadcastConfirmModal() {
+  const msg = (document.getElementById('bc-message')?.value || '').trim();
+  if (!msg) {
+    showToast("Iltimos, xabar matnini kiriting!", "warning");
+    return;
+  }
+
+  const target = document.getElementById('bc-target')?.value || 'all';
+  const testVal = document.getElementById('bc-target-test')?.value || '';
+  if (target === 'test' && !testVal) {
+    showToast("Iltimos, kerakli testni tanlang!", "warning");
+    return;
+  }
+
+  const title = (document.getElementById('bc-title')?.value || '').trim() || 'Ommaviy Xabarnoma';
+
+  const audienceLabels = {
+    all: "Barchaga (Barcha faol o'quvchilar)",
+    active: "Faol o'quvchilarga (Kamida 1 marta test topshirganlar)",
+    test: `Muayyan test qatnashchilariga (#${testVal})`,
+    blocked: "Bloklangan foydalanuvchilarga"
+  };
+
+  const audLabelEl = document.getElementById('bc-confirm-audience-label');
+  const audCountEl = document.getElementById('bc-confirm-audience-count');
+  const titleLabelEl = document.getElementById('bc-confirm-title-label');
+
+  if (audLabelEl) audLabelEl.textContent = audienceLabels[target] || target;
+  if (audCountEl) audCountEl.textContent = `${State.broadcastAudienceCount || 0} nafar`;
+  if (titleLabelEl) titleLabelEl.textContent = title;
+
+  const modal = document.getElementById('modal-broadcast-confirm');
+  if (modal) modal.classList.add('active');
+}
+
+function closeBroadcastConfirmModal() {
+  const modal = document.getElementById('modal-broadcast-confirm');
+  if (modal) modal.classList.remove('active');
+}
+
+async function executeBroadcastSend() {
+  const msg = (document.getElementById('bc-message')?.value || '').trim();
+  const title = (document.getElementById('bc-title')?.value || '').trim() || 'Ommaviy Xabarnoma';
+  const target = document.getElementById('bc-target')?.value || 'all';
+  const testVal = document.getElementById('bc-target-test')?.value || '';
+  const btnText = (document.getElementById('bc-btn-text')?.value || '').trim();
+  const btnUrl = (document.getElementById('bc-btn-url')?.value || '').trim();
+
+  const sendBtn = document.getElementById('btn-broadcast-confirm-send');
+  if (sendBtn) {
+    sendBtn.disabled = true;
+    sendBtn.innerHTML = `<span>Yuborilmoqda...</span>`;
+  }
+
+  try {
+    const res = await fetch('/api/dashboard/broadcast/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: title,
+        message: msg,
+        target: target,
+        target_param: testVal,
+        btn_text: btnText,
+        btn_url: btnUrl
+      })
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      showToast(data.message || "Xabarnoma yuborish boshlandi!", "success");
+      closeBroadcastConfirmModal();
+      const msgBox = document.getElementById('bc-message');
+      if (msgBox) msgBox.value = '';
+      updateTelegramPreview();
+      fetchBroadcastHistory();
+    } else {
+      showToast(data.error || "Xatolik yuz berdi", "danger");
+    }
+  } catch (err) {
+    showToast("Bog'lanishda xatolik yuz berdi", "danger");
+  } finally {
+    if (sendBtn) {
+      sendBtn.disabled = false;
+      sendBtn.innerHTML = `<span>Ha, yuborilsin 🚀</span>`;
+    }
+  }
+}
+
+async function fetchBroadcastHistory() {
+  const tbody = document.getElementById('broadcast-history-tbody');
+  if (!tbody) return;
+
+  try {
+    const res = await fetch('/api/dashboard/broadcast/history?limit=50');
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success) {
+        State.broadcastHistory = data.logs || [];
+        renderBroadcastHistory(State.broadcastHistory);
+        return;
+      }
+    }
+  } catch (e) {}
+
+  tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--text-muted);">Tarixni yuklashda xatolik</td></tr>`;
+}
+
+function renderBroadcastHistory(logs) {
+  const tbody = document.getElementById('broadcast-history-tbody');
+  if (!tbody) return;
+
+  if (!logs || logs.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--text-muted);">Hali birorta xabarnoma yuborilmagan.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = logs.map(l => {
+    const statusBadges = {
+      completed: `<span class="badge badge-success">Yetkazildi</span>`,
+      in_progress: `<span class="badge badge-warning">Yuborilmoqda</span>`,
+      failed: `<span class="badge badge-danger">Xatolik</span>`
+    };
+    const stBadge = statusBadges[l.status] || `<span class="badge badge-info">${escapeHtml(l.status || 'Tugatildi')}</span>`;
+    const snippet = (l.message_text || '').replace(/<[^>]*>?/gm, '').substring(0, 50) + '...';
+
+    return `
+      <tr>
+        <td style="font-weight:700;color:var(--text-dim);font-family:var(--font-mono);">#${l.id}</td>
+        <td style="font-weight:700;color:var(--text-main);">${escapeHtml(l.title || 'Xabarnoma')}</td>
+        <td style="font-size:12px;color:var(--text-muted);" title="${escapeHtmlAttr(l.message_text)}">${escapeHtml(snippet)}</td>
+        <td><span class="badge badge-info">${escapeHtml(l.target || 'all')}</span></td>
+        <td style="font-weight:700;">${l.target_count || 0}</td>
+        <td style="font-weight:700;color:#10b981;">${l.sent_count || 0}</td>
+        <td style="font-weight:700;color:${l.failed_count > 0 ? '#ef4444' : 'var(--text-dim)'};">${l.failed_count || 0}</td>
+        <td>${stBadge}</td>
+        <td style="font-size:12px;color:var(--text-muted);font-family:var(--font-mono);">${escapeHtml(l.created_at_fmt || '-')}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function escapeHtmlAttr(str) {
+  return escapeHtml(str);
+}
+
+// Global exposes for HTML onclick
+window.toggleNotificationDrawer = toggleNotificationDrawer;
+window.setNotificationDrawerFilter = setNotificationDrawerFilter;
+window.markAllNotificationsRead = markAllNotificationsRead;
+window.clearAllNotifications = clearAllNotifications;
+window.handleNotificationClick = handleNotificationClick;
+window.requestNotificationPermission = requestNotificationPermission;
+window.dismissPermissionBanner = dismissPermissionBanner;
+window.playAppleChime = playAppleChime;
+
+window.handleBroadcastTargetChange = handleBroadcastTargetChange;
+window.updateBroadcastAudienceCount = updateBroadcastAudienceCount;
+window.insertBcFormat = insertBcFormat;
+window.insertBcLink = insertBcLink;
+window.insertBcTemplate = insertBcTemplate;
+window.updateTelegramPreview = updateTelegramPreview;
+window.openBroadcastConfirmModal = openBroadcastConfirmModal;
+window.closeBroadcastConfirmModal = closeBroadcastConfirmModal;
+window.executeBroadcastSend = executeBroadcastSend;
+window.fetchBroadcastHistory = fetchBroadcastHistory;
+
 

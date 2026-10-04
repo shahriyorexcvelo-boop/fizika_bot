@@ -324,6 +324,20 @@ def init_db():
             )
             """)
 
+            cur.execute("""
+            CREATE TABLE IF NOT EXISTS broadcast_logs (
+                id SERIAL PRIMARY KEY,
+                title TEXT DEFAULT '',
+                message_text TEXT NOT NULL,
+                target TEXT DEFAULT 'all',
+                target_count INTEGER DEFAULT 0,
+                sent_count INTEGER DEFAULT 0,
+                failed_count INTEGER DEFAULT 0,
+                created_at BIGINT NOT NULL,
+                status TEXT DEFAULT 'completed'
+            )
+            """)
+
             # Bosh adminni qo'shish (ON CONFLICT — PostgreSQL)
             cur.execute("""
             INSERT INTO admins (tg_id, fullname, username, added_by, created_at)
@@ -451,6 +465,20 @@ def init_db():
             """)
 
             cur.execute("""
+            CREATE TABLE IF NOT EXISTS broadcast_logs (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT DEFAULT '',
+                message_text TEXT NOT NULL,
+                target TEXT DEFAULT 'all',
+                target_count INTEGER DEFAULT 0,
+                sent_count INTEGER DEFAULT 0,
+                failed_count INTEGER DEFAULT 0,
+                created_at INTEGER NOT NULL,
+                status TEXT DEFAULT 'completed'
+            )
+            """)
+
+            cur.execute("""
             INSERT OR IGNORE INTO admins (tg_id, fullname, username, added_by, created_at)
             VALUES (8039427064, 'Bosh Admin', 'admin', 0, 1789300000)
             """)
@@ -523,6 +551,44 @@ def init_db():
             except Exception:
                 pass
             conn.commit()
+
+        # broadcast_logs jadvali mavjudligini kafolatlash
+        if USE_POSTGRES:
+            try:
+                cur.execute("""
+                CREATE TABLE IF NOT EXISTS broadcast_logs (
+                    id SERIAL PRIMARY KEY,
+                    title TEXT DEFAULT '',
+                    message_text TEXT NOT NULL,
+                    target TEXT DEFAULT 'all',
+                    target_count INTEGER DEFAULT 0,
+                    sent_count INTEGER DEFAULT 0,
+                    failed_count INTEGER DEFAULT 0,
+                    created_at BIGINT NOT NULL,
+                    status TEXT DEFAULT 'completed'
+                )
+                """)
+                conn.commit()
+            except Exception:
+                conn.rollback()
+        else:
+            try:
+                cur.execute("""
+                CREATE TABLE IF NOT EXISTS broadcast_logs (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    title TEXT DEFAULT '',
+                    message_text TEXT NOT NULL,
+                    target TEXT DEFAULT 'all',
+                    target_count INTEGER DEFAULT 0,
+                    sent_count INTEGER DEFAULT 0,
+                    failed_count INTEGER DEFAULT 0,
+                    created_at INTEGER NOT NULL,
+                    status TEXT DEFAULT 'completed'
+                )
+                """)
+                conn.commit()
+            except Exception:
+                pass
 
         # Kutilmoqda (pending) bo'lgan mavjud barcha foydalanuvchilarni to'g'ridan-to'g'ri faol (approved) holatiga o'tkazish
         try:
@@ -852,6 +918,175 @@ def get_broadcast_by_batch(batch_id: str) -> Optional[Dict[str, Any]]:
 
 
 # ──────────────────────────────────────────────────────────
+# CACHE INVALIDATION & DASHBOARD REAL-TIME HOOKS
+# ──────────────────────────────────────────────────────────
+
+_on_data_change_callbacks = []
+
+def register_cache_invalidator(callback):
+    """Keshni tozalovchi funksiyani ro'yxatdan o'tkazish."""
+    if callback and callback not in _on_data_change_callbacks:
+        _on_data_change_callbacks.append(callback)
+
+def notify_data_change():
+    """Bazada yangi o'zgarish (user, submission, test) yuz berganda keshni tozalash."""
+    for cb in list(_on_data_change_callbacks):
+        try:
+            cb()
+        except Exception:
+            pass
+
+
+# ──────────────────────────────────────────────────────────
+# TELEGRAM BROADCAST LOGS & TARGETING APIS
+# ──────────────────────────────────────────────────────────
+
+def create_broadcast_log(title: str, message_text: str, target: str, target_count: int, status: str = "in_progress") -> int:
+    """Yangi broadcast xabarnoma yozuvini yaratish."""
+    conn = get_connection()
+    try:
+        cur = conn.cursor()
+        now = int(time.time())
+        if USE_POSTGRES:
+            cur.execute("""
+            INSERT INTO broadcast_logs (title, message_text, target, target_count, sent_count, failed_count, created_at, status)
+            VALUES (%s, %s, %s, %s, 0, 0, %s, %s)
+            RETURNING id
+            """, (title, message_text, target, target_count, now, status))
+            row = cur.fetchone()
+            log_id = _row_to_dict(row).get("id") if row else 0
+        else:
+            cur.execute("""
+            INSERT INTO broadcast_logs (title, message_text, target, target_count, sent_count, failed_count, created_at, status)
+            VALUES (?, ?, ?, ?, 0, 0, ?, ?)
+            """, (title, message_text, target, target_count, now, status))
+            log_id = cur.lastrowid
+        conn.commit()
+        return log_id
+    except Exception as e:
+        print(f"Error create_broadcast_log: {e}")
+        return 0
+    finally:
+        _close_conn(conn)
+
+
+def update_broadcast_log(log_id: int, sent_count: int, failed_count: int, status: str = "completed") -> bool:
+    """Broadcast jo'natish yakunlanganida natijalarni yangilash."""
+    conn = get_connection()
+    try:
+        cur = conn.cursor()
+        cur.execute(f"""
+        UPDATE broadcast_logs
+        SET sent_count = {_ph()}, failed_count = {_ph()}, status = {_ph()}
+        WHERE id = {_ph()}
+        """, (sent_count, failed_count, status, log_id))
+        conn.commit()
+        return True
+    except Exception as e:
+        print(f"Error update_broadcast_log: {e}")
+        return False
+    finally:
+        _close_conn(conn)
+
+
+def get_broadcast_logs(limit: int = 50) -> List[Dict[str, Any]]:
+    """Broadcast xabarnomalari tarixini olish."""
+    conn = get_connection()
+    try:
+        cur = conn.cursor()
+        cur.execute(f"""
+        SELECT id, title, message_text, target, target_count, sent_count, failed_count, created_at, status
+        FROM broadcast_logs
+        ORDER BY id DESC
+        LIMIT {int(limit)}
+        """)
+        rows = cur.fetchall()
+        return [_row_to_dict(r) for r in rows if r]
+    finally:
+        _close_conn(conn)
+
+
+def get_broadcast_target_users(target: str = "all", target_param: Optional[str] = None) -> List[int]:
+    """Auditoriya bo'yicha Telegram chat ID larni olish."""
+    conn = get_connection()
+    try:
+        cur = conn.cursor()
+        tg_ids = set()
+        t = (target or "all").lower().strip()
+        if t == "active":
+            # Test topshirgan o'quvchilar
+            cur.execute("SELECT DISTINCT user_tg_id FROM submissions WHERE user_tg_id IS NOT NULL AND user_tg_id > 0")
+            for r in cur.fetchall():
+                d = _row_to_dict(r)
+                uid = d.get("user_tg_id") if d else None
+                if uid:
+                    tg_ids.add(int(uid))
+            # Approved statusdagi o'quvchilar
+            cur.execute("SELECT tg_id FROM users WHERE status = 'approved' AND tg_id > 0")
+            for r in cur.fetchall():
+                d = _row_to_dict(r)
+                uid = d.get("tg_id") if d else None
+                if uid:
+                    tg_ids.add(int(uid))
+        elif t == "blocked":
+            cur.execute("SELECT tg_id FROM users WHERE status = 'blocked' AND tg_id > 0")
+            for r in cur.fetchall():
+                d = _row_to_dict(r)
+                uid = d.get("tg_id") if d else None
+                if uid:
+                    tg_ids.add(int(uid))
+        elif t == "test" and target_param:
+            param_str = str(target_param).strip()
+            cur.execute(f"""
+            SELECT DISTINCT user_tg_id FROM submissions 
+            WHERE (test_code = {_ph()} OR CAST(test_id AS TEXT) = {_ph()}) AND user_tg_id > 0
+            """, (param_str, param_str))
+            for r in cur.fetchall():
+                d = _row_to_dict(r)
+                uid = d.get("user_tg_id") if d else None
+                if uid:
+                    tg_ids.add(int(uid))
+        else:
+            # Barcha bloklanmagan foydalanuvchilar
+            cur.execute("SELECT tg_id FROM users WHERE (status != 'blocked' OR status IS NULL) AND tg_id > 0")
+            for r in cur.fetchall():
+                d = _row_to_dict(r)
+                uid = d.get("tg_id") if d else None
+                if uid:
+                    tg_ids.add(int(uid))
+        return list(tg_ids)
+    finally:
+        _close_conn(conn)
+
+
+def get_broadcast_audience_count(target: str = "all", target_param: Optional[str] = None) -> int:
+    """Tanlangan auditoriya sonini tezkor hisoblash."""
+    return len(get_broadcast_target_users(target, target_param))
+
+
+def get_recent_users(limit: int = 15) -> List[Dict[str, Any]]:
+    """Yangi ro'yxatdan o'tgan foydalanuvchilar ro'yxati (Jonli Notification markazi uchun)."""
+    conn = get_connection()
+    try:
+        cur = conn.cursor()
+        cur.execute(f"""
+        SELECT id, tg_id, fullname, username, phone, status, registered_at
+        FROM users
+        ORDER BY registered_at DESC, id DESC
+        LIMIT {int(limit)}
+        """)
+        rows = cur.fetchall()
+        return [_row_to_dict(r) for r in rows if r]
+    finally:
+        _close_conn(conn)
+
+
+def get_recent_submissions(limit: int = 15) -> List[Dict[str, Any]]:
+    """Yangi test topshirganlar ro'yxati."""
+    return get_all_submissions_for_admin(limit)
+
+
+# ──────────────────────────────────────────────────────────
 # USERS & ACCESS
 # ──────────────────────────────────────────────────────────
 
@@ -882,6 +1117,7 @@ def add_or_update_user(tg_id: int, fullname: str, phone: str,
                 status=CASE WHEN users.status = 'blocked' THEN 'blocked' ELSE excluded.status END
             """, (tg_id, fullname, phone, username, status, now))
         conn.commit()
+        notify_data_change()
         return True
     except Exception as e:
         print(f"Error saving user: {e}")
@@ -2431,6 +2667,7 @@ def check_and_save_submission(test_id: int, user_tg_id: int, user_answers: Dict[
             ))
             submission_id = cur.lastrowid
         conn.commit()
+        notify_data_change()
     finally:
         _close_conn(conn)
 
