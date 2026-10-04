@@ -31,7 +31,7 @@ const AdminApp = {
 
     if (window.Telegram && window.Telegram.WebApp) {
       try {
-        const bg = isDark ? '#0B0F19' : '#F1F5F9';
+        const bg = isDark ? '#0B0F19' : '#FFFFFF';
         if (window.Telegram.WebApp.setHeaderColor) window.Telegram.WebApp.setHeaderColor(bg);
         if (window.Telegram.WebApp.setBackgroundColor) window.Telegram.WebApp.setBackgroundColor(bg);
         if (window.Telegram.WebApp.setBottomBarColor) window.Telegram.WebApp.setBottomBarColor(bg);

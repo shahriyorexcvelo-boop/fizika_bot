@@ -198,7 +198,7 @@ const TestApp = {
     // Telegram WebApp interfeys ranglarini moslash
     if (window.Telegram && window.Telegram.WebApp) {
       try {
-        const bg = isDark ? '#0B0F19' : '#F1F5F9';
+        const bg = isDark ? '#0B0F19' : '#FFFFFF';
         if (window.Telegram.WebApp.setHeaderColor) window.Telegram.WebApp.setHeaderColor(bg);
         if (window.Telegram.WebApp.setBackgroundColor) window.Telegram.WebApp.setBackgroundColor(bg);
         if (window.Telegram.WebApp.setBottomBarColor) window.Telegram.WebApp.setBottomBarColor(bg);
@@ -207,20 +207,20 @@ const TestApp = {
   },
 
   // ----------------------------------------------------
-  // SAVOLLARNI GENERATSIYA QILISH
+  // SAVOLLARNI GENERATSIYA QILISH (TEST YARATISHDAGIDEK TOZA VA IXCHAM HARFLAR)
   // ----------------------------------------------------
   renderQuestions() {
     const part1 = document.getElementById('questions-part-1');
     const part2 = document.getElementById('questions-part-2');
     const part3 = document.getElementById('questions-part-3');
 
-    // 1. 1-32 Variantli Savollar (A, B, C, D)
+    // 1. 1-32 Variantli Savollar (A, B, C, D) — Test yaratishdagi admin qatorlari dizaynida
     if (part1) {
       let html1 = '';
       for (let q = 1; q <= 32; q++) {
         html1 += `
           <div class="question-card" id="qcard-${q}">
-            <span class="question-num-tag">${q}-savol</span>
+            <span class="question-num-tag">${q}.</span>
             <div class="options-group">
               ${['A', 'B', 'C', 'D'].map(opt => `
                 <button class="option-btn" id="opt-${q}-${opt}" onclick="TestApp.selectOption(${q}, '${opt}')">
@@ -239,10 +239,10 @@ const TestApp = {
       let html2 = '';
       for (let q = 33; q <= 35; q++) {
         html2 += `
-          <div class="question-card" id="qcard-${q}" style="flex-direction: column; align-items: flex-start; gap: 8px; margin-bottom: 8px;">
-            <div style="display: flex; justify-content: space-between; width: 100%;">
-              <span class="question-num-tag" style="font-size: 13.5px; font-weight: 800;">${q}-savol (6 ta variant)</span>
-              <span style="font-size: 11px; color: var(--text-muted);">Maxsus savol</span>
+          <div class="question-card" id="qcard-${q}" style="flex-direction: column; align-items: stretch; gap: 8px; margin-bottom: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+              <span class="question-num-tag" style="font-weight: 800;">${q}. (6 ta variant)</span>
+              <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Moslik savoli</span>
             </div>
             <div class="options-group-6" style="width: 100%;">
               ${['A', 'B', 'C', 'D', 'E', 'F'].map(opt => `
@@ -265,7 +265,7 @@ const TestApp = {
           const key = `${q}${sub}`;
           html3 += `
             <div class="open-question-row" id="qrow-${key}">
-              <div class="savol-badge">${key}-savol</div>
+              <div class="savol-badge">${key}:</div>
               <div class="savol-input-box" id="box-${key}" onclick="MathKeyboard.openFor('${key}')">
                 <input type="text" class="savol-input" id="input-${key}" readonly inputmode="none" placeholder="Masalan: 400 J, 4 m/s²" onclick="MathKeyboard.openFor('${key}')">
               </div>

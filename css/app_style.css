@@ -4,22 +4,22 @@
    ============================================= */
 /* Font loaded asynchronously in html */
 :root {
-  /* Asosiy fonlar */
+  /* Asosiy fonlar (DARK OBSIDIAN + CHERRY) */
   --bg-main: #0B0F19;          /* Chuqur kosmik fon */
   --bg-card: #161E2E;          /* Test savollari va kartalar foni */
   --bg-card-hover: #1E293B;    /* Bosilgandagi holat */
   
   /* Chegaralar va ajratuvchilar */
   --border-color: rgba(255, 255, 255, 0.08);
-  --border-active: #3B82F6;
+  --border-active: #F43F5E;
   
-  /* Aksent ranglar (Fizika ruhi) */
-  --accent-electric: #3B82F6;  /* Asosiy elektr ko'k */
-  --accent-cyan: #06B6D4;      /* Neon firuza (Glow va timer uchun) */
+  /* Aksent ranglar (CHERRY) */
+  --accent-electric: #E11D48;  /* Asosiy to'q cherry */
+  --accent-cyan: #FB7185;      /* Och cherry neon glow */
   
   /* Holatlar */
   --success: #10B981;          /* To'g'ri javob (Zumrad yashil) */
-  --danger: #EF4444;           /* Xato javob (Neon qizil) */
+  --danger: #F43F5E;           /* Xato javob (Cherry neon) */
   --warning: #F59E0B;          /* Ogohlantirish / Qolgan vaqt */
   
   /* Matn ranglari */
@@ -27,13 +27,13 @@
   --text-secondary: #94A3B8;  /* Izohlar, pastki matnlar */
   --text-muted: #64748B;      /* Noaniq/o'chirilgan holatlar */
 
-  --grad-1: #1a56db;
-  --grad-2: #1e3a8a;
-  --grad-3: #3b82f6;
+  --grad-1: #881337;
+  --grad-2: #be123c;
+  --grad-3: #e11d48;
   --accent: var(--accent-electric);
-  --accent-2: #60a5fa;
+  --accent-2: #fb7185;
 
-  /* ── LIQUID GLASS DESIGN TOKENS (DARK OBSIDIAN / COSMIC SPACE) ── */
+  /* ── LIQUID GLASS DESIGN TOKENS (DARK OBSIDIAN / CHERRY COSMIC) ── */
   --liquid-glass-bg: #161E2E;
   --liquid-glass-hover: #1E293B;
   --liquid-glass-border: 1px solid var(--border-color);
@@ -51,11 +51,11 @@
 
   --success-bg: rgba(16, 185, 129, 0.14);
   --error: var(--danger);
-  --error-bg: rgba(239, 68, 68, 0.14);
+  --error-bg: rgba(244, 63, 94, 0.14);
   --warning-bg: rgba(245, 158, 11, 0.14);
 
   --shadow: var(--liquid-glass-shadow);
-  --shadow-glow: 0 0 24px rgba(37, 99, 235, 0.35);
+  --shadow-glow: 0 0 24px rgba(225, 29, 72, 0.4);
 
   --radius-sm: 12px;
   --radius-md: 18px;
@@ -68,32 +68,40 @@
   --header-h: 60px;
 }
 
-/* ── LIGHT MODE (MACOS 27 ICY LIQUID GLASS) ───────────────── */
+/* ── LIGHT MODE (OQ VA YORQIN QIZIL MAVZU) ───────────────── */
 [data-theme="light"] {
   /* ── MACOS 27 LIQUID GLASS DESIGN TOKENS (LIGHT CRYSTAL) ── */
-  --liquid-glass-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0.58) 100%);
-  --liquid-glass-hover: linear-gradient(145deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 255, 255, 0.74) 100%);
-  --liquid-glass-border: 1px solid rgba(255, 255, 255, 0.88);
+  --liquid-glass-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 255, 255, 0.68) 100%);
+  --liquid-glass-hover: linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.80) 100%);
+  --liquid-glass-border: 1px solid rgba(15, 23, 42, 0.08);
   --liquid-glass-specular: inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.03);
-  --liquid-glass-shadow: 0 16px 38px -6px rgba(15, 23, 42, 0.09), 0 4px 14px -2px rgba(15, 23, 42, 0.04);
+  --liquid-glass-shadow: 0 16px 38px -6px rgba(15, 23, 42, 0.07), 0 4px 14px -2px rgba(15, 23, 42, 0.03);
   --liquid-glass-blur: blur(30px) saturate(190%) contrast(105%);
 
-  --bg: #f2f5fd;
-  --bg-main: #f2f5fd;
+  --bg: #F8FAFC;
+  --bg-main: #F8FAFC;
   --bg-card: var(--liquid-glass-bg);
   --bg-card-hover: var(--liquid-glass-hover);
   --bg-card-sub: #ffffff;
-  --bg-glass: rgba(255, 255, 255, 0.72);
-  --bg-glass-2: rgba(255, 255, 255, 0.48);
-  --border: rgba(255, 255, 255, 0.85);
-  --border-active: rgba(37, 99, 235, 0.4);
+  --bg-glass: rgba(255, 255, 255, 0.85);
+  --bg-glass-2: rgba(255, 255, 255, 0.55);
+  --border: rgba(15, 23, 42, 0.08);
+  --border-active: #DC2626;
+  --accent-electric: #DC2626;
+  --accent-cyan: #EF4444;
+  --danger: #DC2626;
+  --grad-1: #991b1b;
+  --grad-2: #dc2626;
+  --grad-3: #ef4444;
+  --accent: #DC2626;
+  --accent-2: #f87171;
   --text: #0f172a;
   --text-primary: #0f172a;
   --text-main: #0f172a;
   --text-muted: #475569;
   --text-soft: #334155;
   --shadow: var(--liquid-glass-shadow);
-  --shadow-glow: 0 0 24px rgba(37, 99, 235, 0.16);
+  --shadow-glow: 0 0 24px rgba(220, 38, 38, 0.22);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -109,15 +117,15 @@ html, body {
 
 body {
   background:
-    radial-gradient(ellipse at 20% 0%, rgba(27,86,219,0.12) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 100%, rgba(30,58,138,0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 0%, rgba(225, 29, 72, 0.14) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(190, 18, 60, 0.10) 0%, transparent 50%),
     var(--bg);
 }
 
 [data-theme="light"] body {
   background:
-    radial-gradient(ellipse at 20% 0%, rgba(59,130,246,0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 100%, rgba(27,86,219,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 0%, rgba(220, 38, 38, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(239, 68, 68, 0.04) 0%, transparent 50%),
     var(--bg);
 }
 
@@ -142,13 +150,13 @@ body {
   transform: translateZ(0);
 }
 
-/* Dark Mode Orbs — Jonli, chuqur neon ko'k, binafsha va havorang gradientlar */
+/* Dark Mode Orbs — Jonli, chuqur CHERRY gradientlar */
 .ambient-orb-1 {
   width: 440px;
   height: 440px;
   top: -100px;
   left: -80px;
-  background: radial-gradient(circle, rgba(37, 99, 235, 0.38) 0%, rgba(30, 58, 138, 0.20) 48%, transparent 72%);
+  background: radial-gradient(circle, rgba(225, 29, 72, 0.32) 0%, rgba(136, 19, 55, 0.18) 48%, transparent 72%);
   animation: ambientFloat1 11s ease-in-out infinite alternate;
 }
 
@@ -157,7 +165,7 @@ body {
   height: 480px;
   bottom: -120px;
   right: -80px;
-  background: radial-gradient(circle, rgba(147, 51, 234, 0.32) 0%, rgba(79, 70, 229, 0.16) 48%, transparent 72%);
+  background: radial-gradient(circle, rgba(190, 18, 60, 0.26) 0%, rgba(159, 18, 57, 0.14) 48%, transparent 72%);
   animation: ambientFloat2 13s ease-in-out infinite alternate-reverse;
 }
 
@@ -166,19 +174,19 @@ body {
   height: 330px;
   top: 38%;
   left: 28%;
-  background: radial-gradient(circle, rgba(6, 182, 212, 0.26) 0%, rgba(14, 165, 233, 0.12) 50%, transparent 72%);
+  background: radial-gradient(circle, rgba(251, 113, 133, 0.18) 0%, rgba(225, 29, 72, 0.10) 50%, transparent 72%);
   animation: ambientFloat3 9s ease-in-out infinite alternate;
 }
 
-/* Light Mode Orbs — Aniq seziladigan, musaffo osmon va binafsha nurli sharlar */
+/* Light Mode Orbs — Aniq seziladigan, yorug' qizil va ruby nurlari */
 [data-theme="light"] .ambient-orb-1 {
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.30) 0%, rgba(147, 197, 253, 0.15) 50%, transparent 72%);
+  background: radial-gradient(circle, rgba(220, 38, 38, 0.20) 0%, rgba(254, 202, 202, 0.10) 50%, transparent 72%);
 }
 [data-theme="light"] .ambient-orb-2 {
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.26) 0%, rgba(216, 180, 254, 0.12) 50%, transparent 72%);
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.16) 0%, rgba(254, 205, 211, 0.08) 50%, transparent 72%);
 }
 [data-theme="light"] .ambient-orb-3 {
-  background: radial-gradient(circle, rgba(14, 165, 233, 0.24) 0%, rgba(186, 230, 253, 0.10) 50%, transparent 72%);
+  background: radial-gradient(circle, rgba(244, 63, 94, 0.14) 0%, rgba(252, 165, 165, 0.06) 50%, transparent 72%);
 }
 
 @keyframes ambientFloat1 {
