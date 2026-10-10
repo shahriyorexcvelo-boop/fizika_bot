@@ -52,7 +52,7 @@ function initApp() {
       queryTgId
     ));
 
-    // ⛔️ ODDIY VEB-BRAUZERDA (TELEGRAMSIZ) OCHILGANDA TO'LIQ BLOKLASH!
+    // ODDIY VEB-BRAUZERDA (TELEGRAMSIZ) OCHILGANDA TO'LIQ BLOKLASH!
     if (!isTg) {
       var wb = document.getElementById('web-block-screen');
       if (wb) wb.style.display = 'flex';
@@ -98,7 +98,7 @@ function startSplashCanvas() {
   var width = canvas.width = window.innerWidth;
   var height = canvas.height = window.innerHeight;
 
-  var symbols = ['E=mc²', 'F=ma', 'v=s/t', 'λ', 'Ω', 'Hz', 'ρ', 'F', 'a', 'm', 'v', 'p', 'h', 'c', 'g', 'q', 'U', 'I', 'R', 'N', 'J', 'W', 'eV', '⚛', '⚡'];
+  var symbols = ['E=mc²', 'F=ma', 'v=s/t', 'λ', 'Ω', 'Hz', 'ρ', 'F', 'a', 'm', 'v', 'p', 'h', 'c', 'g', 'q', 'U', 'I', 'R', 'N', 'J', 'W', 'eV', 'Δt', 'B'];
   var particles = [];
   var count = Math.min(26, Math.max(16, Math.floor(width / 16)));
 
@@ -282,7 +282,7 @@ async function checkBotServerStatus() {
       if (data.bot_active || data.status === 'online') {
         pill.className = 'server-status-pill online';
         txt.textContent = 'Faol';
-        pill.setAttribute('title', '🟢 Bot va Server 24/7 faol ishlamoqda');
+        pill.setAttribute('title', 'Bot va Server 24/7 faol ishlamoqda');
         return;
       }
     }
@@ -290,7 +290,7 @@ async function checkBotServerStatus() {
   } catch (e) {
     pill.className = 'server-status-pill offline';
     txt.textContent = 'O\'chiq';
-    pill.setAttribute('title', '🔴 Server yoki Macbook o\'chiq holatda');
+    pill.setAttribute('title', 'Server yoki kompyuter o\'chiq holatda');
   }
 }
 
@@ -459,14 +459,14 @@ async function loadAllUsers() {
     } else {
       var listEl = document.getElementById('users-list');
       if (listEl) {
-        listEl.innerHTML = '<div class="empty-state" style="padding:24px 10px;"><div class="empty-icon">⚠️</div><p>' + (data.message || 'Foydalanuvchilarni yuklab bo\'lmadi') + '</p></div>';
+        listEl.innerHTML = '<div class="empty-state" style="padding:24px 10px;"><div class="empty-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><p>' + (data.message || 'Foydalanuvchilarni yuklab bo\'lmadi') + '</p></div>';
       }
     }
   } catch (e) {
     console.warn('users err:', e);
     var listEl = document.getElementById('users-list');
     if (listEl) {
-      listEl.innerHTML = '<div class="empty-state" style="padding:24px 10px;"><div class="empty-icon">⚠️</div><p>Server bilan bog\'lanishda xatolik</p></div>';
+      listEl.innerHTML = '<div class="empty-state" style="padding:24px 10px;"><div class="empty-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><p>Server bilan bog\'lanishda xatolik</p></div>';
     }
   }
 }
@@ -694,12 +694,12 @@ function renderTestDetailCard(test, type) {
   var cardClass = isUpcoming ? 'test-card-upcoming' : (isActive ? 'test-card-active' : 'test-card-closed');
   var badgeHtml = '';
   if (isRejected) {
-    badgeHtml = '<span class="badge" style="background:rgba(239,68,68,0.15);color:#EF4444;border:1px solid rgba(239,68,68,0.3);font-weight:800;">❌ ' + (t('badge_cancelled') || 'Bekor qilingan') + '</span>';
+    badgeHtml = '<span class="badge" style="background:rgba(239,68,68,0.15);color:#EF4444;border:1px solid rgba(239,68,68,0.3);font-weight:800;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:inline-block;vertical-align:-1px;margin-right:3px"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>' + (t('badge_cancelled') || 'Bekor qilingan') + '</span>';
   } else if (isUpcoming) {
     badgeHtml = '<span class="badge" style="background:rgba(245,158,11,0.15);color:#D97706;border:1px solid rgba(245,158,11,0.3);font-weight:800;">' + t('badge_upcoming') + '</span>';
   } else if (isActive) {
     if (done) {
-      badgeHtml = '<span class="badge" style="background:rgba(16,185,129,0.15);color:#059669;border:1px solid rgba(16,185,129,0.3);font-weight:800;">' + (Boolean(test.results_published) ? t('badge_submitted') : '⏳ ' + t('badge_submitted')) + '</span>';
+      badgeHtml = '<span class="badge" style="background:rgba(16,185,129,0.15);color:#059669;border:1px solid rgba(16,185,129,0.3);font-weight:800;">' + (Boolean(test.results_published) ? t('badge_submitted') : '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-1px;margin-right:3px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' + t('badge_submitted')) + '</span>';
     } else {
       badgeHtml = '<span class="badge" style="background:rgba(16,185,129,0.15);color:#10B981;border:1px solid rgba(16,185,129,0.3);font-weight:800;">' + t('badge_active_now') + '</span>';
     }
@@ -715,7 +715,7 @@ function renderTestDetailCard(test, type) {
 
   var codeDisplay = '—';
   if (isUpcoming) {
-    codeDisplay = '<span style="background:rgba(245,158,11,0.14);color:#D97706;padding:3px 9px;border-radius:6px;font-size:12px;font-weight:700;">🔒 ' + t('code_hidden_until_start') + '</span>';
+    codeDisplay = '<span style="background:rgba(245,158,11,0.14);color:#D97706;padding:3px 9px;border-radius:6px;font-size:12px;font-weight:700;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-1px;margin-right:3px"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' + t('code_hidden_until_start') + '</span>';
   } else if (test.test_code) {
     codeDisplay = String(test.test_code).startsWith('#') ? test.test_code : ('#' + test.test_code);
   }
@@ -764,7 +764,7 @@ function renderTestDetailCard(test, type) {
   if (isRejected) {
     userStatusBannerHtml =
       '<div class="test-user-status-banner" style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);border-radius:12px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start;margin:12px 0;">' +
-        '<span class="status-icon" style="font-size:20px;">⛔️</span>' +
+        '<span class="status-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></span>' +
         '<div class="status-content">' +
           '<div class="status-title" style="color:#EF4444;font-weight:800;font-size:13.5px;">Test javoblaringiz bekor qilingan</div>' +
           '<div class="status-desc" style="color:var(--text-muted);font-size:12px;margin-top:2px;">Ushbu test bo\'yicha topshirgan javoblaringiz ma\'muriyat tomonidan bekor qilindi va qabul qilinmadi.</div>' +
@@ -775,18 +775,21 @@ function renderTestDetailCard(test, type) {
       var isPub = Boolean(test.results_published);
       var scoreText = (isPub && test.user_score != null) ? (test.user_score + ' ' + t('test_score_unit')) : '';
       var correctPart = (isPub && test.user_correct != null) ? (' (' + test.user_correct + ' ' + t('tests_stat_correct') + ')') : '';
+      var iconDone = isPub
+        ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>'
+        : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
       userStatusBannerHtml =
         '<div class="test-user-status-banner status-participated">' +
-          '<span class="status-icon">' + (isPub ? '✅' : '⏳') + '</span>' +
+          '<span class="status-icon">' + iconDone + '</span>' +
           '<div class="status-content">' +
             '<div class="status-title">' + (isPub ? t('user_status_participated') : 'Javoblaringiz qabul qilindi (Jarayonda)') + '</div>' +
-            '<div class="status-desc">' + (scoreText ? (t('stat_score') + ': <b>' + scoreText + '</b>' + correctPart) : (isPub ? t('test_ended_user_took') : '⏳ Test davom etmoqda. Admin Rasch tahlili o\'tkazgach, ballaringiz e\'lon qilinadi.')) + '</div>' +
+            '<div class="status-desc">' + (scoreText ? (t('stat_score') + ': <b>' + scoreText + '</b>' + correctPart) : (isPub ? t('test_ended_user_took') : 'Test davom etmoqda. Admin Rasch tahlili o\'tkazgach, ballaringiz e\'lon qilinadi.')) + '</div>' +
           '</div>' +
         '</div>';
     } else {
       userStatusBannerHtml =
         '<div class="test-user-status-banner status-not-participated">' +
-          '<span class="status-icon">❌</span>' +
+          '<span class="status-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>' +
           '<div class="status-content">' +
             '<div class="status-title">' + t('user_status_not_participated') + '</div>' +
             '<div class="status-desc">' + t('test_ended_on_desc') + '</div>' +
@@ -795,10 +798,16 @@ function renderTestDetailCard(test, type) {
     }
   }
 
+  var iconHeader = isUpcoming
+    ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>'
+    : (isActive
+      ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>'
+      : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>');
+
   var html = '<div class="test-rich-card ' + cardClass + ' animate-in"' + cardOnClick + '>' +
     '<div class="test-rich-header">' +
       '<div class="test-rich-icon ' + (isUpcoming ? 'amber' : (isActive ? 'green' : 'gray')) + '">' +
-        (isUpcoming ? '⏳' : (isActive ? '📝' : '🔒')) +
+        iconHeader +
       '</div>' +
       '<div class="test-rich-title-box">' +
         '<div class="test-rich-title">' + escHtml(displayTitle) + '</div>' +
@@ -819,11 +828,11 @@ function renderTestDetailCard(test, type) {
         '<span class="test-rich-val">' + dateStr + '</span>' +
       '</div>' +
       '<div class="test-rich-info-row">' +
-        '<span class="test-rich-label">' + (isInactive ? '🟢 ' + t('lbl_start_time') : t('lbl_start_time')) + '</span>' +
+        '<span class="test-rich-label">' + t('lbl_start_time') + '</span>' +
         '<span class="test-rich-val">' + startStr + '</span>' +
       '</div>' +
       '<div class="test-rich-info-row">' +
-        '<span class="test-rich-label">' + (isInactive ? '🔴 ' + t('lbl_ended_time') : t('lbl_end_time')) + '</span>' +
+        '<span class="test-rich-label">' + (isInactive ? t('lbl_ended_time') : t('lbl_end_time')) + '</span>' +
         '<span class="test-rich-val">' + endStr + '</span>' +
       '</div>' +
       '<div class="test-rich-info-row">' +
@@ -846,32 +855,35 @@ function renderTestDetailCard(test, type) {
   html += '<div class="test-rich-actions">';
   if (isRejected) {
     html += '<button type="button" class="btn-rich-action" style="width:100%;background:rgba(239,68,68,0.15);color:#EF4444;border:1px solid rgba(239,68,68,0.3);font-weight:800;cursor:pointer;" onclick="event.stopPropagation(); showToast(\'Ushbu test javoblaringiz ma\\\'muriyat tomonidan bekor qilingan\');">' +
-      '<span>⛔️</span> Test bekor qilingan' +
+      '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-2px;margin-right:4px"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>Test bekor qilingan' +
     '</button>';
   } else if (isUpcoming) {
     html += '<button type="button" class="btn-rich-action btn-rich-secondary" style="width:100%;cursor:pointer;" onclick="event.stopPropagation(); showTestNotStartedAlert(\'' + escHtml(startStr) + '\')">' +
-      '<span>⏳</span> ' + t('btn_waiting_start') + (test.scheduled_start ? (' (' + escHtml(test.scheduled_start) + ')') : '') +
+      '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-2px;margin-right:4px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' + t('btn_waiting_start') + (test.scheduled_start ? (' (' + escHtml(test.scheduled_start) + ')') : '') +
     '</button>';
   } else if (isActive) {
     if (done) {
       var isPub = Boolean(test.results_published);
+      var btnDoneIcon = isPub
+        ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:inline-block;vertical-align:-2px;margin-right:4px"><polyline points="20 6 9 17 4 12"/></svg>'
+        : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-2px;margin-right:4px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
       html += '<button type="button" class="btn-rich-action btn-rich-success" style="width:100%" onclick="event.stopPropagation(); openPastTestResult(' + test.id + ')">' +
-        '<span>' + (isPub ? '✅' : '⏳') + '</span> ' + (isPub ? t('btn_view_result') : 'Javoblar qabul qilindi (Jarayonda ⏳)') +
+        btnDoneIcon + (isPub ? t('btn_view_result') : 'Javoblar qabul qilindi (Jarayonda)') +
       '</button>';
     } else {
       html += '<button type="button" class="btn-rich-action btn-rich-primary" style="width:100%" onclick="event.stopPropagation(); startTestInBot(\'' + (test.test_code || '') + '\', ' + test.id + ')">' +
-        '<span>✍️</span> ' + t('btn_solve_test') +
+        '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-2px;margin-right:4px"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>' + t('btn_solve_test') +
       '</button>';
     }
   } else {
     // Inactive / Past test buttons
     if (done) {
       html += '<button type="button" class="btn-rich-action btn-rich-success" style="width:100%" onclick="event.stopPropagation(); openPastTestResult(' + test.id + ')">' +
-        '<span>📊</span> ' + t('btn_view_my_result') +
+        '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-2px;margin-right:4px"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>' + t('btn_view_my_result') +
       '</button>';
     } else {
       html += '<button type="button" class="btn-rich-action btn-rich-secondary" style="width:100%" onclick="event.stopPropagation(); showPastTestEndedModal(' + test.id + ')">' +
-        '<span>🔒</span> ' + t('btn_test_ended_info') +
+        '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-2px;margin-right:4px"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' + t('btn_test_ended_info') +
       '</button>';
     }
   }
@@ -980,7 +992,7 @@ function showPastTestEndedModal(testId) {
     var correctCount = test.user_correct != null ? test.user_correct : '—';
     userStatusHtml =
       '<div class="past-modal-status-box status-participated">' +
-        '<div style="font-size:28px;">✅</div>' +
+        '<div style="width:36px;height:36px;border-radius:50%;background:rgba(16,185,129,0.15);color:#059669;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>' +
         '<div>' +
           '<div style="font-weight:900;font-size:15px;color:#059669;">' + t('user_status_participated') + '</div>' +
           '<div style="font-size:13px;color:var(--text-muted);margin-top:3px;">' +
@@ -991,7 +1003,7 @@ function showPastTestEndedModal(testId) {
   } else {
     userStatusHtml =
       '<div class="past-modal-status-box status-not-participated">' +
-        '<div style="font-size:28px;">❌</div>' +
+        '<div style="width:36px;height:36px;border-radius:50%;background:rgba(239,68,68,0.15);color:#DC2626;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>' +
         '<div>' +
           '<div style="font-weight:900;font-size:15px;color:#DC2626;">' + t('user_status_not_participated') + '</div>' +
           '<div style="font-size:13px;color:var(--text-muted);margin-top:3px;line-height:1.4;">' +
@@ -1005,7 +1017,7 @@ function showPastTestEndedModal(testId) {
   if (test.youtube_url && test.youtube_url.trim()) {
     ytHtml =
       '<a href="' + escHtml(test.youtube_url.trim()) + '" target="_blank" class="past-modal-yt-btn">' +
-        '<span>🎬</span> ' + t('val_yt_available') +
+        '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-2px;margin-right:4px;"><polygon points="5 3 19 12 5 21 5 3"/></svg>' + t('val_yt_available') +
       '</a>';
   }
 
@@ -1013,7 +1025,7 @@ function showPastTestEndedModal(testId) {
   if (done) {
     actionBtnHtml =
       '<button type="button" class="btn-primary" style="width:100%;margin-bottom:10px;padding:12px;border-radius:12px;font-weight:800;font-size:14px;" onclick="closePastTestModal(); openPastTestResult(' + test.id + ');">' +
-        '<span>📊</span> ' + t('btn_view_my_result') +
+        '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-2px;margin-right:4px;"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>' + t('btn_view_my_result') +
       '</button>';
   }
 
@@ -1023,30 +1035,30 @@ function showPastTestEndedModal(testId) {
 
   body.innerHTML =
     '<div class="past-modal-hero">' +
-      '<div class="past-modal-lock-icon">🔒</div>' +
+      '<div class="past-modal-lock-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>' +
       '<h3 class="past-modal-heading">' + t('test_ended_modal_title') + '</h3>' +
       '<div class="past-modal-title-tag">' + escHtml(title) + ' (' + escHtml(code) + ')</div>' +
     '</div>' +
 
     '<div class="past-modal-info-card">' +
       '<div class="past-modal-info-row">' +
-        '<span>📅 ' + t('lbl_ended_date') + '</span>' +
+        '<span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-1px;margin-right:3px"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' + t('lbl_ended_date') + '</span>' +
         '<b>' + escHtml(dateStr) + '</b>' +
       '</div>' +
       '<div class="past-modal-info-row">' +
-        '<span>🟢 ' + t('lbl_start_time') + '</span>' +
+        '<span>' + t('lbl_start_time') + '</span>' +
         '<b>' + escHtml(startStr) + '</b>' +
       '</div>' +
       '<div class="past-modal-info-row">' +
-        '<span>🔴 ' + t('lbl_ended_time') + '</span>' +
+        '<span>' + t('lbl_ended_time') + '</span>' +
         '<b>' + escHtml(endStr) + '</b>' +
       '</div>' +
       '<div class="past-modal-info-row">' +
-        '<span>❓ ' + t('lbl_questions_count') + '</span>' +
+        '<span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-1px;margin-right:3px"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>' + t('lbl_questions_count') + '</span>' +
         '<b>' + (test.total_questions || 45) + ' ta savol</b>' +
       '</div>' +
       '<div class="past-modal-summary-text">' +
-        'ℹ️ ' + summaryNotice +
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-2px;margin-right:4px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>' + summaryNotice +
       '</div>' +
     '</div>' +
 
@@ -1109,7 +1121,7 @@ function renderHomeTab(tests) {
     // 1. Kutilayotgan testlar (Upcoming)
     if (upcoming.length > 0) {
       html += '<div class="section-sub" style="margin-bottom:12px;font-weight:800;color:#D97706;font-size:13px;display:flex;align-items:center;gap:6px;">' +
-        '<span>⏳</span> ' + t('upcoming_tests') + ' (' + upcoming.length + ' ' + t('unit_count') + '):' +
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-2px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ' + t('upcoming_tests') + ' (' + upcoming.length + ' ' + t('unit_count') + '):' +
       '</div>';
       upcoming.forEach(function(test) {
         html += renderTestDetailCard(test, 'upcoming');
@@ -1120,7 +1132,7 @@ function renderHomeTab(tests) {
     if (active.length > 0) {
       if (upcoming.length > 0) {
         html += '<div class="section-sub" style="margin:16px 0 12px;font-weight:800;color:var(--success);font-size:13px;display:flex;align-items:center;gap:6px;">' +
-          '<span>🟢</span> ' + t('active_tests_now') + ' (' + active.length + ' ' + t('unit_count') + '):' +
+          '<span class="status-dot dot-active" style="display:inline-block;margin-right:2px;"></span> ' + t('active_tests_now') + ' (' + active.length + ' ' + t('unit_count') + '):' +
         '</div>';
       }
       active.forEach(function(test) {
@@ -1131,7 +1143,7 @@ function renderHomeTab(tests) {
     // Bo'sh holat
     if (activeTotalCount === 0) {
       html += '<div class="empty-state animate-in" style="padding:44px 16px;">' +
-        '<div class="empty-icon" style="font-size:42px;margin-bottom:12px;">📫</div>' +
+        '<div class="empty-icon" style="margin-bottom:12px;"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></div>' +
         '<div style="font-weight:800;font-size:16px;margin-bottom:6px;color:var(--text)">' + t('empty_active') + '</div>' +
         '<p style="font-size:13px;color:var(--text-muted);margin:0;max-width:280px;line-height:1.5;">' + t('empty_active_sub') + '</p>' +
       '</div>';
@@ -1144,7 +1156,7 @@ function renderHomeTab(tests) {
       });
     } else {
       html += '<div class="empty-state animate-in" style="padding:44px 16px;">' +
-        '<div class="empty-icon" style="font-size:42px;margin-bottom:12px;">📁</div>' +
+        '<div class="empty-icon" style="margin-bottom:12px;"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>' +
         '<div style="font-weight:800;font-size:16px;margin-bottom:6px;color:var(--text)">' + t('empty_past') + '</div>' +
         '<p style="font-size:13px;color:var(--text-muted);margin:0;max-width:280px;line-height:1.5;">' + t('empty_past_sub') + '</p>' +
       '</div>';
@@ -1192,7 +1204,7 @@ function renderTestsTab(results) {
         '<div class="section-sub">0 ' + t('tests_count') + '</div>' +
       '</div>' +
       '<div class="empty-tests-hero animate-in">' +
-        '<div class="empty-tests-icon">🎯</div>' +
+        '<div class="empty-tests-icon"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>' +
         '<h3 class="empty-tests-title">' + t('tests_empty_title') + '</h3>' +
         '<p class="empty-tests-desc">' + t('tests_empty_desc') + '</p>' +
         '<button type="button" class="empty-tests-btn" onclick="switchTab(\'home\')">' +
@@ -1258,10 +1270,10 @@ function renderTestsTab(results) {
     '<div class="tests-hero-card animate-in">' +
       '<div class="tests-hero-top">' +
         '<div class="tests-hero-badge">' +
-          '<span>🎖</span> <span>' + t('tests_hero_title') + '</span>' +
+          '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-2px;margin-right:4px;"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg><span>' + t('tests_hero_title') + '</span>' +
         '</div>' +
         '<div class="tests-cert-chip ' + certClass + '">' +
-          '<span>★</span> ' + certLevel +
+          '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="display:inline-block;vertical-align:-1px;margin-right:3px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>' + certLevel +
         '</div>' +
       '</div>' +
       '<div class="tests-hero-stats">' +
@@ -1311,7 +1323,7 @@ function renderTestsTab(results) {
   });
 
   if (filtered.length === 0) {
-    html += '<div class="empty-state animate-in"><div class="empty-icon">🔍</div><p>' + t('admin_no_match') + '</p></div>';
+    html += '<div class="empty-state animate-in"><div class="empty-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><p>' + t('admin_no_match') + '</p></div>';
   } else {
     filtered.forEach(function(r, idx) {
       var origIndex = results.indexOf(r);
@@ -1328,23 +1340,23 @@ function renderTestsTab(results) {
           '<div class="test-card-modern animate-in" style="animation-delay:' + (idx * 0.04) + 's;border:1.5px solid rgba(239,68,68,0.45);background:rgba(239,68,68,0.04);" onclick="showResultModal(window._myResults[' + origIndex + '])">' +
             '<div class="test-card-top-row">' +
               '<div class="test-card-title">' + escHtml(r.test_title || r.title || t('default_test_title')) + '</div>' +
-              '<div class="test-card-date">📅 ' + date + '</div>' +
+              '<div class="test-card-date"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-1px;margin-right:3px"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' + date + '</div>' +
             '</div>' +
             '<div class="test-card-middle-row">' +
-              '<div class="test-score-box" style="background:rgba(239,68,68,0.15);border:1.5px solid #EF4444;color:#EF4444;">' +
-                '<span class="test-score-num" style="font-size:16px;color:#EF4444;">❌</span>' +
+              '<div class="test-score-box" style="background:rgba(239,68,68,0.15);border:1.5px solid #EF4444;color:#EF4444;display:flex;align-items:center;justify-content:center;flex-direction:column;">' +
+                '<span class="test-score-num" style="display:flex;align-items:center;justify-content:center;color:#EF4444;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>' +
                 '<span class="test-score-rank" style="font-size:9.5px;color:#EF4444;">' + (t('badge_cancelled') || 'Bekor') + '</span>' +
               '</div>' +
               '<div class="test-metrics-grid">' +
-                '<span class="test-metric-tag" style="color:#EF4444;font-weight:800;">⛔️ Test bekor qilingan</span>' +
+                '<span class="test-metric-tag" style="color:#EF4444;font-weight:800;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-1px;margin-right:3px"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>Test bekor qilingan</span>' +
                 '<span class="test-metric-tag" style="color:var(--text-muted);">Natija qabul qilinmagan</span>' +
               '</div>' +
             '</div>' +
             '<div class="test-card-bottom-row">' +
               '<button type="button" class="btn-test-action-quick" style="color:#EF4444;">' +
-                '<span>ℹ️ ' + t('tests_card_btn_analysis') + '</span>' +
+                '<span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-2px;margin-right:3px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>' + t('tests_card_btn_analysis') + '</span>' +
               '</button>' +
-              '<span style="color:var(--text-muted);font-size:14px;font-weight:800;">➔</span>' +
+              '<span style="color:var(--text-muted);display:flex;align-items:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>' +
             '</div>' +
           '</div>';
       } else if (isPub) {
@@ -1366,7 +1378,7 @@ function renderTestsTab(results) {
           '<div class="test-card-modern ' + borderClass + ' animate-in" style="animation-delay:' + (idx * 0.04) + 's;" onclick="showResultModal(window._myResults[' + origIndex + '])">' +
             '<div class="test-card-top-row">' +
               '<div class="test-card-title">' + escHtml(r.test_title || r.title || t('default_test_title')) + '</div>' +
-              '<div class="test-card-date">📅 ' + date + '</div>' +
+              '<div class="test-card-date"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-1px;margin-right:3px"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' + date + '</div>' +
             '</div>' +
             '<div class="test-card-middle-row">' +
               '<div class="test-score-box ' + gradeClass + '">' +
@@ -1374,16 +1386,16 @@ function renderTestsTab(results) {
                 '<span class="test-score-rank">' + grade + '</span>' +
               '</div>' +
               '<div class="test-metrics-grid">' +
-                '<span class="test-metric-tag" style="color:#10b981;">✅ ' + correct + ' ' + t('tests_stat_correct') + '</span>' +
-                '<span class="test-metric-tag" style="color:#ef4444;">❌ ' + incorrect + ' ' + t('tests_stat_incorrect') + '</span>' +
-                '<span class="test-metric-tag" style="color:var(--primary,#3b82f6);">⚡️ ' + pct + '% ' + t('tests_stat_efficiency') + '</span>' +
+                '<span class="test-metric-tag" style="color:#10b981;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:inline-block;vertical-align:-1px;margin-right:2px"><polyline points="20 6 9 17 4 12"/></svg>' + correct + ' ' + t('tests_stat_correct') + '</span>' +
+                '<span class="test-metric-tag" style="color:#ef4444;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:inline-block;vertical-align:-1px;margin-right:2px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' + incorrect + ' ' + t('tests_stat_incorrect') + '</span>' +
+                '<span class="test-metric-tag" style="color:var(--primary,#3b82f6);"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="display:inline-block;vertical-align:-1px;margin-right:2px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>' + pct + '% ' + t('tests_stat_efficiency') + '</span>' +
               '</div>' +
             '</div>' +
             '<div class="test-card-bottom-row">' +
               '<button type="button" class="btn-test-action-quick">' +
-                '<span>🔍 ' + t('tests_card_btn_analysis') + '</span>' +
+                '<span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-2px;margin-right:3px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>' + t('tests_card_btn_analysis') + '</span>' +
               '</button>' +
-              '<span style="color:var(--text-muted);font-size:14px;font-weight:800;">➔</span>' +
+              '<span style="color:var(--text-muted);display:flex;align-items:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>' +
             '</div>' +
           '</div>';
       } else {
@@ -1391,22 +1403,22 @@ function renderTestsTab(results) {
           '<div class="test-card-modern grade-pending animate-in" style="animation-delay:' + (idx * 0.04) + 's;" onclick="showResultModal(window._myResults[' + origIndex + '])">' +
             '<div class="test-card-top-row">' +
               '<div class="test-card-title">' + escHtml(r.test_title || r.title || t('default_test_title')) + '</div>' +
-              '<div class="test-card-date">📅 ' + date + '</div>' +
+              '<div class="test-card-date"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-1px;margin-right:3px"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' + date + '</div>' +
             '</div>' +
             '<div class="test-card-middle-row">' +
               '<div class="test-score-box pending">' +
-                '<span style="font-size:16px;">⏳</span>' +
+                '<span style="display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>' +
                 '<span class="test-score-rank" style="font-size:10px;">' + t('test_waiting_result') + '</span>' +
               '</div>' +
               '<div class="test-metrics-grid">' +
-                '<span class="test-metric-tag" style="color:#f59e0b;">⏳ ' + t('test_in_progress') + '</span>' +
+                '<span class="test-metric-tag" style="color:#f59e0b;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-1px;margin-right:3px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' + t('test_in_progress') + '</span>' +
               '</div>' +
             '</div>' +
             '<div class="test-card-bottom-row">' +
               '<button type="button" class="btn-test-action-quick" style="color:#f59e0b;">' +
                 '<span>' + t('btn_view_result') + '</span>' +
               '</button>' +
-              '<span style="color:var(--text-muted);font-size:14px;font-weight:800;">➔</span>' +
+              '<span style="color:var(--text-muted);display:flex;align-items:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>' +
             '</div>' +
           '</div>';
       }
@@ -1486,12 +1498,12 @@ function renderProfileTab() {
       simSwitchHtml =
         '<div class="admin-simulation-switch-card animate-in">' +
           '<div class="sim-switch-body">' +
-            '<div class="sim-switch-badge">🛡 ADMIN BOSHQARUVI</div>' +
+            '<div class="sim-switch-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-1px;margin-right:3px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>ADMIN BOSHQARUVI</div>' +
             '<div class="sim-switch-title">O\'quvchi sifatida kirish (User Mode)</div>' +
             '<div class="sim-switch-desc">Mini ilova oddiy o\'quvchida qanday ko\'rinishi va ishlashini o\'z ko\'zingiz bilan ko\'rib sinash uchun o\'quvchi rejimiga o\'ting.</div>' +
           '</div>' +
           '<button type="button" class="btn-switch-to-user" onclick="toggleUserSimulationMode(true)">' +
-            '<span>👁 User sifatida kirish</span>' +
+            '<span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-2px;margin-right:4px"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>User sifatida kirish</span>' +
             '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>' +
           '</button>' +
         '</div>';
@@ -1499,12 +1511,12 @@ function renderProfileTab() {
       simSwitchHtml =
         '<div class="admin-simulation-switch-card simulated animate-in">' +
           '<div class="sim-switch-body">' +
-            '<div class="sim-switch-badge simulated">👁 O\'QUVCHI REJIMI FAOL</div>' +
+            '<div class="sim-switch-badge simulated"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-1px;margin-right:3px"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>O\'QUVCHI REJIMI FAOL</div>' +
             '<div class="sim-switch-title">Siz hozir o\'quvchi rejimidasiz</div>' +
             '<div class="sim-switch-desc">Barcha ekranlar, qidiruv va testlar oddiy o\'quvchi sifatida ishlamoqda. Admin boshqaruviga qaytish uchun tugmani bosing.</div>' +
           '</div>' +
           '<button type="button" class="btn-switch-to-admin" onclick="toggleUserSimulationMode(false)">' +
-            '<span>🛡 Admin boshqaruviga qaytish</span>' +
+            '<span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-2px;margin-right:4px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Admin boshqaruviga qaytish</span>' +
           '</button>' +
         '</div>';
     }
@@ -1525,7 +1537,7 @@ function renderProfileTab() {
       '</div>' +
       '<div style="display:flex;justify-content:center;margin-top:10px;">' +
         '<button type="button" class="btn-hero-profile-action btn-edit-profile-hero" onclick="openEditProfileModal()" style="max-width:170px;">' +
-          '<span class="hero-btn-icon">✏️</span><span>' + t('profile_edit_btn') + '</span>' +
+          '<span class="hero-btn-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span><span>' + t('profile_edit_btn') + '</span>' +
         '</button>' +
       '</div>' +
     '</div>' +
@@ -1569,31 +1581,31 @@ function renderProfileTab() {
       '</div>' +
       '<div id="profile-details-content" style="display:' + (window._profileDetailsOpen ? 'block' : 'none') + ';border-top:1px solid var(--border);">' +
         '<div class="profile-item-row clickable" onclick="copyTextToClipboard(\'' + tgId + '\', \'' + t('toast_copied') + '\')">' +
-          '<div class="profile-item-icon">🆔</div>' +
+          '<div class="profile-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><line x1="15" y1="8" x2="17" y2="8"/><line x1="15" y1="12" x2="17" y2="12"/><line x1="7" y1="16" x2="17" y2="16"/></svg></div>' +
           '<div class="profile-item-body">' +
             '<div class="profile-item-label">' + t('lbl_tg_id') + '</div>' +
             '<div class="profile-item-value"><code>' + tgId + '</code></div>' +
           '</div>' +
-          '<span class="profile-item-action-chip">📋 ' + t('btn_copy') + '</span>' +
+          '<span class="profile-item-action-chip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-1px;margin-right:3px"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>' + t('btn_copy') + '</span>' +
         '</div>' +
         '<div class="profile-item-row clickable" onclick="copyTextToClipboard(\'' + escHtml(username) + '\', \'' + t('toast_copied') + '\')">' +
-          '<div class="profile-item-icon">🔗</div>' +
+          '<div class="profile-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>' +
           '<div class="profile-item-body">' +
             '<div class="profile-item-label">' + t('lbl_username') + '</div>' +
             '<div class="profile-item-value">' + escHtml(username) + '</div>' +
           '</div>' +
-          '<span class="profile-item-action-chip">📋 ' + t('btn_copy') + '</span>' +
+          '<span class="profile-item-action-chip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-1px;margin-right:3px"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>' + t('btn_copy') + '</span>' +
         '</div>' +
         '<div class="profile-item-row clickable" onclick="openEditProfileModal()">' +
-          '<div class="profile-item-icon">📱</div>' +
+          '<div class="profile-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>' +
           '<div class="profile-item-body">' +
             '<div class="profile-item-label">' + t('lbl_phone_edit') + '</div>' +
             '<div class="profile-item-value">' + escHtml(formattedPhone) + '</div>' +
           '</div>' +
-          '<span class="profile-item-action-chip">✏️ ' + t('profile_edit_btn') + '</span>' +
+          '<span class="profile-item-action-chip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-1px;margin-right:3px"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>' + t('profile_edit_btn') + '</span>' +
         '</div>' +
         '<div class="profile-item-row" style="border-bottom:none;">' +
-          '<div class="profile-item-icon">📅</div>' +
+          '<div class="profile-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>' +
           '<div class="profile-item-body">' +
             '<div class="profile-item-label">' + t('lbl_reg_date') + '</div>' +
             '<div class="profile-item-value">' + regDateStr + '</div>' +
@@ -1606,20 +1618,20 @@ function renderProfileTab() {
     '<div class="profile-section-card animate-in" style="margin-top:10px;">' +
       '<div class="profile-section-title">' + t('sec_settings_guide') + '</div>' +
       '<div class="profile-item-row clickable" onclick="toggleTheme(event)">' +
-        '<div class="profile-item-icon">🌓</div>' +
+        '<div class="profile-item-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor"/></svg></div>' +
         '<div class="profile-item-body">' +
           '<div class="profile-item-label">' + t('lbl_app_theme') + '</div>' +
           '<div class="profile-item-value" id="profile-theme-label">' + themeLabel + '</div>' +
         '</div>' +
-        '<span class="profile-item-arrow">›</span>' +
+        '<span class="profile-item-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>' +
       '</div>' +
       '<div class="profile-item-row clickable" onclick="openOnboardingModal()" style="border-bottom:none;">' +
-        '<div class="profile-item-icon" style="background:rgba(59,130,246,0.12);color:#2563eb;">📖</div>' +
+        '<div class="profile-item-icon" style="background:rgba(59,130,246,0.12);color:#2563eb;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>' +
         '<div class="profile-item-body">' +
           '<div class="profile-item-label">' + t('lbl_how_it_works') + '</div>' +
           '<div class="profile-item-value" style="font-size:12px;color:var(--text-muted);font-weight:600;">' + t('sub_how_it_works') + '</div>' +
         '</div>' +
-        '<span class="profile-item-arrow">›</span>' +
+        '<span class="profile-item-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>' +
       '</div>' +
     '</div>' +
 
@@ -1671,7 +1683,7 @@ function openEditProfileModal() {
       '<div class="modal-box" style="max-width:380px;width:100%;padding:22px 18px;border-radius:24px;background:var(--bg-card,#1e293b);border:1px solid var(--border);box-shadow:0 24px 60px rgba(0,0,0,0.5);">' +
         '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">' +
           '<div style="font-size:16px;font-weight:800;color:var(--text);">' + t('modal_edit_title') + '</div>' +
-          '<button class="modal-close" onclick="closeEditProfileModal()" style="background:none;border:none;font-size:22px;color:var(--text-muted);cursor:pointer;line-height:1;">✕</button>' +
+          '<button class="modal-close" onclick="closeEditProfileModal()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>' +
         '</div>' +
         '<div style="margin-bottom:12px;">' +
           '<label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.4px;">' + t('lbl_fullname') + '</label>' +
@@ -1798,25 +1810,25 @@ async function deleteMyAccount() {
 // ── ADMIN TAB ───────────────────────────────────
 var ADMIN_QUICK_TEMPLATES_I18N = {
   uz: {
-    '30m': "⏳ Diqqat! Test boshlanishiga 30 daqiqa qoldi! Internet aloqangizni tekshirib, qoralama qog'ozlarni tayyorlab oling.",
-    '10m': "⚠️ Test boshlanishiga 10 daqiqa qoldi! Mini ilovaga kirib, tayyor bo'lib turing.",
-    'started': "🚀 Test boshlandi! Barchaga omad tilaymiz. Belgilangan vaqt ichida javoblarni topshirishni unutmang.",
-    '15m': "⏰ Diqqat, test yakunlanishiga 15 daqiqa qoldi! Qolgan javoblarni tekshirib, topshirishga shoshiling.",
-    'ended': "🛑 Test yakunlandi! Javoblarni qabul qilish to'xtatildi. Ishtirok etgan barcha o'quvchilarga minnatdorchilik bildiramiz. Tez orada to'liq tahlil va rasmiy natijalar e'lon qilinadi."
+    '30m': "Diqqat! Test boshlanishiga 30 daqiqa qoldi! Internet aloqangizni tekshirib, qoralama qog'ozlarni tayyorlab oling.",
+    '10m': "Test boshlanishiga 10 daqiqa qoldi! Mini ilovaga kirib, tayyor bo'lib turing.",
+    'started': "Test boshlandi! Barchaga omad tilaymiz. Belgilangan vaqt ichida javoblarni topshirishni unutmang.",
+    '15m': "Diqqat, test yakunlanishiga 15 daqiqa qoldi! Qolgan javoblarni tekshirib, topshirishga shoshiling.",
+    'ended': "Test yakunlandi! Javoblarni qabul qilish to'xtatildi. Ishtirok etgan barcha o'quvchilarga minnatdorchilik bildiramiz. Tez orada to'liq tahlil va rasmiy natijalar e'lon qilinadi."
   },
   ru: {
-    '30m': "⏳ Внимание! До начала теста осталось 30 минут! Проверьте подключение к интернету и приготовьте черновики.",
-    '10m': "⚠️ До начала теста осталось 10 минут! Войдите в приложение и будьте готовы.",
-    'started': "🚀 Тест начался! Желаем всем удачи. Не забудьте отправить ответы в установленное время.",
-    '15m': "⏰ Внимание, до окончания теста осталось 15 минут! Проверьте оставшиеся ответы и поторопитесь со сдачей.",
-    'ended': "🛑 Тест завершен! Прием ответов остановлен. Благодарим всех участников. Скоро будут опубликованы полный разбор и официальные результаты."
+    '30m': "Внимание! До начала теста осталось 30 минут! Проверьте подключение к интернету и приготовьте черновики.",
+    '10m': "До начала теста осталось 10 минут! Войдите в приложение и будьте готовы.",
+    'started': "Тест начался! Желаем всем удачи. Не забудьте отправить ответы в установленное время.",
+    '15m': "Внимание, до окончания теста осталось 15 минут! Проверьте оставшиеся ответы и поторопитесь со сдачей.",
+    'ended': "Тест завершен! Прием ответов остановлен. Благодарим всех участников. Скоро будут опубликованы полный разбор и официальные результаты."
   },
   en: {
-    '30m': "⏳ Attention! 30 minutes left before the test starts! Check your internet connection and prepare draft papers.",
-    '10m': "⚠️ 10 minutes left before the test starts! Open the mini app and be ready.",
-    'started': "🚀 The test has started! Good luck to everyone. Remember to submit your answers within the allotted time.",
-    '15m': "⏰ Attention, 15 minutes left before the test ends! Double-check your answers and hurry to submit.",
-    'ended': "🛑 The test has ended! Answer submission is closed. Thank you to all participants. Full analysis and official results will be announced shortly."
+    '30m': "Attention! 30 minutes left before the test starts! Check your internet connection and prepare draft papers.",
+    '10m': "10 minutes left before the test starts! Open the mini app and be ready.",
+    'started': "The test has started! Good luck to everyone. Remember to submit your answers within the allotted time.",
+    '15m': "Attention, 15 minutes left before the test ends! Double-check your answers and hurry to submit.",
+    'ended': "The test has ended! Answer submission is closed. Thank you to all participants. Full analysis and official results will be announced shortly."
   }
 };
 
@@ -1901,7 +1913,7 @@ async function sendAdminBroadcast() {
   var originalHtml = btn ? btn.innerHTML : '';
   if (btn) {
     btn.disabled = true;
-    btn.innerHTML = '<span>⏳ ' + t('admin_broadcast_sending') + '</span>';
+    btn.innerHTML = '<span>' + t('admin_broadcast_sending') + '</span>';
   }
 
   var urlParams = new URLSearchParams(window.location.search);
@@ -1919,12 +1931,12 @@ async function sendAdminBroadcast() {
     });
     var data = await res.json();
     if (data.success) {
-      alert("✅ " + t('admin_broadcast_sent_title') + "\n\n📨 " + t('admin_broadcast_delivered_lbl') + ": " + (data.sent || 0) + " " + t('unit_count') + (data.fail ? ("\n⚠️ " + t('admin_broadcast_failed_lbl') + ": " + data.fail + " " + t('unit_count')) : ""));
+      alert(t('admin_broadcast_sent_title') + "\n\n" + t('admin_broadcast_delivered_lbl') + ": " + (data.sent || 0) + " " + t('unit_count') + (data.fail ? ("\n" + t('admin_broadcast_failed_lbl') + ": " + data.fail + " " + t('unit_count')) : ""));
       textarea.value = '';
       window._cachedBroadcastText = '';
       updateBroadcastCharCount();
     } else {
-      alert("⚠️ " + (t('error_occurred') + ': ') + (data.message || ''));
+      alert((t('error_occurred') + ': ') + (data.message || ''));
     }
   } catch (e) {
     console.error("Broadcast error:", e);
@@ -1981,7 +1993,7 @@ function renderAdminTab() {
 
   var html =
     '<div class="admin-header-card animate-in">' +
-      '<div class="admin-header-icon">⚙️</div>' +
+      '<div class="admin-header-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>' +
       '<div>' +
         '<div style="font-size:16px;font-weight:800;color:var(--text)">' + t('admin_panel') + '</div>' +
         '<div style="font-size:12px;color:var(--text-muted);margin-top:2px">' + t('admin_panel_sub') + '</div>' +
@@ -1998,7 +2010,7 @@ function renderAdminTab() {
       '<button type="button" class="admin-subtab ' + (currentSubtab === 'broadcast' ? 'active' : '') + '" onclick="switchAdminSubtab(\'broadcast\')">' +
         '<span class="admin-subtab-icon">' + broadcastIcon + '</span>' +
         '<span class="admin-subtab-text">' + t('admin_tab_broadcast') + '</span>' +
-        '<span class="admin-subtab-badge">⚡️</span>' +
+        '<span class="admin-subtab-badge"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>' +
       '</button>' +
     '</div>';
 
@@ -2016,7 +2028,7 @@ function renderAdminTab() {
 
         // Qidiruv paneli
         '<div class="admin-search-box">' +
-          '<span class="admin-search-icon">🔍</span>' +
+          '<span class="admin-search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>' +
           '<input type="text" id="admin-user-search-input" class="admin-search-input" placeholder="' + t('admin_search_ph') + '" oninput="handleAdminUserSearch(this.value)">' +
         '</div>' +
 
@@ -2040,12 +2052,12 @@ function renderAdminTab() {
         t('btn_restrict_all') +
       '</button>';
   } else {
-    // 📢 O'quvchilarga xabar yuborish (Tezkor shablonlar + Textarea)
+    // O'quvchilarga xabar yuborish (Tezkor shablonlar + Textarea)
     html +=
       '<div class="admin-broadcast-card animate-in">' +
         '<div class="admin-broadcast-header">' +
           '<div class="admin-broadcast-title-wrap">' +
-            '<div class="admin-broadcast-icon-box">📢</div>' +
+            '<div class="admin-broadcast-icon-box"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></div>' +
             '<div>' +
               '<div class="admin-broadcast-title">' + t('bcast_title') + '</div>' +
               '<div class="admin-broadcast-subtitle">' + t('bcast_subtitle') + '</div>' +
@@ -2056,26 +2068,26 @@ function renderAdminTab() {
 
         // Tezkor tayyor shablonlar
         '<div class="quick-templates-section">' +
-          '<div class="quick-templates-label"><span>⚡️</span> ' + t('bcast_quick_label') + '</div>' +
+          '<div class="quick-templates-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="display:inline-block;vertical-align:-1px;margin-right:3px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> ' + t('bcast_quick_label') + '</div>' +
           '<div class="quick-templates-grid">' +
             '<button type="button" class="quick-tmpl-btn" id="tmpl-btn-30m" onclick="applyQuickTemplate(\'30m\')">' +
-              '<span class="tmpl-icon">⏳</span>' +
+              '<span class="tmpl-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>' +
               '<span class="tmpl-text">' + t('tmpl_30m') + '</span>' +
             '</button>' +
             '<button type="button" class="quick-tmpl-btn" id="tmpl-btn-10m" onclick="applyQuickTemplate(\'10m\')">' +
-              '<span class="tmpl-icon">⚠️</span>' +
+              '<span class="tmpl-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>' +
               '<span class="tmpl-text">' + t('tmpl_10m') + '</span>' +
             '</button>' +
             '<button type="button" class="quick-tmpl-btn" id="tmpl-btn-started" onclick="applyQuickTemplate(\'started\')">' +
-              '<span class="tmpl-icon">🚀</span>' +
+              '<span class="tmpl-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg></span>' +
               '<span class="tmpl-text">' + t('tmpl_started') + '</span>' +
             '</button>' +
             '<button type="button" class="quick-tmpl-btn" id="tmpl-btn-15m" onclick="applyQuickTemplate(\'15m\')">' +
-              '<span class="tmpl-icon">⏰</span>' +
+              '<span class="tmpl-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>' +
               '<span class="tmpl-text">' + t('tmpl_15m') + '</span>' +
             '</button>' +
             '<button type="button" class="quick-tmpl-btn" id="tmpl-btn-ended" onclick="applyQuickTemplate(\'ended\')">' +
-              '<span class="tmpl-icon">🛑</span>' +
+              '<span class="tmpl-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg></span>' +
               '<span class="tmpl-text">' + t('tmpl_ended') + '</span>' +
             '</button>' +
           '</div>' +
@@ -2179,7 +2191,7 @@ function renderFilteredAdminUsers() {
   if (filtered.length === 0) {
     listEl.innerHTML =
       '<div class="empty-state" style="padding:24px 10px;">' +
-        '<div class="empty-icon" style="font-size:36px;">🔍</div>' +
+        '<div class="empty-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>' +
         '<p style="font-size:13px;color:var(--text-muted);">' + (q ? t('admin_no_match') : t('admin_no_users')) + '</p>' +
       '</div>';
     return;
@@ -2206,7 +2218,7 @@ function renderFilteredAdminUsers() {
         '<div class="user-row-name" style="font-size:14.5px;font-weight:700;">' + escHtml(u.fullname || t('user_unknown')) + '</div>' +
       '</div>' +
       sb +
-      '<span style="color:var(--text-muted);font-size:16px;margin-left:4px">›</span>' +
+      '<span style="color:var(--text-muted);display:flex;align-items:center;margin-left:4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>' +
     '</div>';
   }).join('');
 
@@ -2234,7 +2246,7 @@ function openAdminUserModal(targetUid) {
       '<div class="modal-box" id="admin-user-modal-box" style="max-width:400px;width:100%;max-height:92vh;overflow-y:auto;padding:22px 18px;border-radius:24px;background:var(--bg-card,#1e293b);border:1px solid var(--border,rgba(255,255,255,0.12));box-shadow:0 24px 60px rgba(0,0,0,0.5);position:relative;">' +
         '<div class="modal-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">' +
           '<div class="modal-title" style="font-size:16px;font-weight:800;color:var(--text,#fff);">' + t('modal_user_mgmt_title') + '</div>' +
-          '<button class="modal-close" onclick="closeAdminUserModal()" style="background:none;border:none;font-size:22px;color:var(--text-muted,#94a3b8);cursor:pointer;padding:4px 8px;line-height:1;">✕</button>' +
+          '<button class="modal-close" onclick="closeAdminUserModal()" style="background:none;border:none;color:var(--text-muted,#94a3b8);cursor:pointer;padding:4px 8px;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>' +
         '</div>' +
         '<div class="modal-body" id="admin-user-modal-body"></div>' +
       '</div>';
@@ -2284,19 +2296,19 @@ function openAdminUserModal(targetUid) {
   var infoToggleHtml =
     '<button type="button" class="admin-user-info-toggle-btn" id="btn-toggle-user-info" onclick="toggleAdminUserInfo()">' +
       '<span class="info-toggle-left">' +
-        '<span style="font-size:15px;">📋</span>' +
+        '<span style="display:flex;align-items:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>' +
         '<span>' + t('admin_user_info_label') + '</span>' +
       '</span>' +
       '<span class="info-toggle-arrow" id="info-toggle-arrow">' + t('toggle_show') + '</span>' +
     '</button>' +
     '<div id="admin-user-info-content" class="admin-user-info-content" style="display:none;">' +
       '<div class="card" style="margin:0;padding:10px 14px;border-radius:14px;background:var(--bg-glass-2);border:1px solid var(--border);">' +
-        '<div class="info-row" style="padding:9px 0;"><div class="info-icon" style="width:32px;height:32px;font-size:16px;">📱</div><div><div class="info-label" style="font-size:11px;">' + t('lbl_phone_short') + '</div><div class="info-value" style="font-size:14px;font-weight:700;"><a href="tel:' + escHtml(u.phone || '') + '" style="color:var(--primary);text-decoration:none;">' + escHtml(u.phone || '—') + '</a></div></div></div>' +
-        '<div class="info-row" style="padding:9px 0;"><div class="info-icon" style="width:32px;height:32px;font-size:16px;">🆔</div><div><div class="info-label" style="font-size:11px;">' + t('lbl_tg_id_short') + '</div><div class="info-value" style="font-size:14px;font-weight:700;"><code>' + u.tg_id + '</code></div></div></div>' +
-        '<div class="info-row" style="padding:9px 0;"><div class="info-icon" style="width:32px;height:32px;font-size:16px;">🔗</div><div><div class="info-label" style="font-size:11px;">' + t('lbl_username_short') + '</div><div class="info-value" style="font-size:14px;font-weight:700;">' + escHtml(usernameStr) + '</div></div></div>' +
-        '<div class="info-row" style="padding:9px 0;"><div class="info-icon" style="width:32px;height:32px;font-size:16px;">🕒</div><div><div class="info-label" style="font-size:11px;">' + t('lbl_reg_date') + '</div><div class="info-value" style="font-size:13.5px;font-weight:700;color:var(--primary);">' + regDateStr + '</div></div></div>' +
-        '<div class="info-row" style="padding:9px 0;"><div class="info-icon" style="width:32px;height:32px;font-size:16px;">📝</div><div><div class="info-label" style="font-size:11px;">' + t('admin_lbl_tests_count') + '</div><div class="info-value" style="font-size:14px;font-weight:700;">' + (u.tests_count || 0) + ' ' + t('unit_count') + '</div></div></div>' +
-        '<div class="info-row" style="padding:9px 0;border-bottom:none;"><div class="info-icon" style="width:32px;height:32px;font-size:16px;">⏱</div><div><div class="info-label" style="font-size:11px;">' + t('admin_lbl_last_test') + '</div><div class="info-value" style="font-size:13px;font-weight:600;">' + lastTestStr + '</div></div></div>' +
+        '<div class="info-row" style="padding:9px 0;"><div class="info-icon" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div><div><div class="info-label" style="font-size:11px;">' + t('lbl_phone_short') + '</div><div class="info-value" style="font-size:14px;font-weight:700;"><a href="tel:' + escHtml(u.phone || '') + '" style="color:var(--primary);text-decoration:none;">' + escHtml(u.phone || '—') + '</a></div></div></div>' +
+        '<div class="info-row" style="padding:9px 0;"><div class="info-icon" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><line x1="15" y1="8" x2="17" y2="8"/><line x1="15" y1="12" x2="17" y2="12"/><line x1="7" y1="16" x2="17" y2="16"/></svg></div><div><div class="info-label" style="font-size:11px;">' + t('lbl_tg_id_short') + '</div><div class="info-value" style="font-size:14px;font-weight:700;"><code>' + u.tg_id + '</code></div></div></div>' +
+        '<div class="info-row" style="padding:9px 0;"><div class="info-icon" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div><div><div class="info-label" style="font-size:11px;">' + t('lbl_username_short') + '</div><div class="info-value" style="font-size:14px;font-weight:700;">' + escHtml(usernameStr) + '</div></div></div>' +
+        '<div class="info-row" style="padding:9px 0;"><div class="info-icon" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div><div class="info-label" style="font-size:11px;">' + t('lbl_reg_date') + '</div><div class="info-value" style="font-size:13.5px;font-weight:700;color:var(--primary);">' + regDateStr + '</div></div></div>' +
+        '<div class="info-row" style="padding:9px 0;"><div class="info-icon" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><div><div class="info-label" style="font-size:11px;">' + t('admin_lbl_tests_count') + '</div><div class="info-value" style="font-size:14px;font-weight:700;">' + (u.tests_count || 0) + ' ' + t('unit_count') + '</div></div></div>' +
+        '<div class="info-row" style="padding:9px 0;border-bottom:none;"><div class="info-icon" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 10"/></svg></div><div><div class="info-label" style="font-size:11px;">' + t('admin_lbl_last_test') + '</div><div class="info-value" style="font-size:13px;font-weight:600;">' + lastTestStr + '</div></div></div>' +
       '</div>' +
     '</div>';
 
@@ -2325,9 +2337,7 @@ function toggleAdminUserInfo() {
     if (arrow) arrow.innerHTML = t('toggle_show');
   }
   if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
-    try {
-      window.Telegram.WebApp.HapticFeedback.selectionChanged();
-    } catch(e) {}
+    try { window.Telegram.WebApp.HapticFeedback.selectionChanged(); } catch(e) {}
   }
 }
 
@@ -2411,7 +2421,7 @@ async function restrictAllUsersFromApp() {
     });
     var data = await res.json();
     if (data.success) {
-      alert('🔒 Jami ' + (data.count || 0) + ' ta foydalanuvchi muvaffaqiyatli cheklandi!');
+      alert('Jami ' + (data.count || 0) + ' ta foydalanuvchi muvaffaqiyatli cheklandi!');
       loadAllUsers();
     } else {
       alert(data.message || 'Xatolik yuz berdi');
@@ -2627,11 +2637,11 @@ function toggleUserSimulationMode(enable) {
     state.isActualAdmin = true;
     state.isSimulatedUser = true;
     state.isAdmin = false;
-    showToast("👁 O'quvchi rejimiga o'tildi. O'zgarishlarni bemalol tekshirishingiz mumkin!");
+    showToast("O'quvchi rejimiga o'tildi. O'zgarishlarni bemalol tekshirishingiz mumkin!");
   } else {
     state.isSimulatedUser = false;
     state.isAdmin = true;
-    showToast("🛡 Admin rejimiga qaytildi.");
+    showToast("Admin rejimiga qaytildi.");
   }
 
   // Yuqori floating banner
@@ -2778,14 +2788,15 @@ function showResultModal(result) {
   var html =
     '<div style="text-align:center;margin:6px 0 14px;">' +
       '<div style="display:inline-flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 28px;border-radius:18px;background:' + (isRejected ? 'rgba(239,68,68,0.15)' : (gradeBg[gradeClass]||'rgba(99,102,241,0.15)')) + ';border:2px solid ' + (isRejected ? '#EF4444' : (gradeBorder[gradeClass]||'#6366F1')) + ';min-width:140px;">' +
-        '<span style="font-size:24px;font-weight:900;line-height:1.1;color:' + (isRejected ? '#EF4444' : (gradeColor[gradeClass]||'#6366F1')) + ';">' + (isRejected ? '❌ ' + grade : grade) + '</span>' +
+        '<span style="font-size:24px;font-weight:900;line-height:1.1;color:' + (isRejected ? '#EF4444' : (gradeColor[gradeClass]||'#6366F1')) + ';display:inline-flex;align-items:center;justify-content:center;gap:6px;">' + (isRejected ? '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> ' + grade : grade) + '</span>' +
         '<span style="font-size:14px;font-weight:800;color:var(--text);margin-top:4px;">' + (isRejected ? 'Natija bekor qilingan' : (score + ' ' + t('score_pts'))) + '</span>' +
       '</div>' +
     '</div>';
 
   if (isRejected) {
-    html += '<div style="margin:8px 0 14px;padding:12px 14px;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);border-radius:12px;font-size:12.5px;color:#EF4444;font-weight:700;line-height:1.45;text-align:left;">' +
-      '⛔️ Ushbu test javoblaringiz ma\'muriyat tomonidan bekor qilindi va qabul qilinmadi.' +
+    html += '<div style="margin:8px 0 14px;padding:12px 14px;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);border-radius:12px;font-size:12.5px;color:#EF4444;font-weight:700;line-height:1.45;text-align:left;display:flex;align-items:center;gap:8px;">' +
+      '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>' +
+      '<span>Ushbu test javoblaringiz ma\'muriyat tomonidan bekor qilindi va qabul qilinmadi.</span>' +
     '</div>';
   } else {
     html +=
@@ -2803,8 +2814,9 @@ function showResultModal(result) {
       '<div id="compare-keys-result" style="display:none;margin-bottom:14px;max-height:320px;overflow-y:auto;border:1px solid var(--border);border-radius:12px;padding:10px;"></div>';
 
     if (!isPub) {
-      html += '<div style="margin:8px 0 12px;padding:10px 14px;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.25);border-radius:12px;font-size:12.5px;color:#D97706;font-weight:600;line-height:1.45;text-align:left;">' +
-        '⏳ ' + t('test_waiting_result') +
+      html += '<div style="margin:8px 0 12px;padding:10px 14px;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.25);border-radius:12px;font-size:12.5px;color:#D97706;font-weight:600;line-height:1.45;text-align:left;display:flex;align-items:center;gap:8px;">' +
+        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ' +
+        '<span>' + t('test_waiting_result') + '</span>' +
       '</div>';
     }
   }
@@ -2848,7 +2860,7 @@ async function submitCompareKeys(testId) {
 
   if (btn) {
     btn.disabled = true;
-    btn.textContent = 'Tekshirilmoqda... ⏳';
+    btn.innerHTML = '<span class="spinner" style="display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.8s linear infinite;margin-right:6px;vertical-align:middle;"></span>Tekshirilmoqda...';
   }
   if (errEl) errEl.style.display = 'none';
 
@@ -2944,11 +2956,13 @@ function renderKeyComparison(data, container) {
     var isOk = item.status === 'correct';
     var bg = isOk ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)';
     var col = isOk ? '#10B981' : '#EF4444';
-    var icon = isOk ? '✓' : '✗';
+    var iconSvg = isOk 
+      ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="display:inline-block;vertical-align:middle;"><polyline points="20 6 9 17 4 12"/></svg>' 
+      : '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="display:inline-block;vertical-align:middle;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
     var uVal = item.user || '—';
 
     closedHtml += '<div style="background:' + bg + ';color:' + col + ';border:1px solid ' + col + ';border-radius:8px;padding:6px 2px;text-align:center;font-size:11px;line-height:1.2;">';
-    closedHtml += '<div style="font-weight:700;font-size:11px;margin-bottom:2px;">#' + i + ' ' + icon + '</div>';
+    closedHtml += '<div style="font-weight:700;font-size:11px;margin-bottom:2px;display:flex;align-items:center;justify-content:center;gap:3px;">#' + i + ' ' + iconSvg + '</div>';
     closedHtml += '<div style="font-size:10px;opacity:0.9;">' + t('compare_keys_you') + ' <b>' + escHtml(uVal) + '</b></div>';
     closedHtml += '<div style="font-size:10px;font-weight:600;">' + (isOk ? t('result_correct') : t('result_wrong')) + '</div>';
     closedHtml += '</div>';
@@ -2964,12 +2978,16 @@ function renderKeyComparison(data, container) {
       var isPartial = item.status === 'partial';
       var bg = isOk ? 'rgba(16, 185, 129, 0.15)' : (isPartial ? 'rgba(245, 158, 11, 0.15)' : 'rgba(239, 68, 68, 0.15)');
       var col = isOk ? '#10B981' : (isPartial ? '#F59E0B' : '#EF4444');
-      var icon = isOk ? '✓' : (isPartial ? '⚠️ 30%' : '✗');
+      var iconSvg = isOk 
+        ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="display:inline-block;vertical-align:middle;"><polyline points="20 6 9 17 4 12"/></svg>' 
+        : (isPartial 
+          ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:inline-block;vertical-align:middle;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>' 
+          : '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="display:inline-block;vertical-align:middle;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>');
       var uVal = item.user || '—';
       var statusLabel = isOk ? t('result_correct') : (isPartial ? '30% (qisman)' : t('result_wrong'));
 
       openHtml += '<div style="background:' + bg + ';color:' + col + ';border:1px solid ' + col + ';border-radius:8px;padding:6px 2px;text-align:center;font-size:11px;line-height:1.2;overflow:hidden;">';
-      openHtml += '<div style="font-weight:700;font-size:11px;margin-bottom:2px;">#' + key + ' ' + icon + '</div>';
+      openHtml += '<div style="font-weight:700;font-size:11px;margin-bottom:2px;display:flex;align-items:center;justify-content:center;gap:3px;">#' + key + ' ' + iconSvg + '</div>';
       openHtml += '<div style="font-size:10px;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;" title="' + escHtml(uVal) + '">' + t('compare_keys_you') + ' <b>' + escHtml(uVal) + '</b></div>';
       openHtml += '<div style="font-size:10px;font-weight:600;">' + statusLabel + '</div>';
       openHtml += '</div>';
@@ -3022,11 +3040,12 @@ function updateHeaderUser() {
 
 // ── HELPERS ─────────────────────────────────────
 function computeStatus(testsCount, avgScore) {
-  if (testsCount === 0) return { label: t('status_new'), icon: '\uD83C\uDF31', cls: 'status-beginner' };
-  if (avgScore >= 40) return { label: t('status_gold'), icon: '\uD83E\uDD47', cls: 'status-gold' };
-  if (avgScore >= 30) return { label: t('status_silver'), icon: '\uD83E\uDD48', cls: 'status-silver' };
-  if (avgScore >= 20) return { label: t('status_bronze'), icon: '\uD83E\uDD49', cls: 'status-bronze' };
-  return { label: t('status_learner'), icon: '\uD83D\uDCDA', cls: 'status-beginner' };
+  var starSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+  if (testsCount === 0) return { label: t('status_new'), icon: starSvg, cls: 'status-beginner' };
+  if (avgScore >= 40) return { label: t('status_gold'), icon: starSvg, cls: 'status-gold' };
+  if (avgScore >= 30) return { label: t('status_silver'), icon: starSvg, cls: 'status-silver' };
+  if (avgScore >= 20) return { label: t('status_bronze'), icon: starSvg, cls: 'status-bronze' };
+  return { label: t('status_learner'), icon: starSvg, cls: 'status-beginner' };
 }
 
 function getGradeFromScore(score, maxScore) {
@@ -3091,9 +3110,6 @@ function showToast(msg) {
   var toast = document.getElementById('toast');
   if (!toast) return;
   var displayMsg = msg || '';
-  if (!displayMsg.startsWith('✅') && !displayMsg.startsWith('⚠️') && !displayMsg.startsWith('❌')) {
-    displayMsg = '✅ ' + displayMsg;
-  }
   toast.textContent = displayMsg;
   toast.classList.add('show');
   clearTimeout(window._toastTimeout);
@@ -3142,45 +3158,45 @@ function renderOnboardingSlides() {
   container.innerHTML =
     '<!-- Slide 0: Asosiy -->' +
     '<div class="onboarding-slide" id="onboarding-slide-0">' +
-      '<div style="width:72px;height:72px;border-radius:24px;background:rgba(59,130,246,0.12);color:#3B82F6;font-size:34px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;box-shadow:0 8px 22px rgba(59,130,246,0.2);">🏠</div>' +
+      '<div style="width:72px;height:72px;border-radius:24px;background:rgba(59,130,246,0.12);color:#3B82F6;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;box-shadow:0 8px 22px rgba(59,130,246,0.2);"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>' +
       '<div style="display:inline-block;padding:3px 12px;border-radius:20px;background:rgba(59,130,246,0.12);color:#3B82F6;font-size:11.5px;font-weight:800;letter-spacing:0.5px;margin-bottom:8px;">' + t('ob_slide0_badge') + '</div>' +
       '<h3 style="font-size:19px;font-weight:900;color:var(--text);margin-bottom:8px;">' + t('ob_slide0_title') + '</h3>' +
       '<p style="font-size:13.5px;color:var(--text-muted);line-height:1.55;margin:0 auto 12px;max-width:310px;">' + t('ob_slide0_desc') + '</p>' +
       '<div style="background:var(--bg-body);border:1px solid var(--border);border-radius:14px;padding:10px 14px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:12.5px;color:var(--text);font-weight:600;">' +
-        '<span style="font-size:16px;">⚡️</span> ' + t('ob_slide0_feat') +
+        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--primary);flex-shrink:0;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> <span>' + t('ob_slide0_feat') + '</span>' +
       '</div>' +
     '</div>' +
 
     '<!-- Slide 1: Testlar -->' +
     '<div class="onboarding-slide" id="onboarding-slide-1" style="display:none;">' +
-      '<div style="width:72px;height:72px;border-radius:24px;background:rgba(16,185,129,0.12);color:#10B981;font-size:34px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;box-shadow:0 8px 22px rgba(16,185,129,0.2);">📝</div>' +
+      '<div style="width:72px;height:72px;border-radius:24px;background:rgba(16,185,129,0.12);color:#10B981;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;box-shadow:0 8px 22px rgba(16,185,129,0.2);"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>' +
       '<div style="display:inline-block;padding:3px 12px;border-radius:20px;background:rgba(16,185,129,0.12);color:#10B981;font-size:11.5px;font-weight:800;letter-spacing:0.5px;margin-bottom:8px;">' + t('ob_slide1_badge') + '</div>' +
       '<h3 style="font-size:19px;font-weight:900;color:var(--text);margin-bottom:8px;">' + t('ob_slide1_title') + '</h3>' +
       '<p style="font-size:13.5px;color:var(--text-muted);line-height:1.55;margin:0 auto 12px;max-width:310px;">' + t('ob_slide1_desc') + '</p>' +
       '<div style="background:var(--bg-body);border:1px solid var(--border);border-radius:14px;padding:10px 14px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:12.5px;color:var(--text);font-weight:600;">' +
-        '<span style="font-size:16px;">🔍</span> ' + t('ob_slide1_feat') +
+        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#10B981;flex-shrink:0;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> <span>' + t('ob_slide1_feat') + '</span>' +
       '</div>' +
     '</div>' +
 
     '<!-- Slide 2: Profil -->' +
     '<div class="onboarding-slide" id="onboarding-slide-2" style="display:none;">' +
-      '<div style="width:72px;height:72px;border-radius:24px;background:rgba(245,158,11,0.12);color:#F59E0B;font-size:34px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;box-shadow:0 8px 22px rgba(245,158,11,0.2);">👤</div>' +
+      '<div style="width:72px;height:72px;border-radius:24px;background:rgba(245,158,11,0.12);color:#F59E0B;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;box-shadow:0 8px 22px rgba(245,158,11,0.2);"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>' +
       '<div style="display:inline-block;padding:3px 12px;border-radius:20px;background:rgba(245,158,11,0.12);color:#F59E0B;font-size:11.5px;font-weight:800;letter-spacing:0.5px;margin-bottom:8px;">' + t('ob_slide2_badge') + '</div>' +
       '<h3 style="font-size:19px;font-weight:900;color:var(--text);margin-bottom:8px;">' + t('ob_slide2_title') + '</h3>' +
       '<p style="font-size:13.5px;color:var(--text-muted);line-height:1.55;margin:0 auto 12px;max-width:310px;">' + t('ob_slide2_desc') + '</p>' +
       '<div style="background:var(--bg-body);border:1px solid var(--border);border-radius:14px;padding:10px 14px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:12.5px;color:var(--text);font-weight:600;">' +
-        '<span style="font-size:16px;">🎖</span> ' + t('ob_slide2_feat') +
+        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#F59E0B;flex-shrink:0;"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg> <span>' + t('ob_slide2_feat') + '</span>' +
       '</div>' +
     '</div>' +
 
     '<!-- Slide 3: Mavzu -->' +
     '<div class="onboarding-slide" id="onboarding-slide-3" style="display:none;">' +
-      '<div style="width:72px;height:72px;border-radius:24px;background:rgba(139,92,246,0.12);color:#8B5CF6;font-size:34px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;box-shadow:0 8px 22px rgba(139,92,246,0.2);">☀️ 🌙</div>' +
+      '<div style="width:72px;height:72px;border-radius:24px;background:rgba(139,92,246,0.12);color:#8B5CF6;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;box-shadow:0 8px 22px rgba(139,92,246,0.2);gap:6px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>' +
       '<div style="display:inline-block;padding:3px 12px;border-radius:20px;background:rgba(139,92,246,0.12);color:#8B5CF6;font-size:11.5px;font-weight:800;letter-spacing:0.5px;margin-bottom:8px;">' + t('ob_slide3_badge') + '</div>' +
       '<h3 style="font-size:19px;font-weight:900;color:var(--text);margin-bottom:8px;">' + t('ob_slide3_title') + '</h3>' +
       '<p style="font-size:13.5px;color:var(--text-muted);line-height:1.55;margin:0 auto 12px;max-width:310px;">' + t('ob_slide3_desc') + '</p>' +
       '<div style="background:var(--bg-body);border:1px solid var(--border);border-radius:14px;padding:10px 14px;display:flex;align-items:center;justify-content:center;gap:12px;font-size:12.5px;color:var(--text);font-weight:700;">' +
-        '<span>' + t('ob_slide3_light') + '</span> <span style="color:var(--text-muted);">⇄</span> <span>' + t('ob_slide3_dark') + '</span>' +
+        '<span>' + t('ob_slide3_light') + '</span> <span style="color:var(--text-muted);display:inline-flex;align-items:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></span> <span>' + t('ob_slide3_dark') + '</span>' +
       '</div>' +
     '</div>';
 

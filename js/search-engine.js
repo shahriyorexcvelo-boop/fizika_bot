@@ -53,7 +53,7 @@ var BOT_KNOWLEDGE_BASE = [
     id: 'about_bot',
     title: "Fizika — Milliy Sertifikat haqida",
     category: 'about',
-    icon: 'ℹ️',
+    icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
     keywords: 'bot haqida nima fizika milliy sertifikat tizim platforma',
     summary: "Fizika fanidan milliy sertifikat test tekshirish va bilimni baholash tizimi.",
     fullHtml: "<h4>Fizika — Milliy Sertifikat Test Tizimi</h4>" +
@@ -69,7 +69,7 @@ var BOT_KNOWLEDGE_BASE = [
     id: 'rasch_model',
     title: "Rasch modeli va Ball qanday hisoblanadi?",
     category: 'about',
-    icon: '📈',
+    icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>',
     keywords: 'rasch model ball hisoblash baholash qiyinlik daraja theta adolatli',
     summary: "Nega oddiy foiz emas, balki Rasch modeli? Savol qiyinligi va qobiliyat o'lchovi.",
     fullHtml: "<h4>Rasch Modeli Qanday Ishlaydi?</h4>" +
@@ -85,25 +85,25 @@ var BOT_KNOWLEDGE_BASE = [
     id: 'national_cert',
     title: "Milliy Sertifikat darajalari (A+, A, B+, B, C)",
     category: 'about',
-    icon: '🏆',
+    icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>',
     keywords: 'milliy sertifikat daraja a+ a b+ b c foiz ball talab darajalari',
     summary: "Sertifikat olish uchun qancha ball to'plash kerak va qaysi darajalar beriladi.",
     fullHtml: "<h4>Milliy Sertifikat Baholash Mezonlari</h4>" +
               "<p>Tizimda Rasch modeli bo'yicha to'plangan umumiy ballga ko'ra quyidagi darajalar belgilanadi:</p>" +
               "<ul>" +
-              "<li>🌟 <b>A+ Daraja:</b> 90% va undan yuqori — Eng a'lo natija, maksimal imtiyoz.</li>" +
-              "<li>🥇 <b>A Daraja:</b> 80% dan 89.9% gacha — Yuqori darajali sertifikat.</li>" +
-              "<li>🥈 <b>B+ Daraja:</b> 70% dan 79.9% gacha — Yaxshi natija.</li>" +
-              "<li>🥉 <b>B Daraja:</b> 60% dan 69.9% gacha — O'rtacha ijobiy daraja.</li>" +
-              "<li>📜 <b>C Daraja:</b> 50% dan 59.9% gacha — Qoniqarli minimal sertifikat darajasi.</li>" +
-              "<li>❌ <b>Qoniqarsiz:</b> 50% dan past — Sertifikat berilmaydi, bilimni oshirish tavsiya etiladi.</li>" +
+              "<li><b>A+ Daraja:</b> 90% va undan yuqori — Eng a'lo natija, maksimal imtiyoz.</li>" +
+              "<li><b>A Daraja:</b> 80% dan 89.9% gacha — Yuqori darajali sertifikat.</li>" +
+              "<li><b>B+ Daraja:</b> 70% dan 79.9% gacha — Yaxshi natija.</li>" +
+              "<li><b>B Daraja:</b> 60% dan 69.9% gacha — O'rtacha ijobiy daraja.</li>" +
+              "<li><b>C Daraja:</b> 50% dan 59.9% gacha — Qoniqarli minimal sertifikat darajasi.</li>" +
+              "<li><b>Qoniqarsiz:</b> 50% dan past — Sertifikat berilmaydi, bilimni oshirish tavsiya etiladi.</li>" +
               "</ul>"
   },
   {
     id: 'test_rules',
     title: "Test topshirish qoidalari va Vaqt chegarasi",
     category: 'about',
-    icon: '⏱️',
+    icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
     keywords: 'qoida qoidalar vaqt topshirish tartibi javob format 1a2b3c',
     summary: "Test kodi, javoblarni yuborish tartibi va vaqt nazorati haqida muhim qoidalar.",
     fullHtml: "<h4>Test Topshirish Qoidalari</h4>" +
@@ -118,7 +118,7 @@ var BOT_KNOWLEDGE_BASE = [
     id: 'pin_security',
     title: "PIN kod va Shaxsiy xavfsizlik",
     category: 'about',
-    icon: '🔐',
+    icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
     keywords: 'pin kod xavfsizlik parol profil himoya ozgartirish',
     summary: "Natijalaringiz va shaxsiy ma'lumotlaringizni himoyalovchi 4 xonali PIN kod.",
     fullHtml: "<h4>PIN Kod Tizimi</h4>" +
@@ -132,17 +132,17 @@ var BOT_KNOWLEDGE_BASE = [
     id: 'contact_admin',
     title: "Ma'muriyat bilan bog'lanish va Yordam",
     category: 'about',
-    icon: '📞',
+    icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
     keywords: 'admin murojaat yordam boglanish eshmbetov kontakt aloqa savol muammo',
     summary: "Savol, taklif va texnik muammolar bo'yicha administrator bilan aloqa.",
     fullHtml: "<h4>Bog'lanish va Qo'llab-quvvatlash</h4>" +
               "<p>Har qanday savol, taklif yoki texnik muammolar yuzasidan quyidagi kontaktlarga murojaat qilishingiz mumkin:</p>" +
               "<ul>" +
-              "<li>👤 <b>Bosh Admin:</b> @eshmbetov</li>" +
-              "<li>🤖 <b>Rasmiy Bot:</b> @fizika_rash_testbot</li>" +
-              "<li>📢 <b>Rasmiy Kanal:</b> Fizika Milliy Sertifikat o'quv kanali</li>" +
+              "<li><b>Bosh Admin:</b> @eshmbetov</li>" +
+              "<li><b>Rasmiy Bot:</b> @fizika_rash_testbot</li>" +
+              "<li><b>Rasmiy Kanal:</b> Fizika Milliy Sertifikat o'quv kanali</li>" +
               "</ul>" +
-              "<div style='margin-top:14px;'><a href='https://t.me/eshmbetov' target='_blank' style='display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:12px;background:linear-gradient(135deg,#3B82F6,#6366F1);color:white;text-decoration:none;font-weight:700;'>Adminga yozish (@eshmbetov) ➔</a></div>"
+              "<div style='margin-top:14px;'><a href='https://t.me/eshmbetov' target='_blank' style='display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:12px;background:linear-gradient(135deg,#3B82F6,#6366F1);color:white;text-decoration:none;font-weight:700;'><span>Adminga yozish (@eshmbetov)</span><svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5'><polyline points='9 18 15 12 9 6'/></svg></a></div>"
   }
 ];
 
@@ -151,7 +151,7 @@ var QUICK_ACTIONS = [
     id: 'act_tests',
     title: "Testlar bo'limiga o'tish",
     sub: "Barcha faol va rejalashtirilgan testlarni ko'rish",
-    icon: '📝',
+    icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
     keywords: 'test testlar kutilayotgan faol topshirish',
     action: function() { closeGlobalSearch(); switchTab('home'); }
   },
@@ -159,7 +159,7 @@ var QUICK_ACTIONS = [
     id: 'act_results',
     title: "Mening natijalarim",
     sub: "Topshirilgan testlar, ballar va sertifikat darajasi",
-    icon: '📊',
+    icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',
     keywords: 'natija natijalarim ball sertifikat reyting tarix',
     action: function() { closeGlobalSearch(); switchTab('tests'); }
   },
@@ -167,7 +167,7 @@ var QUICK_ACTIONS = [
     id: 'act_profile',
     title: "Profilim va Shaxsiy ma'lumotlar",
     sub: "Ism, telefon raqami va statusni ko'rish",
-    icon: '👤',
+    icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
     keywords: 'profil ism telefon hisob status shaxsiy',
     action: function() { closeGlobalSearch(); switchTab('profile'); }
   },
@@ -175,7 +175,7 @@ var QUICK_ACTIONS = [
     id: 'act_edit_profile',
     title: "Profilni tahrirlash",
     sub: "Ism va telefon raqamini o'zgartirish",
-    icon: '✏️',
+    icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
     keywords: 'profil tahrirlash ism telefon yangilash',
     action: function() { closeGlobalSearch(); switchTab('profile'); if (typeof openEditProfileModal === 'function') openEditProfileModal(); }
   },
@@ -183,7 +183,7 @@ var QUICK_ACTIONS = [
     id: 'act_theme',
     title: "Mavzuni almashtirish (Dark / Light)",
     sub: "Tungi yoki kunduzgi ko'rinish rejimiga o'tish",
-    icon: '🌓',
+    icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>',
     keywords: 'tema mavzu qorongu oq dark light tun',
     action: function() { toggleTheme(); renderSearchResults(); }
   },
@@ -191,7 +191,7 @@ var QUICK_ACTIONS = [
     id: 'act_lang',
     title: "Tilni o'zgartirish (Language)",
     sub: "O'zbekcha / Русский / English",
-    icon: '🌐',
+    icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
     keywords: 'til tilni almashtirish uz ru en language',
     action: function() { cycleLang(); renderSearchResults(); }
   }
@@ -357,7 +357,7 @@ function renderSearchResults() {
   if (totalFound === 0) {
     container.innerHTML =
       '<div class="search-empty-state">' +
-        '<div class="search-empty-icon">🔍</div>' +
+        '<div class="search-empty-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>' +
         '<div class="search-empty-title">' + t('search_empty_title') + '</div>' +
         '<div class="search-empty-desc">' + t('search_empty_desc') + '</div>' +
       '</div>';
@@ -370,20 +370,20 @@ function renderSearchResults() {
   if (matchedTests.length > 0) {
     html += '<div class="search-group-container">' +
       '<div class="search-group-header">' +
-        '<div class="search-group-title"><span>📝</span> ' + t('search_group_tests') + '</div>' +
+        '<div class="search-group-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-2px;margin-right:4px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> ' + t('search_group_tests') + '</div>' +
         '<span class="search-group-badge">' + matchedTests.length + ' ta</span>' +
       '</div>' +
       '<div class="search-card-list">';
     matchedTests.forEach(function(test) {
       var isDone = test.is_participated || (test.user_status && test.user_status.has_submitted);
       var statusPill = isDone
-        ? '<span class="search-card-pill pill-green">✅ Topshirilgan</span>'
-        : (test.is_active ? '<span class="search-card-pill pill-blue">🟢 Faol</span>' : '<span class="search-card-pill">Yakunlangan</span>');
+        ? '<span class="search-card-pill pill-green"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:inline-block;vertical-align:-1px;margin-right:3px"><polyline points="20 6 9 17 4 12"/></svg>Topshirilgan</span>'
+        : (test.is_active ? '<span class="search-card-pill pill-blue"><span class="status-dot dot-active"></span>Faol</span>' : '<span class="search-card-pill">Yakunlangan</span>');
       var codeStr = test.test_code ? ('Kod: #' + test.test_code) : '';
       var qCount = test.total_questions ? (test.total_questions + ' ta savol') : '45 ta savol';
 
       html += '<div class="search-card-item" onclick="handleSearchSelectTest(' + test.id + ', \'' + (test.test_code || '') + '\', ' + (isDone ? 'true' : 'false') + ')">' +
-        '<div class="search-card-icon icon-blue">📝</div>' +
+        '<div class="search-card-icon icon-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>' +
         '<div class="search-card-info">' +
           '<div class="search-card-title">' + escHtml(test.title || 'Fizika Testi') + '</div>' +
           '<div class="search-card-sub">' +
@@ -392,7 +392,7 @@ function renderSearchResults() {
             '<span>' + qCount + '</span>' +
           '</div>' +
         '</div>' +
-        '<span class="search-card-arrow">➔</span>' +
+        '<span class="search-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>' +
       '</div>';
     });
     html += '</div></div>';
@@ -402,7 +402,7 @@ function renderSearchResults() {
   if (matchedResults.length > 0) {
     html += '<div class="search-group-container">' +
       '<div class="search-group-header">' +
-        '<div class="search-group-title"><span>📊</span> ' + t('search_group_results') + '</div>' +
+        '<div class="search-group-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-2px;margin-right:4px"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> ' + t('search_group_results') + '</div>' +
         '<span class="search-group-badge">' + matchedResults.length + ' ta</span>' +
       '</div>' +
       '<div class="search-card-list">';
@@ -412,15 +412,15 @@ function renderSearchResults() {
       var dateStr = formatDateOnly(res.submitted_at);
 
       html += '<div class="search-card-item" onclick="handleSearchSelectResult(' + idx + ')">' +
-        '<div class="search-card-icon icon-green">🏆</div>' +
+        '<div class="search-card-icon icon-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H7"/><path d="M14 14.66V17c0 .55.45 1 1 1h2"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg></div>' +
         '<div class="search-card-info">' +
           '<div class="search-card-title">' + escHtml(res.test_title || res.title || 'Test Natijasi') + '</div>' +
           '<div class="search-card-sub">' +
             '<span class="search-card-pill pill-green">' + scoreVal + ' ball (' + gradeVal + ')</span>' +
-            '<span>📅 ' + dateStr + '</span>' +
+            '<span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-1px;margin-right:3px"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' + dateStr + '</span>' +
           '</div>' +
         '</div>' +
-        '<span class="search-card-arrow">➔</span>' +
+        '<span class="search-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>' +
       '</div>';
     });
     html += '</div></div>';
@@ -430,7 +430,7 @@ function renderSearchResults() {
   if (matchedKnowledge.length > 0) {
     html += '<div class="search-group-container">' +
       '<div class="search-group-header">' +
-        '<div class="search-group-title"><span>ℹ️</span> ' + t('search_group_about') + '</div>' +
+        '<div class="search-group-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-2px;margin-right:4px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> ' + t('search_group_about') + '</div>' +
         '<span class="search-group-badge">' + matchedKnowledge.length + ' ta</span>' +
       '</div>' +
       '<div class="search-card-list">';
@@ -441,7 +441,7 @@ function renderSearchResults() {
           '<div class="search-card-title">' + escHtml(item.title) + '</div>' +
           '<div class="search-card-sub">' + escHtml(item.summary) + '</div>' +
         '</div>' +
-        '<span class="search-card-arrow">›</span>' +
+        '<span class="search-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>' +
       '</div>';
     });
     html += '</div></div>';
@@ -451,7 +451,7 @@ function renderSearchResults() {
   if (matchedActions.length > 0 && filter === 'all') {
     html += '<div class="search-group-container">' +
       '<div class="search-group-header">' +
-        '<div class="search-group-title"><span>⚡️</span> ' + t('search_group_actions') + '</div>' +
+        '<div class="search-group-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-2px;margin-right:4px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> ' + t('search_group_actions') + '</div>' +
       '</div>' +
       '<div class="search-card-list">';
     matchedActions.forEach(function(act, idx) {
@@ -461,7 +461,7 @@ function renderSearchResults() {
           '<div class="search-card-title">' + escHtml(act.title) + '</div>' +
           '<div class="search-card-sub">' + escHtml(act.sub) + '</div>' +
         '</div>' +
-        '<span class="search-card-arrow">›</span>' +
+        '<span class="search-card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></span>' +
       '</div>';
     });
     html += '</div></div>';

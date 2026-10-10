@@ -1485,6 +1485,18 @@ body[data-theme="dark"] .btn-submit-test:active {
   transform: scale(0.98);
 }
 
+/* Topshirilgan holati: Yashil (Muvaffaqiyatli topshirilgan) */
+.btn-submit-test.already-submitted,
+body:not(.dark-mode):not([data-theme="dark"]) .btn-submit-test.already-submitted,
+body[data-theme="light"] .btn-submit-test.already-submitted,
+body.dark-mode .btn-submit-test.already-submitted,
+body[data-theme="dark"] .btn-submit-test.already-submitted {
+  background: linear-gradient(135deg, #10B981, #059669) !important;
+  box-shadow: 0 4px 18px rgba(16, 185, 129, 0.4) !important;
+  cursor: not-allowed !important;
+  opacity: 0.95 !important;
+}
+
 /* Compact Admin Submit Dock (Kam joy egallaydi, telefon ekraniga to'liq mos) */
 .bottom-submit-dock.admin-compact-dock {
   padding: 8px 16px calc(env(safe-area-inset-bottom, 8px) + 6px) 16px;

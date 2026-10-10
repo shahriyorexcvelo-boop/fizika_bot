@@ -95,7 +95,7 @@
             <input type="text" class="kb-live-input" id="keyboard-live-input" readonly inputmode="none" placeholder="Javobni kiriting...">
           </div>
           <button type="button" class="kb-done-btn" onclick="PhysicsKeyboard.close()" title="Klaviaturani yopish">
-            Tayyor ✓
+            Tayyor <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-left:2px;"><polyline points="20 6 9 17 4 12"/></svg>
           </button>
         </div>
 
@@ -127,7 +127,7 @@
             <button type="button" class="kb-key kb-func" onclick="PhysicsKeyboard.insert('(')">(</button>
             <button type="button" class="kb-key kb-func" onclick="PhysicsKeyboard.insert(')')">)</button>
             <button type="button" class="kb-key kb-action" onclick="PhysicsKeyboard.clear()">C</button>
-            <button type="button" class="kb-key kb-backspace" onclick="PhysicsKeyboard.backspace()">⌫</button>
+            <button type="button" class="kb-key kb-backspace" onclick="PhysicsKeyboard.backspace()" title="O'chirish"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg></button>
           </div>
           <div class="kb-row">
             <button type="button" class="kb-key kb-num" onclick="PhysicsKeyboard.insert('7')">7</button>
@@ -170,7 +170,7 @@
             <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('mJ')">mJ</button>
             <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('eV')">eV</button>
             <button type="button" class="kb-key kb-unit" onclick="PhysicsKeyboard.insertUnit('s')">s</button>
-            <button type="button" class="kb-key kb-backspace" onclick="PhysicsKeyboard.backspace()">⌫</button>
+            <button type="button" class="kb-key kb-backspace" onclick="PhysicsKeyboard.backspace()" title="O'chirish"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg></button>
           </div>
           <!-- 2. Masofa, Maydon & Yuza -->
           <div class="kb-row">
@@ -228,7 +228,7 @@
             <button type="button" class="kb-key kb-phrase" onclick="PhysicsKeyboard.insertWithSpace('ga kamaydi')">ga kamaydi</button>
             <button type="button" class="kb-key kb-phrase" onclick="PhysicsKeyboard.insertWithSpace('ga ortdi')">ga ortdi</button>
             <button type="button" class="kb-key kb-phrase" onclick="PhysicsKeyboard.insertWithSpace('o\'zgarmaydi')">o'zgarmaydi</button>
-            <button type="button" class="kb-key kb-backspace" onclick="PhysicsKeyboard.backspace()">⌫</button>
+            <button type="button" class="kb-key kb-backspace" onclick="PhysicsKeyboard.backspace()" title="O'chirish"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg></button>
           </div>
           <!-- 2. Optika va nurlar (Ochiq 45-savol kabi) -->
           <div class="kb-row">
@@ -297,7 +297,7 @@
             <button type="button" class="kb-key kb-greek" onclick="PhysicsKeyboard.insert('ω')">ω</button>
             <button type="button" class="kb-key kb-greek" onclick="PhysicsKeyboard.insert('φ')">φ</button>
             <button type="button" class="kb-key kb-greek" onclick="PhysicsKeyboard.insert('Δ')">Δ</button>
-            <button type="button" class="kb-key kb-backspace" onclick="PhysicsKeyboard.backspace()">⌫</button>
+            <button type="button" class="kb-key kb-backspace" onclick="PhysicsKeyboard.backspace()" title="O'chirish"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg></button>
           </div>
           <div class="kb-row">
             <button type="button" class="kb-key kb-greek" onclick="PhysicsKeyboard.insert('α')">α</button>

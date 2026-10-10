@@ -54,7 +54,7 @@ const TestApp = {
       queryTgId
     ));
 
-    // ⛔️ ODDIY VEB-BRAUZERDA (TELEGRAMSIZ) OCHILGANDA TO'LIQ BLOKLASH!
+    // ODDIY VEB-BRAUZERDA (TELEGRAMSIZ) OCHILGANDA TO'LIQ BLOKLASH!
     if (!isTg) {
       const webBlock = document.getElementById('web-block-screen');
       if (webBlock) webBlock.style.display = 'flex';
@@ -84,7 +84,7 @@ const TestApp = {
       titleEl.textContent = this.testCode ? `#${this.testCode} test` : this.testTitle;
     }
     if (codeEl) codeEl.textContent = `KOD: #${this.testCode}`;
-    if (subjectEl) subjectEl.textContent = `📐 ${this.subject}`;
+    if (subjectEl) subjectEl.textContent = this.subject;
     if (userEl) userEl.textContent = `Ishtirokchi: ${this.userFullname}`;
 
     // 3. Savollarni render qilish
@@ -121,13 +121,15 @@ const TestApp = {
                 var submitBtn = document.getElementById('btn-submit-test');
                 if (submitBtn) {
                   submitBtn.disabled = true;
-                  submitBtn.textContent = 'Topshirilgan ✅';
-                  submitBtn.style.background = '#10b981';
+                  submitBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:4px;"><polyline points="20 6 9 17 4 12"/></svg>Topshirilgan';
+                  submitBtn.classList.add('already-submitted');
                   submitBtn.style.cursor = 'not-allowed';
                 }
                 setTimeout(function() {
-                  alert("⛔️ Siz ushbu testni allaqachon topshirgansiz!\n\nJavoblaringiz qabul qilingan. Natijalar Rasch modeli tahlili e'lon qilingandan so'ng botingizga yuboriladi.");
+                  alert("Siz ushbu testni allaqachon topshirgansiz!\n\nJavoblaringiz qabul qilingan. Natijalar Rasch modeli tahlili e'lon qilingandan so'ng botingizga yuboriladi.");
                 }, 400);
+              } else {
+                TestApp.updateSubmitButtonState();
               }
             }
           }
@@ -138,7 +140,7 @@ const TestApp = {
         submitBtn.disabled = true;
         submitBtn.style.opacity = '0.5';
         submitBtn.style.cursor = 'not-allowed';
-        submitBtn.textContent = 'Bot orqali kiring 🔒';
+        submitBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:4px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Bot orqali kiring';
       }
     }
   },
@@ -191,7 +193,9 @@ const TestApp = {
     // Tugma ikonkasini yangilash
     const themeBtn = document.querySelector('.theme-toggle-btn');
     if (themeBtn) {
-      themeBtn.innerHTML = isDark ? '🌙' : '☀️';
+      themeBtn.innerHTML = isDark
+        ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>'
+        : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
       themeBtn.title = isDark ? "Kunduzgi rejim (Oq)" : "Tungi rejim (Qora)";
     }
 
@@ -322,19 +326,66 @@ const TestApp = {
     const uid = this.userTgId || '0';
     const storageKey = `bm_fizika_timer_start_${tid}_${uid}`;
 
+    let targetEndMs = null;
+    let scheduledTotalSec = null;
+
+    if (cur && cur.scheduled_end) {
+      try {
+        const parts = String(cur.scheduled_end).trim().split(':');
+        const endH = parseInt(parts[0], 10);
+        const endM = parseInt(parts[1], 10);
+        const endS = parts[2] ? parseInt(parts[2], 10) : 0;
+
+        let endDate = new Date();
+        if (cur.scheduled_date) {
+          const dateParts = String(cur.scheduled_date).trim().split(/[-.]/);
+          if (dateParts.length === 3) {
+            if (dateParts[0].length === 4) {
+              endDate = new Date(parseInt(dateParts[0], 10), parseInt(dateParts[1], 10) - 1, parseInt(dateParts[2], 10));
+            } else {
+              endDate = new Date(parseInt(dateParts[2], 10), parseInt(dateParts[1], 10) - 1, parseInt(dateParts[0], 10));
+            }
+          }
+        }
+        endDate.setHours(endH, endM, endS, 0);
+
+        if (cur.scheduled_start) {
+          const sParts = String(cur.scheduled_start).trim().split(':');
+          const startH = parseInt(sParts[0], 10);
+          const startM = parseInt(sParts[1], 10);
+          const startDate = new Date(endDate.getTime());
+          startDate.setHours(startH, startM, 0, 0);
+
+          if (endH < startH || (endH === startH && endM < startM)) {
+            if (new Date().getHours() >= startH) {
+              endDate.setDate(endDate.getDate() + 1);
+            } else {
+              startDate.setDate(startDate.getDate() - 1);
+            }
+          }
+
+          const spanSec = Math.floor((endDate.getTime() - startDate.getTime()) / 1000);
+          if (spanSec > 0) {
+            scheduledTotalSec = spanSec;
+          }
+        }
+
+        targetEndMs = endDate.getTime();
+      } catch (err) {
+        console.warn('Scheduled end parse error:', err);
+      }
+    }
+
     let timeLimitMin = 0;
     if (cur && cur.time_limit_min) {
       timeLimitMin = parseInt(cur.time_limit_min, 10);
     }
 
-    let totalSeconds = 0;
-    if (timeLimitMin > 0) {
+    let totalSeconds = 120 * 60; // Standart 2 soat
+    if (scheduledTotalSec && scheduledTotalSec > 0) {
+      totalSeconds = scheduledTotalSec;
+    } else if (timeLimitMin > 0) {
       totalSeconds = timeLimitMin * 60;
-    } else if (cur && cur.min_submit_info && cur.min_submit_info.remaining_seconds > 0) {
-      totalSeconds = Math.max(45 * 60, cur.min_submit_info.remaining_seconds);
-    } else {
-      // Standart 120 daqiqalik (2 soatlik) Fizika blok test davri
-      totalSeconds = 120 * 60;
     }
 
     let startTime = parseInt(localStorage.getItem(storageKey), 10);
@@ -349,22 +400,21 @@ const TestApp = {
     const noteEl = document.getElementById('test-timer-note');
 
     const updateTimerUI = () => {
-      const elapsedSec = Math.floor((Date.now() - startTime) / 1000);
-      let remainingSec = Math.max(0, totalSeconds - elapsedSec);
-
-      // Agar min_submit cheklovi mavjud bo'lsa
-      if (this.minSubmitInfo && this.minSubmitInfo.remaining_seconds !== undefined && !this.minSubmitInfo.can_submit) {
-        remainingSec = Math.max(0, this.minSubmitInfo.remaining_seconds);
+      let remainingSec = 0;
+      if (targetEndMs !== null) {
+        remainingSec = Math.max(0, Math.floor((targetEndMs - Date.now()) / 1000));
+      } else {
+        const elapsedSec = Math.floor((Date.now() - startTime) / 1000);
+        remainingSec = Math.max(0, totalSeconds - elapsedSec);
       }
 
-      const mins = Math.floor(remainingSec / 60);
+      const hours = Math.floor(remainingSec / 3600);
+      const mins = Math.floor((remainingSec % 3600) / 60);
       const secs = remainingSec % 60;
-      const hours = Math.floor(mins / 60);
-      const remMins = mins % 60;
 
       let timeStr = '';
       if (hours > 0) {
-        timeStr = `${String(hours).padStart(2, '0')}:${String(remMins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        timeStr = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
       } else {
         timeStr = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
       }
@@ -376,37 +426,23 @@ const TestApp = {
 
       // 1 daqiqadan (60s) kam qolganda avtomatik sariq/qizilga o'zgaradi
       if (remainingSec <= 60 && remainingSec > 20) {
-        if (fillEl) {
-          fillEl.className = 'test-timer-fill timer-warning';
-        }
-        if (badgeEl) {
-          badgeEl.className = 'timer-badge-neon timer-warning';
-        }
+        if (fillEl) fillEl.className = 'test-timer-fill timer-warning';
+        if (badgeEl) badgeEl.className = 'timer-badge-neon timer-warning';
         if (noteEl) noteEl.textContent = 'Qoldi:';
       } else if (remainingSec <= 20 && remainingSec > 0) {
-        if (fillEl) {
-          fillEl.className = 'test-timer-fill timer-danger';
-        }
-        if (badgeEl) {
-          badgeEl.className = 'timer-badge-neon timer-danger';
-        }
+        if (fillEl) fillEl.className = 'test-timer-fill timer-danger';
+        if (badgeEl) badgeEl.className = 'timer-badge-neon timer-danger';
         if (noteEl) noteEl.textContent = 'Shoshiling:';
       } else if (remainingSec === 0) {
         if (fillEl) {
           fillEl.className = 'test-timer-fill timer-danger';
           fillEl.style.width = '0%';
         }
-        if (badgeEl) {
-          badgeEl.className = 'timer-badge-neon timer-danger';
-        }
+        if (badgeEl) badgeEl.className = 'timer-badge-neon timer-danger';
         if (noteEl) noteEl.textContent = 'Tugadi:';
       } else {
-        if (fillEl) {
-          fillEl.className = 'test-timer-fill';
-        }
-        if (badgeEl) {
-          badgeEl.className = 'timer-badge-neon';
-        }
+        if (fillEl) fillEl.className = 'test-timer-fill';
+        if (badgeEl) badgeEl.className = 'timer-badge-neon';
         if (noteEl) noteEl.textContent = 'Vaqt:';
       }
     };
@@ -597,7 +633,7 @@ const TestApp = {
     if (countEl) countEl.textContent = `${answeredQuestions} / ${total}`;
     if (fillEl) fillEl.style.width = `${percent}%`;
     if (dockText) dockText.textContent = `${answeredQuestions} / ${total} ta belgilandi (${percent}%)`;
-    if (dockSub) dockSub.textContent = remaining === 0 ? '🎉 Barcha 55 ta savol to\'ldirildi!' : `${remaining} ta savol qoldi`;
+    if (dockSub) dockSub.textContent = remaining === 0 ? "Barcha 55 ta savol to'ldirildi!" : `${remaining} ta savol qoldi`;
   },
 
   // ----------------------------------------------------
@@ -676,7 +712,9 @@ const TestApp = {
       // 0 ta belgilangan bo'lsa: QAT'IY TO'SIQ!
       if (zeroWarn) zeroWarn.style.display = 'block';
       if (partialWarn) partialWarn.style.display = 'none';
-      if (iconEl) iconEl.textContent = '⚠️';
+      if (iconEl) {
+        iconEl.innerHTML = '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>';
+      }
       if (titleEl) titleEl.textContent = 'Javoblar belgilanmagan!';
       if (descEl) descEl.textContent = 'Testda birorta ham savolga javob belgilanmagan.';
       if (finalBtn) {
@@ -684,13 +722,15 @@ const TestApp = {
         finalBtn.style.opacity = '0.35';
         finalBtn.style.cursor = 'not-allowed';
         finalBtn.style.pointerEvents = 'none';
-        finalBtn.textContent = 'Topshirish bloklangan ⛔️';
+        finalBtn.innerHTML = '<span>Topshirish bloklangan</span>';
       }
     } else {
       // Kamida 1 ta belgilangan bo'lsa: Yakunlash imkoni
       if (zeroWarn) zeroWarn.style.display = 'none';
       if (partialWarn) partialWarn.style.display = empty > 0 ? 'block' : 'none';
-      if (iconEl) iconEl.textContent = '📊';
+      if (iconEl) {
+        iconEl.innerHTML = '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>';
+      }
       if (titleEl) titleEl.textContent = 'Javoblaringiz holati';
       if (descEl) descEl.textContent = `Siz 55 ta savoldan ${answered} tasini belgiladingiz, ${empty} tasini belgilanmagan qoldirdingiz.`;
       if (finalBtn) {
@@ -698,7 +738,7 @@ const TestApp = {
         finalBtn.style.opacity = '1';
         finalBtn.style.cursor = 'pointer';
         finalBtn.style.pointerEvents = 'auto';
-        finalBtn.textContent = 'Oxirgi yakunlash 🚀';
+        finalBtn.innerHTML = '<span>Oxirgi yakunlash</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>';
       }
     }
 
@@ -733,21 +773,49 @@ const TestApp = {
       clearInterval(this.minSubmitTimerInterval);
       this.minSubmitTimerInterval = null;
     }
-    if (!this.minSubmitInfo || this.minSubmitInfo.can_submit) return;
+    if (!this.minSubmitInfo || this.minSubmitInfo.can_submit) {
+      this.updateSubmitButtonState();
+      return;
+    }
 
     this.minSubmitTimerInterval = setInterval(() => {
       if (!this.minSubmitInfo) return;
       if (this.minSubmitInfo.remaining_seconds > 0) {
         this.minSubmitInfo.remaining_seconds--;
         this.updateMinSubmitModalUI();
+        this.updateSubmitButtonState();
       } else {
         this.minSubmitInfo.can_submit = true;
         this.minSubmitInfo.remaining_seconds = 0;
         clearInterval(this.minSubmitTimerInterval);
         this.minSubmitTimerInterval = null;
         this.updateMinSubmitModalUI();
+        this.updateSubmitButtonState();
       }
     }, 1000);
+    this.updateSubmitButtonState();
+  },
+
+  updateSubmitButtonState() {
+    const submitBtn = document.getElementById('btn-submit-test');
+    if (!submitBtn) return;
+
+    if (this.activeTestInfo && this.activeTestInfo.already_submitted) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:4px;"><polyline points="20 6 9 17 4 12"/></svg>Topshirilgan';
+      submitBtn.classList.add('already-submitted');
+      return;
+    }
+
+    if (this.minSubmitInfo && !this.minSubmitInfo.can_submit && !this.isAdmin) {
+      const rem = Math.max(0, this.minSubmitInfo.remaining_seconds || 0);
+      const m = Math.floor(rem / 60);
+      const s = rem % 60;
+      const remStr = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+      submitBtn.innerHTML = `<span>Testni yakunlash</span> <span style="font-size:12.5px;opacity:0.9;margin-left:6px;font-weight:700;display:inline-flex;align-items:center;gap:3px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>(${remStr})</span>`;
+    } else {
+      submitBtn.textContent = 'Testni yakunlash';
+    }
   },
 
   updateMinSubmitModalUI() {
@@ -776,12 +844,13 @@ const TestApp = {
       if (titleEl) titleEl.textContent = 'Hali javob yubora olmaysiz!';
       if (descEl) descEl.innerHTML = 'Test boshlanganidan so\'ng dastlabki <b>45 daqiqa</b> davomida javoblarni topshirish cheklangan.';
       if (iconWrap) {
-        iconWrap.textContent = '⏳';
+        iconWrap.innerHTML = '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>';
         iconWrap.style.borderColor = '#F59E0B';
+        iconWrap.style.color = '#F59E0B';
         iconWrap.style.background = 'linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(239, 68, 68, 0.15))';
       }
       if (actionBtn) {
-        actionBtn.textContent = 'Savollarni qayta tekshirish 🔍';
+        actionBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><span>Savollarni qayta tekshirish</span>';
         actionBtn.className = 'btn-modal-cancel';
         actionBtn.onclick = () => this.closeMinSubmitModal();
       }
@@ -791,17 +860,18 @@ const TestApp = {
         countEl.style.color = '#10B981';
       }
       if (unlockEl) {
-        unlockEl.innerHTML = '✅ <b style="color:#10B981;">45 daqiqalik cheklov yakunlandi!</b>';
+        unlockEl.innerHTML = '<span style="display:inline-flex;align-items:center;gap:4px;color:#10B981;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><b>45 daqiqalik cheklov yakunlandi!</b></span>';
       }
       if (titleEl) titleEl.textContent = 'Topshirish vaqti yetib keldi!';
       if (descEl) descEl.textContent = 'Endi javoblaringizni bemalol topshirishingiz mumkin.';
       if (iconWrap) {
-        iconWrap.textContent = '✅';
+        iconWrap.innerHTML = '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
         iconWrap.style.borderColor = '#10B981';
+        iconWrap.style.color = '#10B981';
         iconWrap.style.background = 'rgba(16, 185, 129, 0.15)';
       }
       if (actionBtn) {
-        actionBtn.textContent = 'Testni yakunlashga o\'tish 🚀';
+        actionBtn.innerHTML = '<span>Testni yakunlashga o\'tish</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>';
         actionBtn.className = 'btn-modal-confirm';
         actionBtn.onclick = () => {
           this.closeMinSubmitModal();
@@ -814,7 +884,7 @@ const TestApp = {
   async submitTestNow() {
     if (!this.userTgId || this.userTgId <= 0) {
       this.closeConfirmSubmitModal();
-      alert("⚠️ Web orqali ishlash mumkin emas! Testni faqat rasmiy Telegram botimiz (@fizika_rash_testbot) va Mini ilova orqali topshirish mumkin.");
+      alert("Web orqali ishlash mumkin emas! Testni faqat rasmiy Telegram botimiz (@fizika_rash_testbot) va Mini ilova orqali topshirish mumkin.");
       const webBlock = document.getElementById('web-block-screen');
       if (webBlock) webBlock.style.display = 'flex';
       return;
@@ -851,7 +921,7 @@ const TestApp = {
     }
 
     if (answered === 0 && !this.isAdmin) {
-      alert("⚠️ Siz birorta ham savolga javob belgilamadingiz (0/55)!\n\nBo'sh testni topshirib bo'lmaydi. Iltimos, savollarni ishlab, javoblarni belgilang!");
+      alert("Siz birorta ham savolga javob belgilamadingiz (0/55)!\n\nBo'sh testni topshirib bo'lmaydi. Iltimos, savollarni ishlab, javoblarni belgilang!");
       this.closeConfirmSubmitModal();
       return;
     }
@@ -863,7 +933,7 @@ const TestApp = {
     const backBtn = document.getElementById('btn-confirm-back');
     if (submitBtn) {
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Amalga oshirilmoqda... ⏳';
+      submitBtn.textContent = 'Amalga oshirilmoqda...';
     }
     if (backBtn) {
       backBtn.disabled = true;
@@ -893,7 +963,7 @@ const TestApp = {
       if (response.status === 429) {
         if (submitBtn) {
           submitBtn.disabled = false;
-          submitBtn.textContent = 'Oxirgi yakunlash 🚀';
+          submitBtn.innerHTML = '<span>Oxirgi yakunlash</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>';
         }
         if (backBtn) backBtn.disabled = false;
         alert(result.message || "Iltimos, biroz kuting! So'rovingiz navbatda qayta ishlanmoqda...");
@@ -908,7 +978,7 @@ const TestApp = {
       } else {
         if (submitBtn) {
           submitBtn.disabled = false;
-          submitBtn.textContent = 'Oxirgi yakunlash 🚀';
+          submitBtn.innerHTML = '<span>Oxirgi yakunlash</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>';
         }
         if (backBtn) backBtn.disabled = false;
 
@@ -922,6 +992,7 @@ const TestApp = {
             this.minSubmitInfo.unlock_time_str = result.unlock_time;
           }
           this.startMinSubmitTimer();
+          this.updateSubmitButtonState();
           this.openMinSubmitModal();
           return;
         }
@@ -936,7 +1007,7 @@ const TestApp = {
       this.closeConfirmSubmitModal();
       if (submitBtn) {
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Oxirgi yakunlash 🚀';
+        submitBtn.innerHTML = '<span>Oxirgi yakunlash</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>';
       }
       if (backBtn) backBtn.disabled = false;
       alert('Tarmoq xatoligi yoki serverga ulanishda muammo yuz berdi. Iltimos, qayta urinib ko\'ring.');
@@ -950,11 +1021,12 @@ const TestApp = {
 
   showResultModal(data) {
     this.clearAnswersFromStorage();
+    if (this.activeTestInfo) this.activeTestInfo.already_submitted = true;
     const mainSubmitBtn = document.getElementById('btn-submit-test');
     if (mainSubmitBtn) {
       mainSubmitBtn.disabled = true;
-      mainSubmitBtn.textContent = 'Topshirilgan ✅';
-      mainSubmitBtn.style.background = '#10b981';
+      mainSubmitBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:4px;"><polyline points="20 6 9 17 4 12"/></svg>Topshirilgan';
+      mainSubmitBtn.classList.add('already-submitted');
       mainSubmitBtn.style.cursor = 'not-allowed';
     }
 
@@ -973,12 +1045,17 @@ const TestApp = {
     const isPublished = Boolean(data.is_published);
 
     if (data.is_late) {
-      if (titleEl) titleEl.textContent = "Test kech topshirildi! ⚠️";
+      if (titleEl) titleEl.textContent = "Test kech topshirildi!";
       if (gradeContainer) {
         gradeContainer.style.borderColor = "rgba(239, 68, 68, 0.4)";
         gradeContainer.style.background = "rgba(239, 68, 68, 0.12)";
         gradeContainer.innerHTML = `
-          <span style="font-size: 26px;">⏰</span>
+          <span style="color: #EF4444; display: flex; align-items: center; justify-content: center;">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </span>
           <div style="text-align: left;">
             <div style="font-size: 11px; text-transform: uppercase; font-weight: 800; color: #EF4444; letter-spacing: 0.5px;">Holat</div>
             <div style="font-size: 15px; font-weight: 800; color: #DC2626;">Kech topshirildi (Hisobga olinmaydi)</div>
@@ -988,15 +1065,20 @@ const TestApp = {
       if (detailsGrid) detailsGrid.style.display = 'none';
       if (analysisBtn) analysisBtn.style.display = 'none';
       if (noteEl) {
-        noteEl.innerHTML = `⚠️ <b>Siz testni belgilangan vaqtdan kech topshirdingiz!</b> Natijangiz umumiy hisobga olinmaydi. Javoblaringiz ko'rib chiqish uchun adminga yuborildi. Agar admin ruxsat bersa, natijangiz umumiy reytingga qo'shiladi.`;
+        noteEl.innerHTML = `<b>Siz testni belgilangan vaqtdan kech topshirdingiz!</b> Natijangiz umumiy hisobga olinmaydi. Javoblaringiz ko'rib chiqish uchun adminga yuborildi. Agar admin ruxsat bersa, natijangiz umumiy reytingga qo'shiladi.`;
       }
     } else if (!isPublished) {
-      if (titleEl) titleEl.textContent = "Javoblaringiz qabul qilindi! ⏳";
+      if (titleEl) titleEl.textContent = "Javoblaringiz qabul qilindi!";
       if (gradeContainer) {
         gradeContainer.style.borderColor = "rgba(245, 158, 11, 0.4)";
         gradeContainer.style.background = "rgba(245, 158, 11, 0.12)";
         gradeContainer.innerHTML = `
-          <span style="font-size: 26px;">⏳</span>
+          <span style="color: #F59E0B; display: flex; align-items: center; justify-content: center;">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </span>
           <div style="text-align: left;">
             <div style="font-size: 11px; text-transform: uppercase; font-weight: 800; color: #D97706; letter-spacing: 0.5px;">Holat</div>
             <div style="font-size: 16px; font-weight: 800; color: #B45309;">Jarayonda (Kutilmoqda)...</div>
@@ -1006,10 +1088,10 @@ const TestApp = {
       if (detailsGrid) detailsGrid.style.display = 'none';
       if (analysisBtn) analysisBtn.style.display = 'none';
       if (noteEl) {
-        noteEl.innerHTML = `⏳ <b>Eslatma:</b> Javoblaringiz muvaffaqiyatli saqlandi. Test hozirda davom etmoqda. Admin testni to'xtatib, <b>Rasch modeli (JMLE)</b> asosida tahlil o'tkazgach, to'g'ri ishlangan savollar soni, ball va Milliy sertifikat darajangiz botingizga shaxsiy xabar qilib yuboriladi!`;
+        noteEl.innerHTML = `<b>Eslatma:</b> Javoblaringiz muvaffaqiyatli saqlandi. Test hozirda davom etmoqda. Admin testni to'xtatib, <b>Rasch modeli (JMLE)</b> asosida tahlil o'tkazgach, to'g'ri ishlangan savollar soni, ball va Milliy sertifikat darajangiz botingizga shaxsiy xabar qilib yuboriladi!`;
       }
     } else {
-      if (titleEl) titleEl.textContent = "Test Yakunlandi! 🎉";
+      if (titleEl) titleEl.textContent = "Test Yakunlandi!";
       if (detailsGrid) detailsGrid.style.display = 'grid';
       if (analysisBtn) analysisBtn.style.display = 'block';
 
@@ -1056,8 +1138,12 @@ const TestApp = {
       
       let statusBg = isCorrect ? 'rgba(16, 185, 129, 0.12)' : (isUnanswered ? 'rgba(100, 116, 139, 0.12)' : 'rgba(239, 68, 68, 0.12)');
       let statusBorder = isCorrect ? '#10B981' : (isUnanswered ? '#94A3B8' : '#EF4444');
-      let statusIcon = isCorrect ? '✅' : (isUnanswered ? '⚪️' : '❌');
-      let statusLabel = isCorrect ? 'To\'g\'ri' : (isUnanswered ? 'Belgilanmagan' : 'Noto\'g\'ri');
+      let statusIconSvg = isCorrect
+        ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>'
+        : (isUnanswered
+          ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle></svg>'
+          : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>');
+      let statusLabel = isCorrect ? '<span style="color:#10B981;">To\'g\'ri</span>' : (isUnanswered ? '<span style="color:#94A3B8;">Belgilanmagan</span>' : '<span style="color:#EF4444;">Noto\'g\'ri</span>');
 
       let userAnsDisplay = (item.user || '').trim() || '<span style="color: #94A3B8; font-style: italic;">(Belgilanmadi)</span>';
       let correctAnsDisplay = item.correct || '—';
@@ -1072,7 +1158,7 @@ const TestApp = {
         <div style="background: ${statusBg}; border: 1px solid ${statusBorder}; border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px;">
           <div style="display: flex; justify-content: space-between; align-items: center;">
             <span style="font-weight: 800; font-size: 13.5px; color: var(--text-main);">${item.num || key + '-savol'} ${scoreBadge}</span>
-            <span style="font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; gap: 4px;">${statusIcon} ${statusLabel}</span>
+            <span style="font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; gap: 4px;">${statusIconSvg} ${statusLabel}</span>
           </div>
           <div style="display: flex; justify-content: space-between; font-size: 13px; margin-top: 2px;">
             <span>Sizning javobingiz: <strong>${userAnsDisplay}</strong></span>

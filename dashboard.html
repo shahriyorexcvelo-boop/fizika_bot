@@ -282,7 +282,7 @@
                 </svg>
               </span>
               <input type="text" id="global-search-input" placeholder="Qidiruv (Ism, @username, test...)" oninput="handleGlobalSearch(this.value)">
-              <span class="search-shortcut">⌘K</span>
+              <span class="search-shortcut">Ctrl+K</span>
             </div>
 
             <button class="btn btn-secondary" onclick="exportCurrentTable()" title="Excel / CSV eksport">
@@ -761,7 +761,10 @@
                     </svg>
                     <span>Telegram Xabarnoma Yuborish</span>
                   </div>
-                  <span class="badge badge-info" id="bc-audience-count-badge">👥 Hisoblanmoqda...</span>
+                  <span class="badge badge-info" id="bc-audience-count-badge" style="display:inline-flex;align-items:center;gap:4px;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    <span>Hisoblanmoqda...</span>
+                  </span>
                 </div>
 
                 <div class="broadcast-form-body">
@@ -807,19 +810,19 @@
                       <button type="button" class="bc-tool-btn" onclick="insertBcFormat('i')" title="Qiya matn"><i>I</i></button>
                       <button type="button" class="bc-tool-btn" onclick="insertBcFormat('code')" title="Inline kod"><code>&lt;&gt;</code></button>
                       <button type="button" class="bc-tool-btn" onclick="insertBcFormat('pre')" title="Kod bloki">Pre</button>
-                      <button type="button" class="bc-tool-btn" onclick="insertBcLink()" title="Havola qo'shish">🔗 Havola</button>
-                      <button type="button" class="bc-tool-btn" onclick="insertBcFormat('tg-spoiler')" title="Yashirin (Spoiler)">✦ Spoiler</button>
-                      <button type="button" class="bc-tool-btn" onclick="insertBcTemplate('test_announce')" title="Shablon: Yangi test e'loni">📋 Shablon</button>
+                      <button type="button" class="bc-tool-btn" onclick="insertBcLink()" title="Havola qo'shish" style="display:inline-flex;align-items:center;gap:3px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span>Havola</span></button>
+                      <button type="button" class="bc-tool-btn" onclick="insertBcFormat('tg-spoiler')" title="Yashirin (Spoiler)" style="display:inline-flex;align-items:center;gap:3px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg><span>Spoiler</span></button>
+                      <button type="button" class="bc-tool-btn" onclick="insertBcTemplate('test_announce')" title="Shablon: Yangi test e'loni" style="display:inline-flex;align-items:center;gap:3px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><span>Shablon</span></button>
                     </div>
 
-                    <textarea id="bc-message" class="mac-textarea" rows="8" placeholder="Assalomu alaykum, hurmatli o'quvchilar!&#10;&#10;<b>FIZIKA — Milliy sertifikat</b> navbatdagi onlayn imtihoni boshlandi!&#10;&#10;Testni ishlash uchun quyidagi tugmani bosing 👇" oninput="updateTelegramPreview()"></textarea>
+                    <textarea id="bc-message" class="mac-textarea" rows="8" placeholder="Assalomu alaykum, hurmatli o'quvchilar!&#10;&#10;<b>FIZIKA — Milliy sertifikat</b> navbatdagi onlayn imtihoni boshlandi!&#10;&#10;Testni ishlash uchun quyidagi tugmani bosing:" oninput="updateTelegramPreview()"></textarea>
                   </div>
 
                   <!-- Ixtiyoriy Inline Tugma -->
                   <div class="form-group-mac">
                     <label>Ixtiyoriy Inline Tugma (Telegram xabari ostida chiqadi)</label>
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-                      <input type="text" id="bc-btn-text" class="mac-input" placeholder="Tugma matni (masalan: 📱 Testni ochish)" oninput="updateTelegramPreview()">
+                      <input type="text" id="bc-btn-text" class="mac-input" placeholder="Tugma matni (masalan: Testni ochish)" oninput="updateTelegramPreview()">
                       <input type="url" id="bc-btn-url" class="mac-input" placeholder="Havola (https://...)" oninput="updateTelegramPreview()">
                     </div>
                   </div>
@@ -858,8 +861,8 @@
                   <div class="tg-chat-bg">
                     <div class="tg-bubble-container">
                       <div class="tg-sender-avatar">
-                        <div class="tg-avatar-circle">
-                          <span>⚛️</span>
+                        <div class="tg-avatar-circle" style="display:flex;align-items:center;justify-content:center;">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/></svg>
                         </div>
                       </div>
                       <div class="tg-bubble-body">
@@ -870,11 +873,11 @@
                         <div class="tg-bubble-text" id="tg-preview-text">
                           Assalomu alaykum, hurmatli o'quvchilar!<br><br>
                           <b>FIZIKA — Milliy sertifikat</b> navbatdagi onlayn imtihoni boshlandi!<br><br>
-                          Testni ishlash uchun quyidagi tugmani bosing 👇
+                          Testni ishlash uchun quyidagi tugmani bosing:
                         </div>
                         <div class="tg-bubble-footer">
                           <span class="tg-msg-time" id="tg-preview-time">12:00</span>
-                          <span class="tg-msg-check">✓✓</span>
+                          <span class="tg-msg-check"><svg width="14" height="10" viewBox="0 0 16 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6l3.5 3.5L11 2"/><path d="M5.5 6l3.5 3.5L15 2"/></svg></span>
                         </div>
                       </div>
                     </div>
@@ -882,7 +885,7 @@
                     <!-- Inline Button Preview -->
                     <div class="tg-btn-container" id="tg-preview-btn-wrap" style="display:none;">
                       <a class="tg-inline-btn" id="tg-preview-btn-anchor" href="#" target="_blank" onclick="return false;">
-                        <span id="tg-preview-btn-label">📱 Testni ochish</span>
+                        <span id="tg-preview-btn-label">Testni ochish</span>
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                       </a>
                     </div>
@@ -1449,7 +1452,9 @@
             <div style="font-size:12px;color:var(--text-muted);">Telegram bot orqali ommaviy jo'natish</div>
           </div>
         </div>
-        <button class="btn btn-secondary btn-sm" onclick="closeBroadcastConfirmModal()" aria-label="Yopish">✕</button>
+        <button class="btn btn-secondary btn-sm" onclick="closeBroadcastConfirmModal()" aria-label="Yopish" style="display:inline-flex;align-items:center;justify-content:center;padding:6px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
       </div>
       <div class="modal-body" style="padding:20px;">
         <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px;">
@@ -1466,14 +1471,16 @@
             <span style="font-size:13px;font-weight:600;color:var(--text-main);" id="bc-confirm-title-label">Ommaviy xabarnoma</span>
           </div>
         </div>
-        <div style="font-size:12.5px;color:var(--text-muted);line-height:1.5;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);padding:12px 14px;border-radius:10px;">
-          ⚠️ <b>Eslatma:</b> Xabarlar Telegram anti-flood himoyasi bilan xavfsiz navbatda yuboriladi. Jarayon fonda davom etadi va audit tarixida qayd etiladi.
+        <div style="font-size:12.5px;color:var(--text-muted);line-height:1.5;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);padding:12px 14px;border-radius:10px;display:flex;align-items:flex-start;gap:8px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2.2" style="flex-shrink:0;margin-top:2px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          <div><b>Eslatma:</b> Xabarlar Telegram anti-flood himoyasi bilan xavfsiz navbatda yuboriladi. Jarayon fonda davom etadi va audit tarixida qayd etiladi.</div>
         </div>
       </div>
       <div class="modal-footer" style="display:flex;justify-content:space-between;align-items:center;">
         <button class="btn btn-secondary" onclick="closeBroadcastConfirmModal()">Bekor qilish</button>
-        <button class="btn btn-primary" id="btn-broadcast-confirm-send" onclick="executeBroadcastSend()">
-          <span>Ha, yuborilsin 🚀</span>
+        <button class="btn btn-primary" id="btn-broadcast-confirm-send" onclick="executeBroadcastSend()" style="display:inline-flex;align-items:center;gap:6px;">
+          <span>Ha, yuborilsin</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
         </button>
       </div>
     </div>

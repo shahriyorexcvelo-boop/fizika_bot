@@ -180,7 +180,7 @@ function startBootCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
-  var symbols = ['E=mc²', 'F=ma', 'v=s/t', 'λ', 'Ω', 'Hz', 'ρ', 'F', 'a', 'm', 'v', 'p', 'h', 'c', 'g', 'q', 'U', 'I', 'R', 'N', 'J', 'W', 'eV', '⚛', '⚡'];
+  var symbols = ['E=mc²', 'F=ma', 'v=s/t', 'λ', 'Ω', 'Hz', 'ρ', 'F', 'a', 'm', 'v', 'p', 'h', 'c', 'g', 'q', 'U', 'I', 'R', 'N', 'J', 'W', 'eV', 'Δt', 'B'];
   var count = Math.min(28, Math.max(16, Math.floor(canvas.width / 18)));
   var particles = [];
   for (var i = 0; i < count; i++) {
@@ -981,7 +981,7 @@ async function warnUserDirect(tgId, testsCount, fullname) {
     ? `Hurmatli ${fullname}!\nSiz birorta ham test ishlamagansiz (0 ta). Bugungi testda qatnashmasangiz botdan chiqarib yuborilishingiz haqida rasmiy ogohlantirish yuborilsinmi?`
     : `Hurmatli ${fullname}!\nSiz hozirgacha faqat ${countNum} ta test ishlagansiz. Bugungi testda qatnashmasangiz botdan chiqarib yuborilishingiz haqida rasmiy ogohlantirish yuborilsinmi?`;
 
-  if (!confirm(`⚠️ TELEGRAM RASMIY OGOHLANTIRISH:\n\n${msgIntro}`)) {
+  if (!confirm(`TELEGRAM RASMIY OGOHLANTIRISH:\n\n${msgIntro}`)) {
     return;
   }
 
@@ -1031,7 +1031,7 @@ async function sendWarningToAllFilteredUsers() {
     return;
   }
 
-  const promptMsg = `⚠️ DIQQAT!\n\nFiltrlangan barcha ${targetUsers.length} nafar foydalanuvchiga Telegram orqali rasmiy ogohlantirish xabari yuborilsinmi?\n\n(Bu foydalanuvchilar hozirgacha ${targetTc} ta test ishlagan)`;
+  const promptMsg = `DIQQAT!\n\nFiltrlangan barcha ${targetUsers.length} nafar foydalanuvchiga Telegram orqali rasmiy ogohlantirish xabari yuborilsinmi?\n\n(Bu foydalanuvchilar hozirgacha ${targetTc} ta test ishlagan)`;
   if (!confirm(promptMsg)) {
     return;
   }
@@ -2718,7 +2718,7 @@ function processIncomingOverviewNotifications(data, isPolling) {
           id: s.id,
           title: `Test topshirildi: ${s.test_title || '#' + s.test_code}`,
           subtitle: `${s.fullname}: ${s.correct_count} to'g'ri (${s.score} ball)`,
-          meta: `${s.is_late ? '⚠️ Kechikkan • ' : ''}Baho: ${s.grade || 'A'}`,
+          meta: `${s.is_late ? 'Kechikkan • ' : ''}Baho: ${s.grade || 'A'}`,
           time: s.submitted_at_fmt || 'Yaqinda',
           rawTime: s.submitted_at || 0,
           data: s,
@@ -2743,7 +2743,7 @@ function processIncomingOverviewNotifications(data, isPolling) {
       const notifItem = {
         type: 'users',
         id: u.id,
-        title: "👤 Yangi o'quvchi ro'yxatdan o'tdi!",
+        title: "Yangi o'quvchi ro'yxatdan o'tdi!",
         subtitle: `${u.fullname} (@${u.username || 'mavjud emas'})`,
         meta: `Tel: ${u.phone || 'Kiritilmagan'} • Holat: ${u.status || 'faol'}`,
         time: u.registered_at_fmt || 'Hozirgina',
@@ -2757,7 +2757,7 @@ function processIncomingOverviewNotifications(data, isPolling) {
 
       if ('Notification' in window && Notification.permission === 'granted') {
         try {
-          new Notification("👤 Yangi o'quvchi!", {
+          new Notification("Yangi o'quvchi!", {
             body: `${u.fullname} botga muvaffaqiyatli qo'shildi.`,
             icon: '/favicon.ico'
           });
@@ -2778,9 +2778,9 @@ function processIncomingOverviewNotifications(data, isPolling) {
       const notifItem = {
         type: 'submissions',
         id: s.id,
-        title: `📝 Yangi test topshirildi: ${s.test_title || '#' + s.test_code}`,
+        title: `Yangi test topshirildi: ${s.test_title || '#' + s.test_code}`,
         subtitle: `${s.fullname}: ${s.correct_count} to'g'ri (${s.score} ball)`,
-        meta: `${s.is_late ? '⚠️ Kechikkan • ' : ''}Baho: ${s.grade || 'A'}`,
+        meta: `${s.is_late ? 'Kechikkan • ' : ''}Baho: ${s.grade || 'A'}`,
         time: s.submitted_at_fmt || 'Hozirgina',
         rawTime: s.submitted_at || Math.floor(Date.now() / 1000),
         data: s,
@@ -2792,7 +2792,7 @@ function processIncomingOverviewNotifications(data, isPolling) {
 
       if ('Notification' in window && Notification.permission === 'granted') {
         try {
-          new Notification("📝 Yangi test topshirildi!", {
+          new Notification("Yangi test topshirildi!", {
             body: `${s.fullname} — ${s.test_title || '#' + s.test_code}: ${s.correct_count} to'g'ri (${s.score} ball)`,
             icon: '/favicon.ico'
           });
@@ -3007,7 +3007,7 @@ async function updateBroadcastAudienceCount() {
   const target = document.getElementById('bc-target')?.value || 'all';
   const testVal = document.getElementById('bc-target-test')?.value || '';
 
-  if (badge) badge.textContent = "👥 Hisoblanmoqda...";
+  if (badge) badge.textContent = "Hisoblanmoqda...";
 
   try {
     let url = `/api/dashboard/broadcast/audience-count?target=${encodeURIComponent(target)}`;
@@ -3019,13 +3019,13 @@ async function updateBroadcastAudienceCount() {
       const data = await res.json();
       if (data.success) {
         State.broadcastAudienceCount = data.count || 0;
-        if (badge) badge.textContent = `👥 ${State.broadcastAudienceCount} qabul qiluvchi`;
+        if (badge) badge.textContent = `${State.broadcastAudienceCount} qabul qiluvchi`;
         return;
       }
     }
   } catch (e) {}
 
-  if (badge) badge.textContent = `👥 Qabul qiluvchilar`;
+  if (badge) badge.textContent = "Qabul qiluvchilar";
 }
 
 function insertBcFormat(tag) {
@@ -3061,20 +3061,20 @@ function insertBcTemplate(type) {
   if (!textarea) return;
   if (type === 'test_announce') {
     const tpl = 
-`🔔 <b>DIQQAT: YANGI TEST BOSHLANDI!</b>
+`<b>DIQQAT: YANGI TEST BOSHLANDI!</b>
 
 Hurmatli o'quvchilar!
 <b>FIZIKA — Milliy sertifikat</b> navbatdagi rasmiy aprobatsiya testi ochildi.
 
-📚 <b>Savollar soni:</b> 45 ta (55 ball)
-⏳ <b>Ajratilgan vaqt:</b> 150 daqiqa
-💡 <i>Testni diqqat bilan ishlab, javoblarni bot orqali topshiring!</i>
+<b>Savollar soni:</b> 45 ta (55 ball)
+<b>Ajratilgan vaqt:</b> 150 daqiqa
+<i>Testni diqqat bilan ishlab, javoblarni bot orqali topshiring!</i>
 
-Quyidagi tugma orqali to'g'ridan-to'g'ri Mini ilovaga o'tishingiz mumkin 👇`;
+Quyidagi tugma orqali to'g'ridan-to'g'ri Mini ilovaga o'tishingiz mumkin:`;
     textarea.value = tpl;
     const btnText = document.getElementById('bc-btn-text');
     const btnUrl = document.getElementById('bc-btn-url');
-    if (btnText && !btnText.value) btnText.value = "📱 Testni ochish (Mini App)";
+    if (btnText && !btnText.value) btnText.value = "Testni ochish (Mini App)";
     if (btnUrl && !btnUrl.value) btnUrl.value = "https://t.me/fizika_rash_testbot";
     updateTelegramPreview();
   }
@@ -3211,7 +3211,7 @@ async function executeBroadcastSend() {
   } finally {
     if (sendBtn) {
       sendBtn.disabled = false;
-      sendBtn.innerHTML = `<span>Ha, yuborilsin 🚀</span>`;
+      sendBtn.innerHTML = `<span>Ha, yuborilsin</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`;
     }
   }
 }
